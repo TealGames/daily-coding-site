@@ -5,7 +5,7 @@
     const offTransTime = 0.5;
 
     $animatingIdentifier.css("opacity");
-    animationDecision();
+    //animationDecision();
 
     function animationDecision() {
         if ($animatingIdentifier.css("opacity") < 0.01) {

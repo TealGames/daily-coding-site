@@ -1,0 +1,14 @@
+img
+{   
+    max-width: 100%;
+}
+
+.inline
+{
+    display: inline;
+}
+
+.centered
+{
+    text-align: center;
+}

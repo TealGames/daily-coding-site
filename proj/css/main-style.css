@@ -1,0 +1,44 @@
+.background
+{
+    background-color:#1E1E1E;
+}
+
+.header
+{
+    background-color: #1E1E1E;
+}
+
+.footer
+{
+    background-color: #1E1E1E;
+}
+
+.title-text
+{
+    font-size: 45px;
+    text-align: center;
+}
+
+.default-text
+{
+    font-size: 20px;
+}
+
+.button
+{
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    width: 300px;
+    height: 50px;
+}
+
+.button-space-shrink
+{
+    margin-left: -15px;
+}
+
+.default-space-shrink
+{
+    margin-left: -10px;
+}

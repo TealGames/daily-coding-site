@@ -1,0 +1,46 @@
+.code-font
+{
+    font-family: 'Courier New', Courier, monospace;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.code-default
+{
+    color:#CCD9D0
+}
+
+.code-default-keyword
+{
+    color:#3885CF
+}
+
+.code-special-keyword
+{
+    color:#D8A0D0
+}
+
+.code-local-variable
+{
+    color:#82D7F1
+}
+
+.code-object
+{
+    color:#49BA82
+}
+
+.code-enum
+{
+    color: #9ED593
+}
+
+.code-method
+{
+    color:#DCD886
+}
+
+.code-string
+{
+    color:#D28453
+}

@@ -1,33 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<head class="header">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/general-style.css">
+    <link rel="stylesheet" href="css/main-style.css">
+    <link rel="stylesheet" href="css/id-style.css">
+    <link rel="stylesheet" href="css/coding-style.css">
 
-    <title class="title">Guess The Code</title>
-    <div id="main-title" class="inline"><b class="text" class="main-font">Guess Code</b>
-        <p id="title-char-identifier" class="inline">
-            <b class="text" class="main-font">_</b>
-        </p>
-    </div>
-
-
+    <title>Guess The Code</title>
+    
 </head>
 
-<body>
-    <ul>
-        <li class="center-list">
-            <button type="button" class="button">Play Daily</button>
-        </li>
-        <li class="center-list">
-            <button type="button" class="button">Leaderboard</button>
-        </li>
-        <li class="center-list">
-            <button type="button" class="button">How to Play</button>
-        </li>
-    </ul>
+<body class="background">
+    <div class="title-text code-font">
+        <p class="inline code-method">Codedle</p>
+        <p class="inline code-default" id="title-space-shrink">();</p>
+    </div>
+
+    <div class="centered" id="main-menu-buttons">
+        <p>
+
+        </p>
+        <ul>
+            <li>
+                <p class="inline code-font code-special-keyword default-text">if
+                    <p class="inline code-font code-default default-text default-space-shrink">(
+                        <p class="inline code-font code-local-variable default-text default-space-shrink">readyToPlay</p>
+                        <p class="inline code-font code-default default-text">) {
+                    </p>
+                </p>
+                <button type="button" class="button code-font code-method">PlayDaily
+                    <p class="inline code-font code-default button-space-shrink">();</p>
+                </button>
+            </li>
+
+            <li>
+                <p class="inline code-font code-special-keyword default-text">else if
+                    <p class="inline code-font code-default default-text default-space-shrink">(
+                        <p class="inline code-font code-local-variable default-text default-space-shrink">showLeaderboard</p>
+                        <p class="inline code-font code-default default-text">) {
+                    </p>
+                </p>
+                <button type="button" class="button code-font code-method">Leaderboard
+                    <p class="inline code-default button-space-shrink">();</p>
+                </button>
+            </li>
+            <li>
+                <button type="button" class="button code-font code-method">HowToPlay
+                    <p class="inline code-default button-space-shrink">();</p>
+                </button>
+            </li>
+        </ul>
+    </div>
+    
 
     <!-- jquery -->
     <script src="js/jquery-3.7.1.js"></script>
