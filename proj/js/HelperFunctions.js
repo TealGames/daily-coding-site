@@ -13,6 +13,7 @@ export class HelperFunctions {
 
     static addHtmlToStart(element, html) {
         element.html(html + element.html());
+        console.log(`Adding html ${html} to element ${element} new html: ${element.html()}`);
     }
 
     static addHtmlToEnd(element, html) {

@@ -1,10 +1,10 @@
-import { HelperFunctions } from "./HelperFunctions.mjs";
+import { HelperFunctions } from "./HelperFunctions.js";
 
-async function displayText(text, waitTime, displayCallback) {
+export async function displayText(text, waitTime, displayCallback) {
     const minTime = 0;
     const maxTime = 1;
 
-    waitTime = HelperFunctions.clamp(waitTime, minTime);
+    waitTime = HelperFunctions.clamp(waitTime, minTime, maxTime);
     let foundTag = false;
     for (let i = 0; i < text.length; i++) {
         const character = text.charAt(i);
