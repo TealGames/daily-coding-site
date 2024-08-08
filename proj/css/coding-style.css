@@ -1,46 +1,57 @@
-.code-font
-{
+.code-font,
+.code-default,
+.code-default-keyword,
+.code-special-keyword,
+.code-local-variable,
+.code-object,
+.code-enum,
+.code-method,
+.code-string,
+.code-comment {
     font-family: 'Courier New', Courier, monospace;
-    font-style: italic;
     font-weight: bold;
+    margin-left: 0%;
+    margin-right: 0%;
 }
 
-.code-default
-{
-    color:#CCD9D0
+.code-new-line {
+    height: 5%;
+    margin-top: 0%;
+    margin-bottom: 0%;
 }
 
-.code-default-keyword
-{
-    color:#3885CF
+.code-default {
+    color: #CCD9D0
 }
 
-.code-special-keyword
-{
-    color:#D8A0D0
+.code-default-keyword {
+    color: #3885CF
 }
 
-.code-local-variable
-{
-    color:#82D7F1
+.code-special-keyword {
+    color: #D8A0D0
 }
 
-.code-object
-{
-    color:#49BA82
+.code-local-variable {
+    color: #82D7F1
 }
 
-.code-enum
-{
+.code-object {
+    color: #49BA82
+}
+
+.code-enum {
     color: #9ED593
 }
 
-.code-method
-{
-    color:#DCD886
+.code-method {
+    color: #DCD886
 }
 
-.code-string
-{
-    color:#D28453
+.code-string {
+    color: #D28453
+}
+
+.code-comment {
+    color: #494848;
 }

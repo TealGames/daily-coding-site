@@ -1,44 +1,31 @@
-.background
-{
-    background-color:#1E1E1E;
-}
-
-.header
-{
+.background {
     background-color: #1E1E1E;
 }
 
-.footer
-{
+.header {
     background-color: #1E1E1E;
 }
 
-.title-text
-{
-    font-size: 45px;
-    text-align: center;
+.footer {
+    background-color: #1E1E1E;
 }
 
-.default-text
-{
-    font-size: 20px;
-}
-
-.button
-{
+.button {
     background-color: transparent;
     border: none;
-    font-size: 30px;
-    width: 300px;
-    height: 50px;
+    text-align: left;
+    padding-left: 0%;
+    padding-right: 0%;
+    width: 70%;
+    height: 15%;
 }
 
-.button-space-shrink
-{
-    margin-left: -15px;
+.body-text,
+.button {
+    font-size: 3vw;
 }
 
-.default-space-shrink
-{
-    margin-left: -10px;
+.title-text {
+    font-size: 10vw;
+    text-align: center;
 }

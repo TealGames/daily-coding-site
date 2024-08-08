@@ -3,5 +3,6 @@
         "include": [
             "jquery"
         ]
-    }
+    },
+    "type": "module"
 }

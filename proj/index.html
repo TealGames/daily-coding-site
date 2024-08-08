@@ -8,57 +8,60 @@
     <link rel="stylesheet" href="css/main-style.css">
     <link rel="stylesheet" href="css/id-style.css">
     <link rel="stylesheet" href="css/coding-style.css">
-
     <title>Guess The Code</title>
-    
+
 </head>
 
 <body class="background">
-    <div class="title-text code-font">
+    <div class="title-text">
         <p class="inline code-method">Codedle</p>
-        <p class="inline code-default" id="title-space-shrink">();</p>
+        <p class="inline code-default" id="title-space-shrink">()</p>
     </div>
 
-    <div class="centered" id="main-menu-buttons">
-        <p>
-
-        </p>
+    <div class="left-aligned" id="main-menu-buttons">
         <ul>
-            <li>
-                <p class="inline code-font code-special-keyword default-text">if
-                    <p class="inline code-font code-default default-text default-space-shrink">(
-                        <p class="inline code-font code-local-variable default-text default-space-shrink">readyToPlay</p>
-                        <p class="inline code-font code-default default-text">) {
-                    </p>
-                </p>
-                <button type="button" class="button code-font code-method">PlayDaily
-                    <p class="inline code-font code-default button-space-shrink">();</p>
+            <li class="body-text" id="play-container">
+                <p class="inline code-special-keyword">if
+                <p class="inline code-default">(
+                <p class="inline code-local-variable">readyToPlay</p>
+                <p class="inline code-default">) {</p>
+                <p class="code-new-line"></p>
+                <button type="button" class="button code-method">PlayDaily
+                    <p class="inline code-default minimize-space">();</p>
                 </button>
+                <p class="code-new-line code-default">}</p>
             </li>
 
-            <li>
-                <p class="inline code-font code-special-keyword default-text">else if
-                    <p class="inline code-font code-default default-text default-space-shrink">(
-                        <p class="inline code-font code-local-variable default-text default-space-shrink">showLeaderboard</p>
-                        <p class="inline code-font code-default default-text">) {
-                    </p>
-                </p>
-                <button type="button" class="button code-font code-method">Leaderboard
-                    <p class="inline code-default button-space-shrink">();</p>
+            <li class="body-text" id="leaderboard-container">
+                <p class="inline code-special-keyword">else if
+                <p class="inline code-default">(
+                <p class="inline code-local-variable">wantToKnowTopPlayers</p>
+                <p class="inline code-default ">) {</p>
+                <p class="code-new-line"></p>
+                <button type="button" class="button code-method">ShowLeaderboard
+                    <p class="inline code-default minimize-space">();</p>
                 </button>
+                <p class="code-new-line code-default">}</p>
             </li>
-            <li>
-                <button type="button" class="button code-font code-method">HowToPlay
-                    <p class="inline code-default button-space-shrink">();</p>
+
+            <li class="body-text" id="tutorial-container">
+                <p class="inline code-special-keyword">else if
+                <p class="inline code-default">(
+                <p class="inline code-local-variable">unsureHowToPlay</p>
+                <p class="inline code-default ">) {</p>
+                <p class="code-new-line"></p>
+                <button type="button" class="button code-method">HowToPlay
+                    <p class="inline code-default minimize-space">();</p>
                 </button>
+                <p class="code-new-line code-default">}</p>
             </li>
         </ul>
     </div>
-    
+
 
     <!-- jquery -->
     <script src="js/jquery-3.7.1.js"></script>
-    <script src="js/AnimateHeader.js"></script>
+    <script type="module" src="js/CommentDisplay.mjs"></script>
 </body>
 
 </html>
