@@ -29,3 +29,8 @@
     font-size: 3vw;
     text-align: center;
 }
+
+.body-text-shrink
+{
+    margin-left: -1vw;
+}

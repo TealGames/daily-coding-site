@@ -1,3 +1,8 @@
+:root
+{
+    --new-line-width: 0.5vw;
+}
+
 .code-font,
 .code-default,
 .code-default-keyword,
@@ -15,9 +20,21 @@
 }
 
 .code-new-line {
-    height: 5%;
+    height: var(--new-line-width);
+    width: 2%;
     margin-top: 0%;
     margin-bottom: 0%;
+}
+
+.code-2-new-line {
+    height: calc(var(--new-line-width)*4);
+    margin-top: 0%;
+    margin-bottom: 0%;
+}
+
+.code-tab-space
+{
+    margin-left:5%;
 }
 
 .code-default {
