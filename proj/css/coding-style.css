@@ -1,6 +1,6 @@
 :root
 {
-    --new-line-width: 0.5vw;
+    --new-line-width: 0.3vw;
 }
 
 .code-font,
@@ -27,7 +27,7 @@
 }
 
 .code-2-new-line {
-    height: calc(var(--new-line-width)*4);
+    height: calc(var(--new-line-width)*8);
     margin-top: 0%;
     margin-bottom: 0%;
 }

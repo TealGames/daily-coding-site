@@ -10,9 +10,13 @@ export async function displayText(text, waitTime, displayCallback) {
         const character = text.charAt(i);
 
         //Using type coercion empty strings are false
-        if (!character || character === " ") continue;
-
-        if (character === "<") {
+        if (!character) continue;
+        else if (character === " ")
+        {
+            displayCallback(character);
+            continue;
+        }
+        else if (character === "<") {
             foundTag = true;
             continue;
         }

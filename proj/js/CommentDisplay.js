@@ -1,23 +1,42 @@
 import { HelperFunctions } from "./HelperFunctions.js";
 import { displayText } from "./TextDisplay.js";
 
-function display() {
-    const newElementId = "comment-element";
-    const emptyTag = `<p class=\"code-comment\" id=\"${newElementId}\"></p>`;
-    //const $element = $("play-container");
-    const $element= document.querySelector("#play-container");
+import {getFacts} from "./RandomFacts.js";
 
-    //HelperFunctions.addHtmlToStart($element, emptyTag);
-    $element.innerHTML=emptyTag+$element.innerHTML;
-    //const $newElement = $(`#${newElementId}`);
-    const $newElement= document.querySelector(`#${newElementId}`);
+function commentDisplay(containerId, comment) {
+    const elementContainer = document.querySelector(`#${containerId}`);
+    const elementId = `${containerId}-comment-element`;
+    const emptyTag = `<p class=\"no-margins code-comment\" id=\"${elementId}\"></p>`;
+
+    elementContainer.innerHTML="<p class=\"code-2-new-line\"></p>"+emptyTag+ elementContainer.innerHTML;
+    const $newElement= document.querySelector(`#${elementId}`);
 
     const updateText = str => {
         $newElement.innerHTML= $newElement.innerHTML+str;
-        //HelperFunctions.addHtmlToEnd($newElement, str);
     }
 
-    const comment= "//Hello World!";
-    displayText(comment, 0.3, updateText);
+    if (comment.substr(0, 2)!=="//") comment= "//"+comment;
+    displayText(comment, 0.1, updateText);
 }
-display();
+
+function randomCommentDisplay(containerId, possibleComments) 
+{
+    const index= Math.floor(Math.random()*possibleComments.length);
+    commentDisplay(containerId, possibleComments[index]);
+}
+
+function randomCommentDisplayFromJson(containerId, json)
+{
+    const data= HelperFunctions.getObjFromJson(json).data;
+    const index= Math.floor(Math.random()*data.length);
+    commentDisplay(containerId, data[index]);
+}
+
+function displayAllComments()
+{
+    randomCommentDisplay("play-container", getFacts());
+    randomCommentDisplay("leaderboard-container", ["poop", "eat"]);
+    randomCommentDisplay("tutorial-container", ["poop", "eat"]);
+}
+
+displayAllComments();

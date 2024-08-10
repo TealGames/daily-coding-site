@@ -11,6 +11,11 @@ export class HelperFunctions {
         });
     }
 
+    static getObjFromJson(json)
+    {
+        return JSON.parse(json);
+    }
+
     static addHtmlToStart(element, html) {
         element.html(html + element.html());
         console.log(`Adding html ${html} to element ${element} new html: ${element.html()}`);
