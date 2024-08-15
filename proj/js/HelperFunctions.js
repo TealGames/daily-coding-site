@@ -1,4 +1,9 @@
 export class HelperFunctions {
+    static specialCharacters= ["`","~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "="
+                                , "+", "{", "}", "[", "]", "\\", "|", ";", ":", "'", "\"", "<", ">", ","
+                                , ".", "?", "/"
+                              ];
+
     static clamp(value, min, max) {
         return Math.max(Math.min(value, max), min);
     }
@@ -23,6 +28,12 @@ export class HelperFunctions {
 
     static addHtmlToEnd(element, html) {
         element.html(element.html() + html);
+    }
+
+    static isSpecialCharacter(c)
+    {
+        console.log(`is special: ${c} ${ this.specialCharacters.indexOf(c)!=-1}`);
+        return this.specialCharacters.indexOf(c)!=-1;
     }
 }
 

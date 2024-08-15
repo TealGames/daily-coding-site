@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head class="header">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/general-style.css">
+    <link rel="stylesheet" href="css/main-style.css">
+    <link rel="stylesheet" href="css/id-style.css">
+    <link rel="stylesheet" href="css/coding-style.css">
+    <title>Guess The Code</title>
+
+</head>
+
+<body class="background">
+    <div class="title-text">
+        <p class="inline code-method">Codedle</p>
+        <p class="inline code-default" id="title-space-shrink">()</p>
+    </div>
+
+    <div class="left-aligned" id="main-menu-buttons">
+        <div class="body-text">
+            <div class="inline" id="play-container">
+                <p class= "code-special-keyword">if</p>
+                <p class="inline code-default">(</p>
+                <p class="inline code-local-variable">wantDefaultMode</p>
+                <p class="inline code-default ">) {</p>
+                <p class="code-new-line"></p>
+                <button type="button" class="button">
+                    <p class= "inline code-method code-tab-space dark-on-hover">PlayDefaultMode</p>
+                    <p class="inline code-default body-text-shrink">();</p>
+                </button>
+                <p class="code-new-line"></p>
+                <p class="inline code-default">}</p>
+                <p class="code-2-new-line"></p>
+            </div>
+
+            <div class="inline" id="play-container">
+                <p class= "code-special-keyword">else if</p>
+                <p class="inline code-default">(</p>
+                <p class="inline code-local-variable">wantSomethingNew</p>
+                <p class="inline code-default ">) {</p>
+                <p class="code-new-line"></p>
+                <button type="button" class="button">
+                    <p class= "inline code-method code-tab-space dark-on-hover">PlayTableMode</p>
+                    <p class="inline code-default body-text-shrink">();</p>
+                </button>
+                <p class="code-new-line"></p>
+                <p class="inline code-default">}</p>
+                <p class="code-2-new-line"></p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- jquery -->
+    <script src="js/jquery-3.7.1.js"></script>
+    <script type="module" src="js/CommentDisplay.js"></script>
+</body>
+
+</html>

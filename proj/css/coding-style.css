@@ -34,41 +34,57 @@
 
 .code-tab-space
 {
-    margin-left:5%;
+    margin-left:7%;
+}
+
+.code-2-tab-space
+{
+    margin-left:14%;
 }
 
 .code-default {
-    color: #CCD9D0
+    color: #a0aaa3
 }
 
 .code-default-keyword {
-    color: #3885CF
+    color: #2b67a0
 }
 
 .code-special-keyword {
-    color: #D8A0D0
+    color: #c083b6
 }
 
 .code-local-variable {
-    color: #82D7F1
+    color: #67afc5
 }
 
 .code-object {
-    color: #49BA82
+    color: #35865e
 }
 
 .code-enum {
-    color: #9ED593
+    color: #7ea776
 }
 
 .code-method {
-    color: #DCD886
+    color: #c4be76
 }
 
 .code-string {
-    color: #D28453
+    color: #946446
 }
 
 .code-comment {
     color: #494848;
+}
+
+.dark-on-hover::before
+{
+    transition: 250ms ease-in-out;
+}
+
+.selected-color,
+.dark-on-hover:hover
+{
+    background-color: rgb(85, 88, 92);
 }

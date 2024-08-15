@@ -2,6 +2,21 @@
     margin-left: -1%;
 }
 
-#main-menu-buttons {
-    margin-top: 10%;
+#left-panel
+{
+    width:2%;
+    height:100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+    overflow: hidden;
+    padding-right: 2%;
+}
+
+#right-panel
+{
+    position: relative;
+    width:75%;
 }

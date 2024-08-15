@@ -9,58 +9,115 @@
     <link rel="stylesheet" href="css/id-style.css">
     <link rel="stylesheet" href="css/coding-style.css">
     <title>Guess The Code</title>
-
 </head>
 
 <body class="background">
-    <div class="title-text">
+    <div class="header title-text">
         <p class="inline code-method">Codedle</p>
         <p class="inline code-default" id="title-space-shrink">()</p>
     </div>
-
-    <div class="left-aligned" id="main-menu-buttons">
-        <ul>
-            <li class="body-text" id="play-container">
-                <p class="inline code-special-keyword">if
-                <p class="inline code-default">(
-                <p class="inline code-local-variable">readyToPlay</p>
-                <p class="inline code-default">) {</p>
+        
+    <div class="flex-center body-text">
+        <div class="text-new-line code-comment" id="left-panel">
+            <p class="inline no-margins">1</p>
+            <p class="inline no-margins">2</p>
+            <p class="inline no-margins">3</p>
+            <p class="inline no-margins">4</p>
+            <p class="inline no-margins">5</p>
+            <p class="inline no-margins">6</p>
+            <p class="inline no-margins">7</p>
+            <p class="inline no-margins">8</p>
+            <p class="inline no-margins">9</p>
+            <p class="inline no-margins">10</p>
+            <p class="inline no-margins">11</p>
+            <p class="inline no-margins">12</p>
+            <p class="inline no-margins">13</p>
+            <p class="inline no-margins">14</p>
+            <p class="inline no-margins">15</p>
+            <p class="inline no-margins">16</p>
+            <p class="inline no-margins">17</p>
+            <p class="inline no-margins">18</p>
+            <p class="inline no-margins">19</p>
+            <p class="inline no-margins">20</p>
+            <p class="inline no-margins">21</p>
+            <p class="inline no-margins">22</p>
+            <p class="inline no-margins">23</p>
+            <p class="inline no-margins">24</p>
+            <p class="inline no-margins">25</p>
+            <p class="inline no-margins">26</p>
+        </div>
+    
+        <div id="right-panel">
+                <p class="inline code-special-keyword">switch</p>
+                <p class="inline code-default">(</p>
+                <p class="inline code-local-variable">choice</p>
+                <p class="inline code-default">)</p>
                 <p class="code-new-line"></p>
-                <button type="button" class="button code-method code-tab-space">PlayDaily
-                    <p class="inline code-default body-text-shrink">();</p>
+                <p class="inline code-default">{</p>
+                <p class="code-new-line"></p>
+    
+            <div>
+                <p class="inline code-tab-space code-special-keyword">case</p>
+                <p class="inline code-local-variable">READY</p>
+                <p class="inline code-default">:</p>
+                <p class="code-new-line"></p>
+                <button type="button" class="button">
+                    <div class="dark-on-hover">
+                        <p class= "inline code-2-tab-space code-method">PlayDaily</p>
+                        <p class= "inline code-default body-text-shrink">();</p>
+                    </div>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-2-tab-space code-special-keyword">break</p>
+                    <p class="inline code-default">;</p>
+                </button>
+                <p class="code-2-new-line"></p>
+            </div>
+    
+            <div>
+                <p class="inline code-tab-space code-special-keyword">case</p>
+                <p class="inline code-local-variable">TOP_PLAYERS</p>
+                <p class="inline code-default">:</p>
+                <p class="code-new-line"></p>
+                <button type="button" class="button">
+                    <div class="dark-on-hover">
+                        <p class= "inline code-2-tab-space code-method dark-on-hover">ShowLeaderboard</p>
+                        <p class= "inline code-default body-text-shrink">();</p>
+                    </div>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-2-tab-space code-special-keyword">break</p>
+                    <p class="inline code-default">;</p>
+                </button>
+                <p class="code-2-new-line"></p>
+            </div>
+    
+            <div>
+                <p class="inline code-tab-space code-special-keyword">case</p>
+                <p class="inline code-local-variable">LEARN_HOW_TO_PLAY</p>
+                <p class="inline code-default">:</p>
+                <p class="code-new-line"></p>
+                <button type="button" class="button">
+                    <div class="dark-on-hover">
+                        <p class= "inline code-2-tab-space code-method dark-on-hover">ShowInstructions</p>
+                        <p class= "inline code-default body-text-shrink">();</p>
+                    </div>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-2-tab-space code-special-keyword">break</p>
+                    <p class="inline code-default">;</p>
                 </button>
                 <p class="code-new-line"></p>
                 <p class="inline code-default">}</p>
-            </li>
-
-            <li class="body-text" id="leaderboard-container">
-                <p class="inline code-special-keyword">else if
-                <p class="inline code-default">(
-                <p class="inline code-local-variable">wantToKnowTopPlayers</p>
-                <p class="inline code-default ">) {</p>
-                <p class="code-new-line"></p>
-                <button type="button" class="button code-method code-tab-space">ShowLeaderboard
-                    <p class="inline code-default body-text-shrink">();</p>
-                </button>
-                <p class="code-new-line"></p>
-                <p class="inline code-default">}</p>
-            </li>
-
-            <li class="body-text" id="tutorial-container">
-                <p class="inline code-special-keyword">else if
-                <p class="inline code-default">(
-                <p class="inline code-local-variable">unsureHowToPlay</p>
-                <p class="inline code-default ">) {</p>
-                <p class="code-new-line"></p>
-                <button type="button" class="button code-method code-tab-space">HowToPlay
-                    <p class="inline code-default body-text-shrink">();</p>
-                </button>
-                <p class="code-new-line"></p>
-                <p class="inline code-default">}</p>
-            </li>
-        </ul>
+                <p class="code-2-new-line"></p>
+            </div>
+        
+            <div class= "body-text text-new-line" id="fun-fact-container"></div>
+        </div>
     </div>
 
+    <div class="footer">
+        <div class="background-2">
+            <p class="no-margins code-comment">index.html</p>
+        </div>
+    </div>
 
     <!-- jquery -->
     <script src="js/jquery-3.7.1.js"></script>
