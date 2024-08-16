@@ -3,7 +3,7 @@ import { displayText } from "./TextDisplay.js";
 
 import {getFacts} from "./RandomFacts.js";
 
-const maxLineChars=25;
+let maxLineChars= 30;
 const newLineOnSpaceOnly=true;
 const skipSpecialCharacters=true;
 
@@ -14,36 +14,46 @@ function commentDisplay(containerId, comment) {
     const elementId = `${containerId}-comment-element`;
     const newLine = `<p class=\"no-margins code-comment\" id=\"${elementId}\"></p>`;
 
+    maxLineChars= Math.floor(window.innerWidth/20);
+    console.log(`chars: ${maxLineChars}`);
+    
+    
     //elementContainer.innerHTML="<p class=\"code-new-line\"></p>"+newLine+ elementContainer.innerHTML;
     elementContainer.innerHTML=newLine+ elementContainer.innerHTML;
-    const $newElement= document.querySelector(`#${elementId}`);
+    const newElement= document.querySelector(`#${elementId}`);
     
-    const isLongComment= comment.length/maxLineChars>0;
-    if (isLongComment) comment= "/*\n * "+comment;
-    else comment= "// "+ comment;
-    
-    let needsNewLine=false;
+    let displayStr=comment;
+    const isLongComment= displayStr.length/maxLineChars>0;
 
-    if (isLongComment)
-    {
-        for (let i=0; i<comment.length; i++)
+    const formatComment= function (){
+        displayStr=comment;
+        if (isLongComment) displayStr= "/*\n * "+displayStr;
+        else{
+            displayStr= "// "+ displayStr;
+            return;
+        }
+    
+        let needsNewLine=false;
+
+        for (let i=0; i<displayStr.length; i++)
             {
-                const text= comment.substring(0, i+1);
-                const character= comment.charAt(i);
+                const text= displayStr.substring(0, i+1);
+                const character= displayStr.charAt(i);
         
                 if (text.length%maxLineChars===0) needsNewLine=true;
                 if (newLineOnSpaceOnly && needsNewLine && character!== " ") continue;
         
-                if (needsNewLine && i<comment.length-1)
+                if (needsNewLine && i<displayStr.length-1)
                 {
                     needsNewLine=false;
-                    comment= text+ "\n * "+ comment.substring(i+1);
+                    displayStr= text+ "\n * "+ displayStr.substring(i+1);
                 }
             }
     }
+    formatComment();
 
-    const updateText = str => {
-        let old= $newElement.innerHTML;
+    const updateText = function(str) {
+        let old= newElement.innerHTML;
 
         const closingCommentIndex= old.lastIndexOf("\n */");
         if (isLongComment && closingCommentIndex!==-1)
@@ -51,11 +61,27 @@ function commentDisplay(containerId, comment) {
             old= old.substring(0, closingCommentIndex);
         }
 
-        $newElement.innerHTML= old+str+ "\n */";
-        $newElement.dispatchEvent(nextCharDisplayEvent);
+        newElement.innerHTML= old+str+ "\n */";
+        newElement.dispatchEvent(nextCharDisplayEvent);
     }
 
-    displayText(comment, 0.1, skipSpecialCharacters, updateText, null);
+    displayText(displayStr, 0.1, skipSpecialCharacters, updateText, null);
+
+    window.addEventListener("resize", function(e) {
+        newElement.innerHTML="";
+        HelperFunctions.cancelCurrentDelay();
+        formatComment();
+        displayText(comment, 0, skipSpecialCharacters, updateText, null);
+    });
+}
+
+function updateComment(event, element)
+{
+    if (HelperFunctions.windowWidthShrunk())
+    {
+        const oldHtml= element.innerHTML;
+        element.innerHTML= oldHtml.replace("\.", '\n* ');
+    }
 }
 
 function randomCommentDisplay(containerId, possibleComments) 
@@ -78,4 +104,4 @@ function displayAllComments()
     //randomCommentDisplay("tutorial-container", ["poop", "eat"]);
 }
 
-displayAllComments();
+document.addEventListener("DOMContentLoaded", displayAllComments);
