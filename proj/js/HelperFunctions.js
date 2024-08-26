@@ -1,4 +1,8 @@
 export class HelperFunctions {
+    
+    //-------------------------------
+    // BASIC
+    //-------------------------------
     static specialCharacters= ["`","~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "="
                                 , "+", "{", "}", "[", "]", "\\", "|", ";", ":", "'", "\"", "<", ">", ","
                                 , ".", "?", "/"
@@ -38,10 +42,9 @@ export class HelperFunctions {
         this.currentTimeout=null;
     }
 
-    static getObjFromJson(json){
-        return JSON.parse(json);
-    }
-
+    //-------------------------------
+    // HTML
+    //-------------------------------
     static addHtmlToStart(element, html) {
         element.html(html + element.html());
         console.log(`Adding html ${html} to element ${element} new html: ${element.html()}`);
@@ -61,6 +64,23 @@ export class HelperFunctions {
 
     static windowHeightShrunk(){
         return window.innerHeight< this.startHeight;
+    }
+
+    //-------------------------------
+    // REPETITION
+    //-------------------------------
+    static getObjFromJson(json){
+        return JSON.parse(json);
+    }
+
+    /**
+     * Compares the times of the days using Unix Time in milleseconds
+     * @param {Date} day1 - first day to compare
+     * @param {Date} day2 -  second day to compare
+     */
+    static isSameDay(day1, day2)
+    {
+        return day1.getTime()===day2.getTime();
     }
 }
 
