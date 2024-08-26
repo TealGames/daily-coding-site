@@ -7,6 +7,9 @@ let maxLineChars= 30;
 const newLineOnSpaceOnly=true;
 const skipSpecialCharacters=true;
 
+//If true, will show the * symbol every new comment line
+const doNewLineChar=false;
+
 const nextCharDisplayEvent= new Event("onNextCharDisplayed");
 
 function commentDisplay(containerId, comment) {
@@ -17,7 +20,6 @@ function commentDisplay(containerId, comment) {
     maxLineChars= Math.floor(window.innerWidth/20);
     console.log(`chars: ${maxLineChars}`);
     
-    
     //elementContainer.innerHTML="<p class=\"code-new-line\"></p>"+newLine+ elementContainer.innerHTML;
     elementContainer.innerHTML=newLine+ elementContainer.innerHTML;
     const newElement= document.querySelector(`#${elementId}`);
@@ -27,7 +29,11 @@ function commentDisplay(containerId, comment) {
 
     const formatComment= function (){
         displayStr=comment;
-        if (isLongComment) displayStr= "/*\n * "+displayStr;
+        if (isLongComment)
+        {
+            if (doNewLineChar) displayStr= "/*\n * "+displayStr;
+            else displayStr= "/*\n"+displayStr;
+        }
         else{
             displayStr= "// "+ displayStr;
             return;
@@ -35,6 +41,7 @@ function commentDisplay(containerId, comment) {
     
         let needsNewLine=false;
 
+        if (!doNewLineChar) return;
         for (let i=0; i<displayStr.length; i++)
             {
                 const text= displayStr.substring(0, i+1);
@@ -54,7 +61,6 @@ function commentDisplay(containerId, comment) {
 
     const updateText = function(str) {
         let old= newElement.innerHTML;
-
         const closingCommentIndex= old.lastIndexOf("\n */");
         if (isLongComment && closingCommentIndex!==-1)
         {
@@ -65,13 +71,14 @@ function commentDisplay(containerId, comment) {
         newElement.dispatchEvent(nextCharDisplayEvent);
     }
 
-    displayText(displayStr, 0.1, skipSpecialCharacters, updateText, null);
+    const displayTextCancelId= "displayTextCancelId";
+    displayText(displayStr, 0.1, skipSpecialCharacters, displayTextCancelId, updateText, null);
 
     window.addEventListener("resize", function(e) {
         newElement.innerHTML="";
-        HelperFunctions.cancelCurrentDelay();
+        HelperFunctions.cancelDelay(displayTextCancelId);
         formatComment();
-        displayText(comment, 0, skipSpecialCharacters, updateText, null);
+        displayText(displayStr, 0, skipSpecialCharacters, displayTextCancelId, updateText, null);
     });
 }
 

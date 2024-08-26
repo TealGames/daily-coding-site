@@ -1,6 +1,7 @@
 :root
 {
-    --new-line-width: 0.3vw;
+    --new-line-width: 5px;
+    --new-line-height: 5px;
 }
 
 .code-font,
@@ -20,26 +21,27 @@
 }
 
 .code-new-line {
-    height: var(--new-line-width);
-    width: 2%;
+    width: var(--new-line-width);
+    height: var(--new-line-height);
     margin-top: 0%;
     margin-bottom: 0%;
 }
 
 .code-2-new-line {
-    height: calc(var(--new-line-width)*8);
+    width: calc(var(--new-line-width)*8);
+    height: var(--new-line-height);
     margin-top: 0%;
     margin-bottom: 0%;
 }
 
 .code-tab-space
 {
-    margin-left:7%;
+    margin-left:50px;
 }
 
 .code-2-tab-space
 {
-    margin-left:14%;
+    margin-left:100px;
 }
 
 .code-default {
