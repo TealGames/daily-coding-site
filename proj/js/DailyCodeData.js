@@ -53,8 +53,7 @@ export const CodingLanguage= Object.freeze(
     }
 );
 
-export class CodeData
-{
+export class CodeData {
     #day;
     #code="";
     #lang;
@@ -98,14 +97,20 @@ export class CodeData
 
 const dailyCode= 
 [
-    new CodeData("some code"),
+    new CodeData(new Date(2024, 7, 26), "<spc>if </spc><def>(</def><var>reallyCool</var><def>) "+
+        "{</def><new></new><def>someText</def>", CodingLanguage.Java),
 ];
-  
+
+/**
+ * @param {Date} day 
+ * @returns 
+ */
 export function getCode(day)
 {
     for (let i=0; i<dailyCode.length; i++)
     {
-        if (HelperFunctions.isSameDay(day, dailyCode[i]))
+        console.log(`testing day ${HelperFunctions.isSameDay(day, dailyCode[i].getDay())}`);
+        if (HelperFunctions.isSameDay(day, dailyCode[i].getDay()))
         {
             return dailyCode[i];
         }

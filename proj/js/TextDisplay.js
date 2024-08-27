@@ -36,16 +36,18 @@ export async function displayText(text, waitTime, skipSpecialChars, cancelId, ch
             continue;
         }
         else if (foundTag) continue;
+        
+        await HelperFunctions.delay(waitTime, cancelId);
 
-        //We need to catch error in case the delay is rejected by promise
-        try{
-            await HelperFunctions.delay(waitTime, cancelId);
-        }
-        catch (e)
-        {
-            console.log(`display text was cancelled!`);
-            return;
-        }
+        // //We need to catch error in case the delay is rejected by promise
+        // try{
+        //     await HelperFunctions.delay(waitTime, cancelId);
+        // }
+        // catch (e)
+        // {
+        //     console.log(`display text was cancelled!`);
+        //     return;
+        // }
         
         if (charAction) charAction(character);
         if (strAction) strAction(text.substring(0, i+1));

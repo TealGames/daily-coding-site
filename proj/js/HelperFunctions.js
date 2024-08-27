@@ -119,7 +119,7 @@ export class HelperFunctions {
 
                 const cancelCallback= (e) =>{
                     if (e.detail!==outCancelId || !this.#timeoutIds.hasKey(outCancelId)) return;
-                    reject();
+                    resolve(`Delay of ${seconds} has been cancelled`);
                 }
 
                 //If we decide to cancel the delay while we are delaying(we know we are delaying still if we have
@@ -193,7 +193,8 @@ export class HelperFunctions {
      */
     static isSameDay(day1, day2)
     {
-        return day1.getTime()===day2.getTime();
+        return day1.getDay()===day2.getDay() && day1.getFullYear() ===day2.getFullYear() &&
+               day1.getMonth() ===day2.getMonth();
     }
 }
 

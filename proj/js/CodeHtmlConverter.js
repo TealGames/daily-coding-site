@@ -1,4 +1,4 @@
-import { CodeData } from "./DailyCodeData";
+import { CodeData } from "./DailyCodeData.js";
 
 const tagLength=3;
 const defaultTag= "def";
@@ -40,8 +40,36 @@ function getCSSClassFromTag(tag)
     }
 }
 
+export class CodeHtmlData{
+    #lines="";
+    #html="";
+
+    constructor(lines, html)
+    {
+        this.#lines= lines;
+        this.#html= html;
+    }
+
+    /**
+     * @returns {string[]}
+     */
+    getLines()
+    {
+        return this.#lines;
+    }
+
+    /**
+     * @returns {string}
+     */
+    getHtml()
+    {
+        return this.#html;
+    }
+}
+
 /**
  * @param {CodeData} data 
+ * @returns {CodeHtmlData}
  */
 export function getHtmlFromCodeData(data)
 {
@@ -49,31 +77,46 @@ export function getHtmlFromCodeData(data)
     let html="";
     let currentTag=null;
 
+    let lines= [];
+    let currentLine="";
+
     for (let i=0; i<code.length; i++)
     {
         const c= code.charAt(i);
-        if(c==="<")
+        if(c==="<" && i+1<code.length)
         {
             //If we are at closing tag, we can skip to the next text (since we know it has to be
-            //of the form </TAG>) so we have to do / + tag length + > and next space occurs with i++
-            if (i+1<code.length && code[i+1]==="/")
+            //of the form </TAG>) so we have to do / + tag length + > and next space
+            if (code[i+1]==="/")
             {
                 i+= currentTag.length+2;
                 currentTag=null;
+
+                currentLine+="</p>";
+                html+=currentLine;
             }
 
             //Otherwise we are an opening tag, so we get the current tag and then we
-            //increase to next character past tag so tag + > and next space occurs with i++
+            //increase to next character past tag so tag + > and next space
             else
             {
                 currentTag= code.substring(i+1, i+1+tagLength);
-                i+=i+tagLength+1;
+                i+=tagLength+1;
+                
+                if (currentTag===newLineTag)
+                {
+                    currentLine+="<p class=\"code-new-line\">";
 
-                if (currentTag===newLineTag) html+="<p class=\"code-new-line\"></p>";
-                else html+=`<p class=\"inline ${getCSSClassFromTag(currentTag)}\"></p>`;
+                    lines.push(currentLine);
+                    currentLine="";
+                }
+                else{
+                    currentLine+=`<p class=\"inline ${getCSSClassFromTag(currentTag)}\">`;
+                }
             }
         }
+        else currentLine+=c;
     }
 
-    return html;
+    return new CodeHtmlData(lines, html);
 }

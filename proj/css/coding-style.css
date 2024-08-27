@@ -1,9 +1,12 @@
+/*Root access style for root element (html tag for html) and is useful for 
+defining global variables in css*/
 :root
 {
     --new-line-width: 5px;
     --new-line-height: 5px;
 }
 
+input,
 .code-font,
 .code-default,
 .code-default-keyword,
