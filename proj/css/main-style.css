@@ -4,7 +4,7 @@
 
 .background-2
 {
-    background-color: #222222;
+    background-color: #292929;
 }
 
 .header {
@@ -65,7 +65,6 @@
 input{
     background-color: transparent;
     border:none;
-    /*outline-color: transparent;*/
-    width: 15vw;
+    width: 25vw;
     height: 3vh;
 }

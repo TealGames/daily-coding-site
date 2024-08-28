@@ -7,15 +7,17 @@ let today = null;
 let todaysCodeDisplay = null;
 let todaysCodeIndex = 0;
 let displayContainer = null;
+let code=null;
 
 function initCodeDisplay() {
     today = new Date();
-    const code = getCode(today);
+    code = getCode(today);
     todaysCodeDisplay = getHtmlFromCodeData(code);
     todaysCodeIndex = -1;
 
     displayContainer = document.querySelector("#game-default-container");
-    //console.log(`code: ${todaysCodeDisplay.getHtml()}`);
+    for (let i=0; i<todaysCodeDisplay.getLines().length; i++)
+        console.log(`code line: ${todaysCodeDisplay.getLines()[i]}`);
 }
 
 function nextLine() {
@@ -29,17 +31,26 @@ function nextLine() {
 
     if (displayContainer.innerHTML) displayContainer.innerHTML += line;
     else displayContainer.innerHTML = line;
-
-    //console.log(`displaying ${line} to ${displayContainer} ${displayContainer.innerHTML}`);
 }
 
 (function listenForPageChange() {
-    //console.log("listen for page change");
     const defaultModeButton = document.getElementById("play-default-button");
     defaultModeButton.addEventListener("click", (e) => {
         initCodeDisplay();
         nextLine();
-        nextLine();
-        nextLine();
     });
+}());
+
+function checkInput(e)
+{
+    const inputField = document.getElementById("input-field");
+    const text= inputField.value;
+    console.log(`input details: ${text}`);
+    if (text!==code.getLang()) nextLine();
+}
+
+(function listenForInput()
+{
+    const element = document.getElementById("input-field");
+    element.addEventListener("change", checkInput);
 }());

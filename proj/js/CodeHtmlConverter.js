@@ -10,6 +10,8 @@ const objectTag= "obj";
 const enumTag= "enm";
 const stringTag= "str";
 const commentTag= "cmt";
+
+//new line is the only tag that does not need a closing pair of tag
 const newLineTag= "new";
 
 function getCSSClassFromTag(tag)
@@ -85,15 +87,13 @@ export function getHtmlFromCodeData(data)
         const c= code.charAt(i);
         if(c==="<" && i+1<code.length)
         {
+            console.log(`found tag: ${code.substring(i, i+6)} currentline: ${currentLine}`);
             //If we are at closing tag, we can skip to the next text (since we know it has to be
             //of the form </TAG>) so we have to do / + tag length + > and next space
             if (code[i+1]==="/")
             {
                 i+= currentTag.length+2;
-                currentTag=null;
-
-                currentLine+="</p>";
-                html+=currentLine;
+                currentTag="";
             }
 
             //Otherwise we are an opening tag, so we get the current tag and then we
@@ -105,9 +105,11 @@ export function getHtmlFromCodeData(data)
                 
                 if (currentTag===newLineTag)
                 {
-                    currentLine+="<p class=\"code-new-line\">";
+                    currentLine+="<p class=\"code-new-line\"></p>";
 
                     lines.push(currentLine);
+                    console.log("psuhed line"+currentLine);
+                    html+=currentLine;
                     currentLine="";
                 }
                 else{
@@ -118,5 +120,6 @@ export function getHtmlFromCodeData(data)
         else currentLine+=c;
     }
 
+    console.log(`code for ${data.getCode()} is ${html}`);
     return new CodeHtmlData(lines, html);
 }

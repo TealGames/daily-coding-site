@@ -21,6 +21,7 @@ function disablePageAll(disablePageIds) {
  */
 function enablePage(enablePageId) {
     HelperFunctions.enableElement(enablePageId);
+    document.dispatchEvent(new CustomEvent("enablePage", { detail: enablePageId }));
 }
 
 /**
@@ -30,8 +31,6 @@ function enablePage(enablePageId) {
 function switchPage(disablePageId, enablePageId) {
     disablePage(disablePageId);
     enablePage(enablePageId);
-
-    document.dispatchEvent(new CustomEvent("switchPage", { detail: enablePageId }));
 }
 
 /**

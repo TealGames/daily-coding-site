@@ -93,8 +93,8 @@ export class CodeData {
 
 const dailyCode =
     [
-        new CodeData(new Date(2024, 7, 26), "<spc>if </spc><def>(</def><var>reallyCool</var><def>) " +
-            "{</def><new></new><def>someText</def>", CodingLanguage.Java),
+        new CodeData(new Date(2024, 7, 27), "<spc>if </spc><def>(</def><var>reallyCool</var><def>) " +
+            "{</def><new><def>someText</def>", CodingLanguage.Java),
     ];
 
 /**

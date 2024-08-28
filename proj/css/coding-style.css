@@ -7,6 +7,7 @@ defining global variables in css*/
 }
 
 input,
+.terminal,
 .code-font,
 .code-default,
 .code-default-keyword,
@@ -47,6 +48,11 @@ input,
     margin-left:100px;
 }
 
+.terminal
+{
+    color: #abadaf
+}
+
 .code-default {
     color: #a0aaa3
 }
@@ -80,7 +86,7 @@ input,
 }
 
 .code-comment {
-    color: #494848;
+    color: #646363;
 }
 
 .dark-on-hover::before
