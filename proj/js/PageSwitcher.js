@@ -5,9 +5,7 @@ import { HelperFunctions } from "./HelperFunctions.js";
  */
 function disablePage(disablePageId)
 {
-    const disableElement= document.getElementById(disablePageId);
-    console.log("disable"+disableElement);
-    disableElement.style.display= "none";
+    HelperFunctions.disableElement(disablePageId);
 }
 
 /**
@@ -26,13 +24,7 @@ function disablePageAll(disablePageIds)
  */
 function enablePage(enablePageId)
 {
-    const enableElement= document.getElementById(enablePageId);
-    const nodeType= enableElement.nodeName;
-    console.log("enable"+enableElement);
-    
-    //Block elements need to be changed to display as blocks, while others are inline
-    if (nodeType==="DIV" ||nodeType==="P") enableElement.style.display="block";
-    else enableElement.style.display="inline";
+    HelperFunctions.enableElement(enablePageId);
 }
 
 /**
@@ -43,6 +35,8 @@ function switchPage(disablePageId, enablePageId)
 {
    disablePage(disablePageId);
    enablePage(enablePageId);
+
+   document.dispatchEvent(new CustomEvent("switchPage", {detail: enablePageId}));
 }
 
 /**
@@ -55,17 +49,15 @@ function disablePagesAndEnable(disablePageIds, enablePageId)
     enablePage(enablePageId);
 }
 
-const mainPage=  "main";
-const modeSelectPage= "mode-select";
-const defaultGamePage= "game-default";
-const tableGamePage= "game-table";
+export const PageId=Object.freeze(
+    {
+        "MainPage": "main",
+        "ModeSelect": "mode-select",
+        "GameDefault": "game-default",
+        "GameTable": "game-table",
+    }
+);
 
-const pageIds= [
-    mainPage,
-    modeSelectPage,
-    defaultGamePage,
-    tableGamePage,
-];
 
 (function pageSwitchButtonListen()
 {

@@ -196,6 +196,23 @@ export class HelperFunctions {
         return day1.getDay()===day2.getDay() && day1.getFullYear() ===day2.getFullYear() &&
                day1.getMonth() ===day2.getMonth();
     }
+
+    static disableElement(elementId)
+    {
+        const disableElement= document.getElementById(elementId);
+        disableElement.style.display= "none";
+    }
+
+    static enableElement(elementId)
+    {
+        const enableElement= document.getElementById(elementId);
+        const nodeType= enableElement.nodeName;
+    
+        //Block elements need to be changed to display as blocks, while others are inline
+        if (nodeType==="DIV" ||nodeType==="P") enableElement.style.display="block";
+        else enableElement.style.display="inline";
+    }
+
 }
 
 
