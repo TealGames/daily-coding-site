@@ -1,13 +1,13 @@
 import { HelperFunctions } from "./HelperFunctions.js";
 
-export const CodingLanguage= Object.freeze(
+export const CodingLanguage = Object.freeze(
     {
         //OOP
         "C": "C",
         "C++": "C++",
         "C#": "C#",
         "Java": "Java",
-        
+
         //System
         "Rust": "Rust",
         "Zig": "Zig",
@@ -18,12 +18,12 @@ export const CodingLanguage= Object.freeze(
         "TypeScript": "TypeScript",
         "GDScript": "GDScript",
         "Python": "Python",
-        
+
         //Device apps
         "Go": "Go",
         "Swift": "Swift",
         "Kotlin": "Kotlin",
-        
+
         //Functional
         "F#": "F#",
         "Caml": "Caml",
@@ -33,7 +33,7 @@ export const CodingLanguage= Object.freeze(
         "Elixir": "Elixir",
         "Lisp": "Lisp",
         "Clojure": "Clojure",
-        
+
         //Ancient
         "Fortran": "Fortran",
         "BASIC": "BASIC",
@@ -43,7 +43,7 @@ export const CodingLanguage= Object.freeze(
         "Objective-C": "Objective-C",
         "Pascal": "Pascal",
         "SmallTalk": "SmallTalk",
-        
+
         //Other
         "Ruby": "Ruby",
         "Perl": "Perl",
@@ -55,7 +55,7 @@ export const CodingLanguage= Object.freeze(
 
 export class CodeData {
     #day;
-    #code="";
+    #code = "";
     #lang;
 
     /**
@@ -63,55 +63,48 @@ export class CodeData {
      * @param {string} code - the code for the day
      * @param {CodingLanguage} lang - language
      */
-    constructor(day, code, lang)
-    {
-        this.#day=day;
-        this.#code=code;
-        this.#lang= lang;
+    constructor(day, code, lang) {
+        this.#day = day;
+        this.#code = code;
+        this.#lang = lang;
     }
 
     /**
      * @returns {Date}
      */
-    getDay()
-    {
+    getDay() {
         return this.#day;
     }
 
     /**
      * @returns {string}
      */
-    getCode()
-    {
+    getCode() {
         return this.#code;
     }
 
     /**
      * @returns {CodingLanguage}
      */
-    getLang()
-    {
+    getLang() {
         return this.#lang;
     }
 }
 
-const dailyCode= 
-[
-    new CodeData(new Date(2024, 7, 26), "<spc>if </spc><def>(</def><var>reallyCool</var><def>) "+
-        "{</def><new></new><def>someText</def>", CodingLanguage.Java),
-];
+const dailyCode =
+    [
+        new CodeData(new Date(2024, 7, 26), "<spc>if </spc><def>(</def><var>reallyCool</var><def>) " +
+            "{</def><new></new><def>someText</def>", CodingLanguage.Java),
+    ];
 
 /**
  * @param {Date} day 
  * @returns 
  */
-export function getCode(day)
-{
-    for (let i=0; i<dailyCode.length; i++)
-    {
-        console.log(`testing day ${HelperFunctions.isSameDay(day, dailyCode[i].getDay())}`);
-        if (HelperFunctions.isSameDay(day, dailyCode[i].getDay()))
-        {
+export function getCode(day) {
+    for (let i = 0; i < dailyCode.length; i++) {
+        //console.log(`testing day ${HelperFunctions.isSameDay(day, dailyCode[i].getDay())}`);
+        if (HelperFunctions.isSameDay(day, dailyCode[i].getDay())) {
             return dailyCode[i];
         }
     }
