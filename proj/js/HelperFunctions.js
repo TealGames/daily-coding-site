@@ -177,6 +177,12 @@ export class HelperFunctions {
         else enableElement.style.display = "inline";
     }
 
+    static clearInput(inputTag)
+    {
+        inputTag.value="";
+        console.log(`clearing tag ${inputTag} to value: ${inputTag.value}`);
+    }
+
     //-------------------------------
     // REPETITION
     //-------------------------------
@@ -187,15 +193,85 @@ export class HelperFunctions {
     static clamp(value, min, max) {
         return Math.max(Math.min(value, max), min);
     }
+    
+    /**
+     * @param {Number} month - month- where 0 is January, 1 is February, etc.
+     * @param {Number} year -  full year
+     * @returns {boolean}
+     */
+    static daysInMonth (month, year) {
+        return new Date(year, month, 0).getDate();
+    }
 
     /**
-     * Compares the times of the days using Unix Time in milleseconds
      * @param {Date} day1 - first day to compare
      * @param {Date} day2 -  second day to compare
+     * @returns {boolean}
+     */
+    static isSameWeekday(day1, day2)
+    {
+        return day1.getDay() === day2.getDay();
+    }
+
+    /**
+     * @param {Date} day1 - first day to compare
+     * @param {Date} day2 -  second day to compare
+     * @returns {boolean}
+     */
+    static isSameMonth(day1, day2)
+    {
+        return day1.getMonth()===day2.getMonth();
+    }
+
+    /**
+     * @param {Date} day1 - first day to compare
+     * @param {Date} day2 -  second day to compare
+     * @returns {boolean}
+     */
+    static isSameDayNumber(day1, day2)
+    {
+        return day1.getDate() === day2.getDate();
+    }
+
+    /**
+     * @param {Date} day1 - first day to compare
+     * @param {Date} day2 -  second day to compare
+     * @returns {boolean}
+     */
+    static isSameYear(day1, day2)
+    {
+        return day1.getFullYear()===day2.getFullYear();
+    }
+
+    /**
+     * @param {Date} day1 - first day to compare
+     * @param {Date} day2 -  second day to compare
+     * @returns {boolean}
      */
     static isSameDay(day1, day2) {
-        return day1.getDay() === day2.getDay() && day1.getFullYear() === day2.getFullYear() &&
-            day1.getMonth() === day2.getMonth();
+        return this.isSameWeekday(day1, day2) && this.isSameDayNumber(day1, day2) && 
+        this.isSameYear(day1, day2) && this.isSameMonth(day1, day2);
+    }
+
+    /**
+     * @param {Date} day1 - first day to compare
+     * @param {Date} day2 -  second day to compare
+     * @returns {boolean}
+     */
+    static isTomorrow(day1, day2)
+    {
+        const sameMonth= this.isSameYear(day1, day2) && this.isSameMonth(day1, day2) &&
+                         day2.getDate()===day1.getDate()+1;
+
+        const nextMonth= this.isSameYear(day1, day2) && 
+                         this.daysInMonth(day1.getMonth(), day1.getFullYear())===day1.getDate()
+                         && day2.getDate() ===1 && day1.getMonth()+1===day2.getMonth() 
+
+        const nextYear= day1.getFullYear()+1===day2.getFullYear() && day1.getMonth()===11 && 
+                        this.daysInMonth(day1.getMonth(), day1.getFullYear())===day1.getDate() 
+                        && day2.getMonth() ===0 && day2.getDate()===1;
+        
+        return sameMonth || nextMonth || nextYear;
     }
 
     /**
@@ -209,6 +285,22 @@ export class HelperFunctions {
         }
 
         return vals;
+    }
+
+    /**
+     * @param {any[]} array 
+     * @param {any} value 
+     * @returns {boolean}
+     */
+    static arrayContains(array, value)
+    {
+        const contains= array.some((el, idx, arr) =>
+        {
+            console.log(`element ${el} is value: ${value} ${el===value}`);
+            return el===value;
+        });
+        console.log(`array ${array} contains ${value} ${contains}`);
+        return contains;
     }
 }
 

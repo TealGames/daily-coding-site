@@ -8,6 +8,9 @@ defining global variables in css*/
 
 input,
 .terminal,
+.terminal-error,
+.terminal-success,
+.terminal-warn,
 .code-font,
 .code-default,
 .code-default-keyword,
@@ -50,39 +53,54 @@ input,
 
 .terminal
 {
-    color: #abadaf
+    color: #abadaf;
+}
+
+.terminal-error
+{
+    color: rgb(134, 32, 32);
+}
+
+.terminal-warn
+{
+    color:rgb(170, 170, 18);
+}
+
+.terminal-success
+{
+    color:rgb(27, 133, 27);
 }
 
 .code-default {
-    color: #a0aaa3
+    color: #a0aaa3;
 }
 
 .code-default-keyword {
-    color: #2b67a0
+    color: #2b67a0;
 }
 
 .code-special-keyword {
-    color: #c083b6
+    color: #c083b6;
 }
 
 .code-local-variable {
-    color: #67afc5
+    color: #67afc5;
 }
 
 .code-object {
-    color: #35865e
+    color: #35865e;
 }
 
 .code-enum {
-    color: #7ea776
+    color: #7ea776;
 }
 
 .code-method {
-    color: #c4be76
+    color: #c4be76;
 }
 
 .code-string {
-    color: #946446
+    color: #946446;
 }
 
 .code-comment {

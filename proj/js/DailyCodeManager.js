@@ -3,21 +3,37 @@ import { getCode } from "./DailyCodeData.js";
 import { getHtmlFromCodeData } from "./CodeHtmlConverter.js";
 import { CodeHtmlData } from "./CodeHtmlConverter.js";
 
+const inputFieldId= "input-field";
+let inputField=null;
+
 let today = null;
 let todaysCodeDisplay = null;
 let todaysCodeIndex = 0;
 let displayContainer = null;
 let code=null;
 
+let previousInput=[];
+const totalAttempts=5;
+let currentAttempts=0;
+
+let playedDailyDefault=false;
+let playedDailyTable=false;
+
 function initCodeDisplay() {
+    inputField= document.getElementById(inputFieldId);
+    displayContainer = document.querySelector("#game-default-container");
+
     today = new Date();
     code = getCode(today);
     todaysCodeDisplay = getHtmlFromCodeData(code);
     todaysCodeIndex = -1;
+    previousInput=[];
 
-    displayContainer = document.querySelector("#game-default-container");
-    for (let i=0; i<todaysCodeDisplay.getLines().length; i++)
-        console.log(`code line: ${todaysCodeDisplay.getLines()[i]}`);
+    currentAttempts=0;
+    playedDailyDefault=false;
+
+    enableInput();
+    clearCodeDisplay();
 }
 
 function nextLine() {
@@ -33,6 +49,11 @@ function nextLine() {
     else displayContainer.innerHTML = line;
 }
 
+function clearCodeDisplay()
+{
+    displayContainer.innerHTML="";
+}
+
 (function listenForPageChange() {
     const defaultModeButton = document.getElementById("play-default-button");
     defaultModeButton.addEventListener("click", (e) => {
@@ -41,12 +62,43 @@ function nextLine() {
     });
 }());
 
+function disableInput()
+{
+    HelperFunctions.disableElement(inputFieldId);
+}
+
+function enableInput()
+{
+    HelperFunctions.enableElement(inputFieldId);
+}
+
 function checkInput(e)
 {
-    const inputField = document.getElementById("input-field");
-    const text= inputField.value;
-    console.log(`input details: ${text}`);
-    if (text!==code.getLang()) nextLine();
+    currentAttempts++;
+    const text= inputField.value.toLowerCase().replaceAll(" ", "");
+
+    //Don't allow duplicate guessing
+    if (!text || (previousInput && HelperFunctions.arrayContains(previousInput, text)))
+    {
+        return;
+    }
+    previousInput.push(text);
+
+    const rightInput= text===code.getLang().toLowerCase();
+    const maxAttemptsReached= currentAttempts>=totalAttempts;
+
+    inputField.dispatchEvent(new CustomEvent("validGuess", {detail: 
+        {
+            "CorrectGuess": rightInput,
+            "MaxAttempts": totalAttempts,
+            "CurrentAttempts": currentAttempts,
+            "AllAttemptsUsed": maxAttemptsReached,
+        }
+    }));
+
+    if (maxAttemptsReached) gameEnd(true, false);
+    else if (!rightInput) nextLine();
+    else gameEnd(true, true);
 }
 
 (function listenForInput()
@@ -54,3 +106,21 @@ function checkInput(e)
     const element = document.getElementById("input-field");
     element.addEventListener("change", checkInput);
 }());
+
+function gameEnd(isDefaultGame, isSuccess)
+{
+    disableInput();
+
+    if (isDefaultGame) playedDailyDefault=true;
+    else playedDailyTable=true;
+}
+
+export function hasPlayedTodaysDefault()
+{
+    return playedDailyDefault;
+}
+
+export function hasPlayedTodaysTable()
+{
+    return playedDailyTable;
+}

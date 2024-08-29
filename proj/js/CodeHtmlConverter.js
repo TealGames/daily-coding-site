@@ -87,7 +87,6 @@ export function getHtmlFromCodeData(data)
         const c= code.charAt(i);
         if(c==="<" && i+1<code.length)
         {
-            console.log(`found tag: ${code.substring(i, i+6)} currentline: ${currentLine}`);
             //If we are at closing tag, we can skip to the next text (since we know it has to be
             //of the form </TAG>) so we have to do / + tag length + > and next space
             if (code[i+1]==="/")
@@ -108,7 +107,6 @@ export function getHtmlFromCodeData(data)
                     currentLine+="<p class=\"code-new-line\"></p>";
 
                     lines.push(currentLine);
-                    console.log("psuhed line"+currentLine);
                     html+=currentLine;
                     currentLine="";
                 }
@@ -120,6 +118,9 @@ export function getHtmlFromCodeData(data)
         else currentLine+=c;
     }
 
-    console.log(`code for ${data.getCode()} is ${html}`);
+    //If we still have a line at the end not cleared (meaning we did not end on END tag)
+    //we then add it here
+    if (currentLine) lines.push(currentLine);
+
     return new CodeHtmlData(lines, html);
 }
