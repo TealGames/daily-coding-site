@@ -38,3 +38,8 @@ function checkPlayed(e)
     document.addEventListener("enablePage", checkPlayed);
     setButtonsIfPage(PageId.MainPage);
 }());
+
+function addTimer()
+{
+    //nextDay= 
+}
