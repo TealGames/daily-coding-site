@@ -1,5 +1,5 @@
 import { HelperFunctions } from "./HelperFunctions.js";
-import { getCode } from "./DailyCodeData.js";
+import { getCodeUTC } from "./DailyCodeData.js";
 import { getHtmlFromCodeData } from "./CodeHtmlConverter.js";
 import { CodeHtmlData } from "./CodeHtmlConverter.js";
 
@@ -23,8 +23,8 @@ function initCodeDisplay() {
     inputField= document.getElementById(inputFieldId);
     displayContainer = document.querySelector("#game-default-container");
 
-    today = new Date();
-    code = getCode(today);
+    today = HelperFunctions.convertToUTC(new Date());
+    code = getCodeUTC(today);
     todaysCodeDisplay = getHtmlFromCodeData(code);
     todaysCodeIndex = -1;
     previousInput=[];

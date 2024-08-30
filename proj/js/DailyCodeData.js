@@ -103,10 +103,10 @@ const dailyCode =
  * @param {Date} day 
  * @returns 
  */
-export function getCode(day) {
+export function getCodeUTC(day) {
     for (let i = 0; i < dailyCode.length; i++) {
         //console.log(`testing day ${HelperFunctions.isSameDay(day, dailyCode[i].getDay())}`);
-        if (HelperFunctions.isSameDay(day, dailyCode[i].getDay())) {
+        if (HelperFunctions.isSameDay(day, HelperFunctions.convertToUTC(dailyCode[i].getDay()))) {
             return dailyCode[i];
         }
     }
