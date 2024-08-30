@@ -70,10 +70,12 @@ export class CodeData {
     }
 
     /**
+     * Returns a deep copy of the date set 
+     * (to prevent accidental setting of this time object properties)
      * @returns {Date}
      */
     getDay() {
-        return this.#day;
+        return HelperFunctions.deepCopyDate(this.#day);
     }
 
     /**
@@ -93,7 +95,7 @@ export class CodeData {
 
 const dailyCode =
     [
-        new CodeData(new Date(2024, 7, 28), "<spc>if </spc><def>(</def><var>reallyCool</var><def>) " +
+        new CodeData(new Date(2024, 7, 29), "<spc>if </spc><def>(</def><var>reallyCool</var><def>) " +
             "{</def><new><def>someText</def>", CodingLanguage.Java),
     ];
 

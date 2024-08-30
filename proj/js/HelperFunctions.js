@@ -86,9 +86,9 @@ export class HashTable {
 
 export class HelperFunctions {
 
-    //-------------------------------
+    //-------------------------------------------------------------------------------------------------
     // BASIC
-    //-------------------------------
+    //-------------------------------------------------------------------------------------------------
     static specialCharacters = ["`", "~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "="
         , "+", "{", "}", "[", "]", "\\", "|", ";", ":", "'", "\"", "<", ">", ","
         , ".", "?", "/"
@@ -139,9 +139,9 @@ export class HelperFunctions {
         clearTimeout(pair.value);
     }
 
-    //-------------------------------
+    //-------------------------------------------------------------------------------------------------
     // HTML
-    //-------------------------------
+    //-------------------------------------------------------------------------------------------------
     static addHtmlToStart(element, html) {
         element.html(html + element.html());
         console.log(`Adding html ${html} to element ${element} new html: ${element.html()}`);
@@ -183,15 +183,25 @@ export class HelperFunctions {
         console.log(`clearing tag ${inputTag} to value: ${inputTag.value}`);
     }
 
-    //-------------------------------
+    //-------------------------------------------------------------------------------------------------
     // REPETITION
-    //-------------------------------
+    //-------------------------------------------------------------------------------------------------
     static getObjFromJson(json) {
         return JSON.parse(json);
     }
 
     static clamp(value, min, max) {
         return Math.max(Math.min(value, max), min);
+    }
+
+    /**
+     * @param {Date} date 
+     * @returns {Date}
+     */
+    static deepCopyDate(date)
+    {
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 
+        date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
     }
     
     /**
@@ -258,6 +268,17 @@ export class HelperFunctions {
      * @param {Date} day2 -  second day to compare
      * @returns {boolean}
      */
+    static isSameDayAndTime(day1, day2)
+    {
+        return this.isSameDay(day1, day2) && day1.getHours()===day2.getHours() && 
+               day1.getMinutes()===day2.getMinutes() && day1.getSeconds() ===day2.getSeconds();
+    }
+
+    /**
+     * @param {Date} day1 - first day to compare
+     * @param {Date} day2 -  second day to compare
+     * @returns {boolean}
+     */
     static isTomorrow(day1, day2)
     {
         const sameMonth= this.isSameYear(day1, day2) && this.isSameMonth(day1, day2) &&
@@ -272,6 +293,66 @@ export class HelperFunctions {
                         && day2.getMonth() ===0 && day2.getDate()===1;
         
         return sameMonth || nextMonth || nextYear;
+    }
+
+    /**
+     * Will convert the date to have its default amounts be the UTC timezone from the argument
+     * (Yes you can just use separate UTC functions, but easier to convert whole object)
+     * @param {Date} date 
+     * @returns {Date}
+     */
+    static convertToUTC(date)
+    {
+        return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 
+        date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
+    }
+
+    /**
+     * @param {Date} date 
+     * @returns {Date}
+     */
+    static getDateAsMidnight(date)
+    {
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+
+    /**
+     * @param {Date} time1 
+     * @param {Date} time2
+     * @returns {Object} - {Hours, Minutes, Seconds} *hours from 0-23
+     */
+    static getTimeDifference(time1, time2)
+    {
+        //Since the time may get messed up if we do each time unit separately
+        //(if next day's time unit,like min, is smaller, it will be wrong even if further day)
+        const diffInUnixTime= Math.abs(time2.getTime()-time1.getTime());
+        const timeObj= this.getTimeFromMilliseconds(diffInUnixTime);
+
+        return {
+            Hours: timeObj.Hours,
+            Minutes: timeObj.Minutes,
+            Seconds: timeObj.Seconds,
+        }
+    }
+
+    /**
+     * @param {Number} milliseconds 
+     * @returns {Object} - {Hours, Minutes, Seconds}
+     */
+    static getTimeFromMilliseconds(milliseconds)
+    {
+        const millisecondsForHour= (1000*60*60);
+        const millisecondsForMinute= (1000*60);
+
+        const hours= Math.floor(milliseconds/millisecondsForHour);
+        const minutes= Math.floor(milliseconds%millisecondsForHour/millisecondsForMinute);
+        const seconds= Math.floor(milliseconds%millisecondsForHour%millisecondsForMinute/1000);
+
+        return {
+            Hours: hours,
+            Minutes: minutes,
+            Seconds: seconds,
+        }
     }
 
     /**

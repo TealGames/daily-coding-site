@@ -124,3 +124,8 @@ export function hasPlayedTodaysTable()
 {
     return playedDailyTable;
 }
+
+export function getTodaysCodeData()
+{
+    return code;
+}
