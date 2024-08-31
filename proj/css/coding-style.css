@@ -109,11 +109,20 @@ input,
 
 .dark-on-hover::before
 {
+    opacity: 1;
     transition: 250ms ease-in-out;
 }
 
 .selected-color,
 .dark-on-hover:hover
 {
-    background-color: rgb(85, 88, 92);
+    background-color: rgb(74, 75, 77);
 }
+
+.dark-on-hover:disabled,
+button[disabled]
+{
+    background-color: #1E1E1E;
+    opacity: 0.5;
+}
+

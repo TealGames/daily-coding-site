@@ -13,6 +13,12 @@
     margin-bottom:2%;
 }
 
+.console
+{
+    background-color: rgb(26, 25, 25);
+    position: absolute;
+}
+
 .hidden-console {
     background-color: rgb(26, 25, 25);
     position: absolute;
@@ -64,6 +70,14 @@
 
 input{
     background-color: transparent;
+    border:none;
+    width: 25vw;
+    height: 3vh;
+}
+
+select
+{
+    background-color: rgb(42, 42, 43);
     border:none;
     width: 25vw;
     height: 3vh;

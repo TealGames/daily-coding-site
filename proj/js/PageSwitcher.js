@@ -4,6 +4,7 @@ import { HelperFunctions } from "./HelperFunctions.js";
  * @param {string} disablePageId 
  */
 function disablePage(disablePageId) {
+    console.log("disabling page "+ disablePageId);
     HelperFunctions.disableElement(disablePageId);
 }
 
@@ -46,8 +47,7 @@ export const PageId = Object.freeze(
     {
         "MainPage": "main",
         "ModeSelect": "mode-select",
-        "GameDefault": "game-default",
-        "GameTable": "game-table",
+        "GameDisplay": "game-display",
     }
 );
 
@@ -64,12 +64,12 @@ function getAllPageIds() {
 
     const defaultModeButton = document.getElementById("play-default-button");
     defaultModeButton.addEventListener("click", () => {
-        switchPage(PageId.ModeSelect, PageId.GameDefault);
+        switchPage(PageId.ModeSelect, PageId.GameDisplay);
     });
 
     const tableModeButton = document.getElementById("play-table-button");
     tableModeButton.addEventListener("click", () => {
-        switchPage(PageId.ModeSelect, PageId.GameTable);
+        switchPage(PageId.ModeSelect, PageId.GameDisplay);
     });
 
     const returnMenuButtons = document.getElementsByClassName("return-main-button");
@@ -82,7 +82,7 @@ function getAllPageIds() {
 })();
 
 (function disableAllOtherPages() {
-    console.log("disable all pages");
+    console.log(`disable all pages: ${getAllPageIds()}`);
     disablePagesAndEnable(getAllPageIds(), PageId.MainPage);
 })();
 

@@ -1,10 +1,13 @@
 import { HelperFunctions } from "./HelperFunctions.js";
-import { getCodeUTC } from "./DailyCodeData.js";
+import { getTodaysDataUTC } from "./DailyCodeData.js";
 import { getHtmlFromCodeData } from "./CodeHtmlConverter.js";
 import { CodeHtmlData } from "./CodeHtmlConverter.js";
 
 const inputFieldId= "input-field";
 let inputField=null;
+
+const gameReturnMenuContainerId= "game-return-main-container";
+let gameReturnMenuContainer=null;
 
 let today = null;
 let todaysCodeDisplay = null;
@@ -19,12 +22,15 @@ let currentAttempts=0;
 let playedDailyDefault=false;
 let playedDailyTable=false;
 
+let playingDefaultGame=true;
+
 function initCodeDisplay() {
     inputField= document.getElementById(inputFieldId);
     displayContainer = document.querySelector("#game-default-container");
+    gameReturnMenuContainer=document.getElementById(gameReturnMenuContainerId);
 
-    today = HelperFunctions.convertToUTC(new Date());
-    code = getCodeUTC(today);
+    code = getTodaysDataUTC();
+    console.log(`todays code: ${code}`);
     todaysCodeDisplay = getHtmlFromCodeData(code);
     todaysCodeIndex = -1;
     previousInput=[];
@@ -32,8 +38,17 @@ function initCodeDisplay() {
     currentAttempts=0;
     playedDailyDefault=false;
 
-    enableInput();
-    clearCodeDisplay();
+    HelperFunctions.disableElement(gameReturnMenuContainerId);
+    if (playingDefaultGame)
+    {
+        enableInput();
+        clearCodeDisplay();
+        
+    }
+    else
+    {
+        
+    }
 }
 
 function nextLine() {
@@ -76,6 +91,7 @@ function checkInput(e)
 {
     currentAttempts++;
     const text= inputField.value.toLowerCase().replaceAll(" ", "");
+    console.log(`input has submit to ${text}`);
 
     //Don't allow duplicate guessing
     if (!text || (previousInput && HelperFunctions.arrayContains(previousInput, text)))
@@ -96,9 +112,9 @@ function checkInput(e)
         }
     }));
 
-    if (maxAttemptsReached) gameEnd(true, false);
+    if (maxAttemptsReached) gameEnd(false);
     else if (!rightInput) nextLine();
-    else gameEnd(true, true);
+    else gameEnd(true);
 }
 
 (function listenForInput()
@@ -107,11 +123,12 @@ function checkInput(e)
     element.addEventListener("change", checkInput);
 }());
 
-function gameEnd(isDefaultGame, isSuccess)
+function gameEnd(isSuccess)
 {
     disableInput();
+    HelperFunctions.enableElement(gameReturnMenuContainerId);
 
-    if (isDefaultGame) playedDailyDefault=true;
+    if (playingDefaultGame) playedDailyDefault=true;
     else playedDailyTable=true;
 }
 

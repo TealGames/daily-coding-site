@@ -259,7 +259,7 @@ export class HelperFunctions {
      * @returns {boolean}
      */
     static isSameDay(day1, day2) {
-        return this.isSameWeekday(day1, day2) && this.isSameDayNumber(day1, day2) && 
+        return this.isSameDayNumber(day1, day2) && 
         this.isSameYear(day1, day2) && this.isSameMonth(day1, day2);
     }
 
@@ -357,7 +357,7 @@ export class HelperFunctions {
 
     /**
      * @param {Object} obj 
-     * @returns {Object[]} obj properties
+     * @returns {Object[]} obj property values
      */
     static getPropertiesOfObject(obj) {
         let vals = [];

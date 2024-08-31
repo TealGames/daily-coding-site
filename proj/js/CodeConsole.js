@@ -1,3 +1,4 @@
+import { CodingLanguage } from "./DailyCodeData.js";
 import { HelperFunctions } from "./HelperFunctions.js";
 import { PageId } from "./PageSwitcher.js";
 
@@ -5,16 +6,41 @@ const footerId = "footer";
 const inputContainerId = "language-input";
 const inputElementId= "input-field";
 const labelElementId= "input-label-text";
+const languageDropdownButtonId= "language-pick-toggle";
+const languageDropdownTextId= "language-pick-toggle-state";
+const languageDropdownId= "language-select";
+
+let languageDropdownButton=null;
+let languageDropdownText=null;
+let languageDropdown=null;
+let allowLanguageDropdowns=false;
+
+let footer= null;
 
 let label=null;
 let inputField=null;
-
 let previousInput=[];
 
+const newLineHeightChange=1;
+let currentLineHeight=0;
+
+function updateStyle()
+{
+    footer.style.top= `${100-currentLineHeight}%`;
+    footer.style.bottom= "0%";
+    footer.style.width= "100%";
+    footer.style.height= `${currentLineHeight}%`;
+}
+
+function addStyleHeight()
+{
+    currentLineHeight+=newLineHeightChange;
+    updateStyle();
+}
+
 function showConsole() {
-    //console.log("show console");
-    const footer = document.getElementById(footerId);
-    footer.className = "displayed-console";
+    currentLineHeight=30;
+    updateStyle();
 
     label= document.getElementById(labelElementId);
     inputField= document.getElementById(inputElementId);
@@ -31,16 +57,16 @@ function showConsole() {
 }
 
 function hideConsole() {
-    //console.log("hide console");
     const element = document.getElementById(footerId);
-    element.className = "hidden-console";
+    currentLineHeight=10;
+    updateStyle();
 
     HelperFunctions.disableElement(inputContainerId);
 }
 
 function checkPageForConsole(e) {
     console.log("enabled page "+e.detail);
-    if (e.detail === PageId.GameDefault || e.detail === PageId.GameTable) {
+    if (e.detail === PageId.GameDisplay) {
         showConsole();
     }
     else {
@@ -77,6 +103,7 @@ function updateLabelText(e)
         label.innerHTML=oldHtml+` ${input}</p>`;
         if (e)
         {
+            addStyleHeight();
             if (e.detail.AllAttemptsUsed)
             {
                 label.innerHTML+=`<p class=\"code-new-line\"></p>`+
@@ -84,19 +111,21 @@ function updateLabelText(e)
                 `${e.detail.MaxAttempts}/${e.detail.CurrentAttempts}</p>`; 
                 return; 
             }
-            else if (!e.detail.CorrectGuess)
+            else if (e.detail.CorrectGuess)
             {
                 label.innerHTML+=`<p class=\"code-new-line\"></p>`+
-                `<p class=\"inline terminal-error\">wrong input-> ~~~~~~~~  try again</p>`;        
+                `<p class=\"inline terminal-success\">correct input</p>`;  
+                return; 
+                       
             }
             else{
                 label.innerHTML+=`<p class=\"code-new-line\"></p>`+
-                `<p class=\"inline terminal-success\">correct input</p>`;       
+                `<p class=\"inline terminal-error\"> ->  wrong input  ~~~~~~~~  try again</p>`;   
             }
         }
     }
+    addStyleHeight();
     label.innerHTML+=targetTextFull;
-    
 }
 
 (function listenForConsoleEvents() {
@@ -106,7 +135,43 @@ function updateLabelText(e)
     inputField.addEventListener("validGuess", updateLabelText);
 }());
 
-(function hideConsoleOnStart() {
-    //console.log("hide console start");
+(function start() {
+    footer = document.getElementById(footerId);
     hideConsole();
+
+    languageDropdownText= document.getElementById(languageDropdownTextId);
+    languageDropdownButton= document.getElementById(languageDropdownButtonId);
+    languageDropdownButton.addEventListener("click", (e) =>
+    {
+        const currentValue= languageDropdownText.innerHTML.replaceAll(" ", "").toLowerCase();
+
+        //Actions for false
+        if (currentValue==="true")
+        {
+            languageDropdownText.innerHTML= "false";
+            allowLanguageDropdowns=false;
+            HelperFunctions.disableElement(languageDropdownId);
+        }
+
+        //Actions for true
+        else{
+            languageDropdownText.innerHTML= "true";
+            allowLanguageDropdowns= true;
+            HelperFunctions.enableElement(languageDropdownId);
+        }
+    });
+
+    languageDropdown= document.getElementById(languageDropdownId);
+    languageDropdown.addEventListener("change", async (e) =>
+    {
+        inputField.value= e.target.value+ " ";
+        inputField.focus();
+    });
+
+    const langs= HelperFunctions.getPropertiesOfObject(CodingLanguage).sort();
+    for (let i=0; i<langs.length; i++)
+    {
+        languageDropdown.innerHTML+=`<option value="${langs[i]}">${langs[i]}</option>`;
+    }
+    
 }());
