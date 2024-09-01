@@ -35,8 +35,15 @@ input,
 }
 
 .code-2-new-line {
-    width: calc(var(--new-line-width)*8);
-    height: var(--new-line-height);
+    width: calc(var(--new-line-width));
+    height: calc(var(--new-line-height)*8);
+    margin-top: 0%;
+    margin-bottom: 0%;
+}
+
+.code-4-new-line {
+    width: calc(var(--new-line-width));
+    height: calc(var(--new-line-height)*16);
     margin-top: 0%;
     margin-bottom: 0%;
 }
@@ -56,17 +63,17 @@ input,
     color: #abadaf;
 }
 
-.terminal-error
+.terminal-error, .table-wrong
 {
     color: rgb(134, 32, 32);
 }
 
-.terminal-warn
+.terminal-warn, .table-half-correct
 {
     color:rgb(170, 170, 18);
 }
 
-.terminal-success
+.terminal-success, .table-correct
 {
     color:rgb(27, 133, 27);
 }

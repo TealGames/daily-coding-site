@@ -82,3 +82,18 @@ select
     width: 25vw;
     height: 3vh;
 }
+
+table{
+    table-layout: fixed;
+}
+
+th, td{
+    background-color: rgb(42, 42, 43);
+    width: 10%;
+    height: 10%;
+    font-size: 60%;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: clip;
+    white-space: wrap;
+}

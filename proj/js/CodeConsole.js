@@ -85,7 +85,7 @@ function updateLabelText(e)
     const label= document.getElementById(labelElementId);
     const inputField= document.getElementById(inputElementId);
 
-    const input= inputField.value.toLowerCase().replaceAll(" ", "");
+    const input= e? e.detail.Input : "";
     const repeatInput= HelperFunctions.arrayContains(previousInput, input);
 
     const targetTextStart=  `<p class=\"code-new-line\"></p>
@@ -100,6 +100,9 @@ function updateLabelText(e)
     if (lastIndex>=0)
     {
         oldHtml=oldHtml.substring(0, lastIndex);
+
+        //WARNING: potentially dangerous code because allowing input to be added to HTML
+        //which could include script tags with injection attacks
         label.innerHTML=oldHtml+` ${input}</p>`;
         if (e)
         {

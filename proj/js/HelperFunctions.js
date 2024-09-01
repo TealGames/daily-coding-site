@@ -369,6 +369,49 @@ export class HelperFunctions {
     }
 
     /**
+     * @param {Object} obj 
+     * @returns {Number} obj property values
+     */
+    static getAllFlagEnumProperties(obj)
+    {
+        const values= this.getPropertiesOfObject(obj);
+
+        let result=values[0];
+        for (let i=1; i<values.length; i++)
+        {
+            result|=values[i];
+        }
+        return result;
+    }
+
+    /**
+     * @param {Number} flagEnumValue
+     * @param {Number} valueToCheck
+     * @returns {Boolean}
+     */
+    static flagEnumHasProperty(flagEnumValue, valueToCheck)
+    {
+        //We need to check the result is the same as the value to check (and cant do !==0) 
+        //because if value to check has multiple bits, all of them need to appear in the value not just 1
+        return (flagEnumValue & valueToCheck)===valueToCheck;
+    }
+
+    /**
+     * @param {Object} type
+     * @param {Number} flagEnumValue
+     * @returns {String}
+     */
+    static flagEnumToString(type, flagEnumValue)
+    {
+        let str="";
+        for (let key in type) {
+            if ((flagEnumValue & type[key])!==0) str+=key+" ";
+        }
+        str=str.trim();
+        return str;
+    }
+
+    /**
      * @param {any[]} array 
      * @param {any} value 
      * @returns {boolean}
