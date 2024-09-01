@@ -187,8 +187,12 @@ export function getHtmlFromLanguageData(targetLanguage, guessedLanguages, includ
         mainRowHtml+=`<td class=${sameLanguage? "table-correct" : "table-wrong"}>${guessedLanguage.getLang()}</td>`;
         
         //RELEASE YEAR
-        const sameYear= targetLanguage.getReleaseYear()===guessedLanguage.getReleaseYear();
-        mainRowHtml+=`<td class=${sameYear? "table-correct" : "table-wrong"}>${guessedLanguage.getReleaseYear()}</td>`;
+        const targetYear= targetLanguage.getReleaseYear();
+        const guessedYear= guessedLanguage.getReleaseYear();
+        const dirIcon=  guessedYear < targetYear? "▲": "▼";
+        const sameYear= targetYear===guessedYear;
+        mainRowHtml+=`<td class=${sameYear? "table-correct" : "table-wrong"}>`+
+        `${guessedLanguage.getReleaseYear()}${sameYear? "" : dirIcon}</td>`;
 
         //PARADIGM
         let paradigmClass= "";
