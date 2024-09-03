@@ -66,7 +66,7 @@ function hideConsole() {
 
 function checkPageForConsole(e) {
     console.log("enabled page "+e.detail);
-    if (e.detail === PageId.GameDisplay) {
+    if (e.detail.pageEnabledId === PageId.GameDisplay) {
         showConsole();
     }
     else {

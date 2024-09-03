@@ -1,5 +1,7 @@
 import { HelperFunctions } from "./HelperFunctions.js";
 
+let currentPageId="";
+
 /**
  * @param {string} disablePageId 
  */
@@ -22,7 +24,14 @@ function disablePageAll(disablePageIds) {
  */
 function enablePage(enablePageId) {
     HelperFunctions.enableElement(enablePageId);
-    document.dispatchEvent(new CustomEvent("enablePage", { detail: enablePageId }));
+    document.dispatchEvent(new CustomEvent("enablePage", { detail: 
+        {
+            pageEnabledId: enablePageId,
+            pastPageId: currentPageId,
+        }
+    }));
+
+    currentPageId= enablePageId;
 }
 
 /**
@@ -48,6 +57,7 @@ export const PageId = Object.freeze(
         "MainPage": "main",
         "ModeSelect": "mode-select",
         "GameDisplay": "game-display",
+        "GameInstructions": "game-instructions",
     }
 );
 
@@ -79,6 +89,17 @@ function getAllPageIds() {
         });
     }
 
+    const tutorialButtons = document.getElementsByClassName("instruction-button");
+    for (let i = 0; i < tutorialButtons.length; i++) {
+        tutorialButtons[i].addEventListener("click", () => {
+            disablePagesAndEnable(getAllPageIds(), PageId.GameInstructions);
+        });
+    }
+
+    const returnToGameButton= document.getElementById("return-game-button");
+    returnToGameButton.addEventListener("click", () => {
+        switchPage(PageId.GameInstructions, PageId.GameDisplay);
+    });
 })();
 
 (function disableAllOtherPages() {

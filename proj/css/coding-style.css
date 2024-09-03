@@ -22,6 +22,7 @@ input,
 .code-string,
 .code-comment {
     font-family: 'Courier New', Courier, monospace;
+    color: inherit;
     font-weight: bold;
     margin-left: 0%;
     margin-right: 0%;
@@ -70,7 +71,7 @@ input,
 
 .terminal-warn, .table-half-correct
 {
-    color:rgb(170, 170, 18);
+    color:rgb(136, 136, 15);
 }
 
 .terminal-success, .table-correct

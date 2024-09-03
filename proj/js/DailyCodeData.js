@@ -16,7 +16,6 @@ export const CodingLanguage = Object.freeze(
         //Weak type
         "JavaScript": "JavaScript",
         "TypeScript": "TypeScript",
-        "GDScript": "GDScript",
         "Python": "Python",
 
         //Device apps
@@ -42,7 +41,6 @@ export const CodingLanguage = Object.freeze(
         "Ada": "Ada",
         "Objective-C": "Objective-C",
         "Pascal": "Pascal",
-        "SmallTalk": "SmallTalk",
 
         //Other
         "Ruby": "Ruby",
@@ -95,7 +93,7 @@ export class CodeData {
 }
 
 const dailyCode = [
-    new CodeData(new Date(2024, 8, 1), "<spc>if </spc><def>(</def><var>reallyCool</var><def>){</def>"+
+    new CodeData(new Date(2024, 8, 2), "<spc>if </spc><def>(</def><var>reallyCool</var><def>){</def>"+
     "<new><def>someText</def>"+
     "<new><def>someText</def><def>evenmorenew</def>"+
     "<new><def>someText</def><def>here</def>", CodingLanguage.Java),
@@ -139,9 +137,9 @@ export function getTodaysCodeDataUTC() {
 
 
 export const LanguageParadigm= Object.freeze({
-    "Functional" : 1 << 0,
-    "Object-Oriented" : 1 << 1,
-    "Data-Oriented" : 1 << 2,
+    "Declarative" : 1 << 0,
+    "Functional" : 1 << 1,
+    "Object-Oriented" : 1 << 2,
     "Procedural" : 1 << 3,
     "Structural" : 1 << 4,
 });
@@ -149,6 +147,8 @@ export const LanguageParadigm= Object.freeze({
 export const CompilationType= Object.freeze({
     "Compiled" : "Compiled",
     "Interpreted" : "Interpreted",
+    "Compiled or Interpreted": "Compiled or Interpreted",
+    "Other" : "Other",
 });
 
 /*
@@ -160,6 +160,7 @@ export const LanguageTyping= Object.freeze({
     "Strong": 1 << 1,
     "Dynamic": 1 << 2,
     "Static" : 1 << 3,
+    "Other" : 1 << 4,
 });
 
 export const LanguageUse= Object.freeze({
@@ -178,6 +179,7 @@ export const LanguageUse= Object.freeze({
 export const LanguageSyntax= Object.freeze({
     "C-like": "C-like",
     "ALGOL-like": "ALGOL-like",
+    "Fortran-like": "Fortran-like",
     "Perl-like" : "Perl-like",
     "Lisp-like" : "Lisp-like",
     "Assembly-like" : "Assembly-like",
@@ -270,7 +272,7 @@ export class LanguageData
      * @returns {boolean}
      */
     hasParadigm(paradigm){
-        return HelperFunctions.flagEnumHasProperty(this.getParadigm(), paradigm);
+        return HelperFunctions.flagEnumHasAnyProperty(this.getParadigm(), paradigm);
     }
 
     /**
@@ -292,7 +294,7 @@ export class LanguageData
      * @returns {boolean}
      */
     hasTyped(typed){
-        return HelperFunctions.flagEnumHasProperty(this.getTypedType(), typed);
+        return HelperFunctions.flagEnumHasAnyProperty(this.getTypedType(), typed);
     }
 
     /**
@@ -307,7 +309,7 @@ export class LanguageData
      * @returns {boolean}
      */
     hasUse(use){
-        return HelperFunctions.flagEnumHasProperty(this.getUse(), use);
+        return HelperFunctions.flagEnumHasAnyProperty(this.getUse(), use);
     }
 
     /**
@@ -325,15 +327,186 @@ export class LanguageData
 }
 
 const langaugeData= [
-    new LanguageData(CodingLanguage["C#"], 2001, LanguageParadigm["Object-Oriented"]| LanguageParadigm.Functional, CompilationType.Compiled, 
-        LanguageTyping.Static | LanguageTyping.Strong, LanguageSyntax["C-like"], LanguageUse["Game Development"]),
+    //----------------------------------------------------------------------------------------------------------
+    // INTERPRETED LANGUAGES
+    //----------------------------------------------------------------------------------------------------------
+    new LanguageData(CodingLanguage["JavaScript"], 1995, 
+        LanguageParadigm["Object-Oriented"] | LanguageParadigm.Functional, 
+        CompilationType.Interpreted, LanguageTyping.Weak | LanguageTyping.Dynamic, 
+        LanguageSyntax["C-like"], LanguageUse.Web | LanguageUse.Server),
+
+    new LanguageData(CodingLanguage["TypeScript"], 2012, 
+        LanguageParadigm["Object-Oriented"] | LanguageParadigm.Functional, 
+        CompilationType.Interpreted, LanguageTyping.Other, 
+        LanguageSyntax["C-like"], LanguageUse.Web | LanguageUse.Server),
+
+    new LanguageData(CodingLanguage["Python"], 1991, 
+        HelperFunctions.getFullFlagEnumExcept(LanguageParadigm, LanguageParadigm.Declarative), 
+        CompilationType.Interpreted, LanguageTyping.Dynamic | LanguageUse.Strong, 
+        LanguageSyntax["ALGOL-like"], LanguageUse.AI | LanguageUse.Scripting | LanguageUse.Science | LanguageUse.Web),
+
+    new LanguageData(CodingLanguage["HTML"], 1993, 
+        LanguageParadigm.Declarative, 
+        CompilationType.Interpreted, LanguageTyping.Other, 
+        LanguageSyntax["XML-like"], LanguageUse.Web | LanguageUse.Server),
+
+    new LanguageData(CodingLanguage["PHP"], 1995, 
+        LanguageParadigm["Object-Oriented"] | LanguageParadigm.Functional, 
+        CompilationType.Interpreted, LanguageTyping.Dynamic | LanguageUse.Weak, 
+        LanguageSyntax["Perl-like"], LanguageUse.Web | LanguageUse.Server),
     
-    new LanguageData(CodingLanguage.JavaScript, 1995, LanguageParadigm["Object-Oriented"] | LanguageParadigm.Functional, CompilationType.Interpreted, 
-        LanguageTyping.Weak | LanguageTyping.Dynamic, LanguageSyntax["C-like"], LanguageUse.Web),
+    //----------------------------------------------------------------------------------------------------------
+    // OOP/GOOD LANGUAGES
+    //----------------------------------------------------------------------------------------------------------
+    new LanguageData(CodingLanguage["Java"], 1995, 
+        LanguageParadigm["Object-Oriented"] | LanguageParadigm.Functional, 
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["C-like"], LanguageUse.Web | LanguageUse.Applications),
+
+    new LanguageData(CodingLanguage["C#"], 2001, 
+        LanguageParadigm["Object-Oriented"]| LanguageParadigm.Functional | LanguageParadigm.Structural, 
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["C-like"], LanguageUse["Game Development"] | LanguageUse.Applications),
+    
+    new LanguageData(CodingLanguage["C"], 1972, 
+        LanguageParadigm.Structural | LanguageParadigm.Procedural, 
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Weak, 
+        LanguageSyntax["C-like"], LanguageUse.Applications | LanguageUse.Systems),
+
+    new LanguageData(CodingLanguage["C++"], 1985, 
+        HelperFunctions.getFullFlagEnumExcept(LanguageParadigm, LanguageParadigm.Structural | LanguageParadigm.Declarative), 
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["C-like"], LanguageUse.Applications | LanguageUse.Systems | LanguageUse["Game Development"]),
+    
+    new LanguageData(CodingLanguage["Rust"], 2015, 
+        LanguageParadigm.Structural | LanguageParadigm.Functional,
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["C-like"], LanguageUse.Applications | LanguageUse.Systems | LanguageUse.Scripting),
+
+    new LanguageData(CodingLanguage["Zig"], 2016, 
+        LanguageParadigm.Procedural | LanguageParadigm.Functional,
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["C-like"], LanguageUse.Applications | LanguageUse.Systems),
+
+    new LanguageData(CodingLanguage["Lua"], 1993, 
+        HelperFunctions.getFullFlagEnumExcept(LanguageParadigm, LanguageParadigm.Structural | LanguageParadigm.Declarative),
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["C-like"], LanguageUse.Applications | LanguageUse["Game Development"] | LanguageUse.Scripting),
+
+    new LanguageData(CodingLanguage["Go"], 2009, 
+        LanguageParadigm["Object-Oriented"]| LanguageParadigm.Functional,
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["C-like"], LanguageUse.Applications | LanguageUse.Web),
+
+    new LanguageData(CodingLanguage["Swift"], 2014, 
+        HelperFunctions.getFullFlagEnumExcept(LanguageParadigm, LanguageParadigm.Procedural | LanguageParadigm.Declarative),
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["C-like"], LanguageUse.Applications),
+
+    new LanguageData(CodingLanguage["Kotlin"], 2011, 
+        HelperFunctions.getFullFlagEnumExcept(LanguageParadigm, LanguageParadigm.Procedural | LanguageParadigm.Declarative),
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["C-like"], LanguageUse.Applications| LanguageUse.Web | LanguageUse.Server),
+
+    
+    //----------------------------------------------------------------------------------------------------------
+    // OTHER LANGUAGES
+    //----------------------------------------------------------------------------------------------------------
+    new LanguageData(CodingLanguage["Ruby"], 1995, 
+        LanguageParadigm.Functional | LanguageParadigm["Object-Oriented"],
+        CompilationType.Interpreted, LanguageTyping.Dynamic | LanguageTyping.Strong, 
+        LanguageSyntax["Perl-like"], LanguageUse.Web| LanguageUse.Applications | LanguageUse.Scripting),
+
+    new LanguageData(CodingLanguage["Perl"], 1987, 
+        LanguageParadigm.Functional | LanguageParadigm["Object-Oriented"] | LanguageParadigm.Procedural,
+        CompilationType.Interpreted, LanguageTyping.Dynamic, 
+        LanguageSyntax["Perl-like"], LanguageUse.Scripting| LanguageUse.Database | LanguageUse.Server),
+
+    
+    //----------------------------------------------------------------------------------------------------------
+    // FUNCTIONAL LANGUAGES
+    //----------------------------------------------------------------------------------------------------------
+    new LanguageData(CodingLanguage["F#"], 2005, 
+        LanguageParadigm.Functional | LanguageParadigm["Object-Oriented"],
+        CompilationType.Interpreted, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["Lisp-like"], LanguageUse.Science | LanguageUse.Scripting | LanguageUse.Server),
+
+    new LanguageData(CodingLanguage["Caml"], 1985, 
+        LanguageParadigm.Functional,
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["Lisp-like"], LanguageUse.Applications| LanguageUse.Systems | LanguageUse.Scripting),
+
+    new LanguageData(CodingLanguage["OCaml"], 1996, 
+        LanguageParadigm.Functional | LanguageParadigm["Object-Oriented"],
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["Lisp-like"], LanguageUse.Applications| LanguageUse.Systems | LanguageUse.Science),
+
+    new LanguageData(CodingLanguage["Haskell"], 1990, 
+        LanguageParadigm.Functional,
+        CompilationType["Compiled or Interpreted"], LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["Lisp-like"], LanguageUse.Applications| LanguageUse.Systems),
+
+    new LanguageData(CodingLanguage["Erlang"], 1986, 
+        LanguageParadigm.Functional | LanguageParadigm["Object-Oriented"],
+        CompilationType.Compiled, LanguageTyping.Dynamic | LanguageTyping.Strong, 
+        LanguageSyntax["Lisp-like"], LanguageUse.Applications| LanguageUse.Systems | LanguageUse.Server),
+
+    new LanguageData(CodingLanguage["Elixir"], 2012, 
+        LanguageParadigm.Functional,
+        CompilationType.Compiled, LanguageTyping.Dynamic | LanguageTyping.Strong, 
+        LanguageSyntax["Lisp-like"], LanguageUse.Applications| LanguageUse.Web | LanguageUse.Server),
+
+    new LanguageData(CodingLanguage["Lisp"], 1960, 
+        LanguageParadigm.Functional | LanguageParadigm.Procedural,
+        CompilationType["Compiled or Interpreted"], LanguageTyping.Dynamic | LanguageTyping.Strong, 
+        LanguageSyntax["Lisp-like"], LanguageUse.Applications| LanguageUse.Scripting | LanguageUse.AI),
+
+    new LanguageData(CodingLanguage["Clojure"], 2007, 
+        LanguageParadigm.Functional,
+        CompilationType.Compiled, LanguageTyping.Dynamic | LanguageTyping.Strong, 
+        LanguageSyntax["Lisp-like"], LanguageUse.Applications| LanguageUse.Server | LanguageUse.Science),
+    
+    //----------------------------------------------------------------------------------------------------------
+    // ANCIENT LANGUAGES
+    //----------------------------------------------------------------------------------------------------------
+    new LanguageData(CodingLanguage["Fortran"], 1957, 
+        LanguageParadigm.Structural | LanguageParadigm.Procedural,
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["Fortran-like"], LanguageUse.Science | LanguageUse.Applications | LanguageUse.Systems),
+
+    new LanguageData(CodingLanguage["BASIC"], 1958, 
+        LanguageParadigm.Procedural,
+        CompilationType["Compiled or Interpreted"], LanguageTyping.Dynamic | LanguageTyping.Weak, 
+        LanguageSyntax["Fortran-like"], LanguageUse.Applications | LanguageUse.Scripting),
+
+    new LanguageData(CodingLanguage["COBOL"], 1959, 
+        LanguageParadigm.Procedural,
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Weak, 
+        LanguageSyntax["Assembly-like"], LanguageUse.Applications| LanguageUse.Systems | LanguageUse.Database),
+
+    new LanguageData(CodingLanguage["ALGOL"], 1958, 
+        LanguageParadigm.Procedural | LanguageParadigm.Structural | LanguageParadigm["Object-Oriented"],
+        CompilationType["Compiled or Interpreted"], LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["Fortran-like"], LanguageUse.Applications| LanguageUse.Systems),
+
+    new LanguageData(CodingLanguage["Ada"], 1980, 
+        LanguageParadigm.Procedural | LanguageParadigm["Object-Oriented"],
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["ALGOL-like"], LanguageUse.Applications| LanguageUse.Systems | LanguageUse.Science),
+
+    new LanguageData(CodingLanguage["Objective-C"], 1984, 
+        LanguageParadigm["Object-Oriented"],
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Weak, 
+        LanguageSyntax["C-like"], LanguageUse.Applications| LanguageUse.Systems | LanguageUse["Game Development"]),
+
+    new LanguageData(CodingLanguage["Pascal"], 1970, 
+        LanguageParadigm.Structural | LanguageParadigm.Procedural,
+        CompilationType.Compiled, LanguageTyping.Static | LanguageTyping.Strong, 
+        LanguageSyntax["ALGOL-like"], LanguageUse.Applications| LanguageUse.Systems),  
 ];
 
 const dailyTable= [
-    new TableData(new Date(2024, 8, 1), CodingLanguage["C#"]),
+    new TableData(new Date(2024, 8, 2), CodingLanguage["C#"]),
 ];
 
 /**

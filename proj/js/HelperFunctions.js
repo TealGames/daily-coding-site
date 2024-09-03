@@ -369,12 +369,12 @@ export class HelperFunctions {
     }
 
     /**
-     * @param {Object} obj 
+     * @param {Object} type 
      * @returns {Number} obj property values
      */
-    static getAllFlagEnumProperties(obj)
+    static getAllFlagEnumProperties(type)
     {
-        const values= this.getPropertiesOfObject(obj);
+        const values= this.getPropertiesOfObject(type);
 
         let result=values[0];
         for (let i=1; i<values.length; i++)
@@ -385,6 +385,9 @@ export class HelperFunctions {
     }
 
     /**
+     * Will return TRUE if flagEnumValue has a 1 in the 1 bits in valueToCheck
+     * Example: (101, 001) -> true because 101 has 1 bit in least significant place
+     * Example: (10110, 01110) -> false because first arg missing first 1 bit in valueToCheck
      * @param {Number} flagEnumValue
      * @param {Number} valueToCheck
      * @returns {Boolean}
@@ -397,6 +400,20 @@ export class HelperFunctions {
     }
 
     /**
+     * Will return TRUE if flagEnumValue ANY of the same bits as in valueToCheck
+     * Example: (101, 001) -> true because 101 has 1 bit in least significant place
+     * Example: (10110, 01110) -> true because one bit missing in first arg, there is at least one bit in arg1 from arg2
+     * Example: (1000, 0100) -> false because no bits from arg2 are present in arg1
+     * @param {Number} flagEnumValue
+     * @param {Number} valueToCheck
+     * @returns {Boolean}
+     */
+    static flagEnumHasAnyProperty(flagEnumValue, valueToCheck)
+    {
+        return (flagEnumValue & valueToCheck)!=0;
+    }
+
+    /**
      * @param {Object} type
      * @param {Number} flagEnumValue
      * @returns {String}
@@ -405,10 +422,32 @@ export class HelperFunctions {
     {
         let str="";
         for (let key in type) {
-            if ((flagEnumValue & type[key])!==0) str+=key+" ";
+            if ((flagEnumValue & type[key])!==0)
+            {
+                str+=key+", ";
+            }
         }
         str=str.trim();
+        const lastComma= str.lastIndexOf(",");
+        if (lastComma>=0) str=str.substring(0, lastComma);
+
         return str;
+    }
+
+    /**
+     * @param {Object} type
+     * @param {Number} exceptValue
+     * @returns {Object}
+     */
+    static getFullFlagEnumExcept(type, exceptValue)
+    {
+        const allProperties= this.getAllFlagEnumProperties(type);
+        const allIndividual= this.getPropertiesOfObject(type);
+
+        //By changing the exception values to the inverse and using and, the spots not in the enum
+        //get cancelled by the all properties 0 bits, and the ones that all has 
+        //get removed with 0 in exception (that used to be 1 bits)
+        return allProperties & ~exceptValue;
     }
 
     /**

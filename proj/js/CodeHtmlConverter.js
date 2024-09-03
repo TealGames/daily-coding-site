@@ -163,9 +163,12 @@ export function getHtmlFromLanguageData(targetLanguage, guessedLanguages, includ
     const headerRowElement= `<tr>
                                 <th>Language</th>
                                 <th>Release</th>
-                                <th>Paradigm</th>
-                                <th>Compilation</th>
-                                <th>Typed</th>
+                                <th><a class= "code-comment" href="https://www.geeksforgeeks.org/introduction-of-programming-paradigms/" 
+                                        target="_blank">Paradigm</a></th>
+                                <th><a class= "code-comment" href="https://www.geeksforgeeks.org/difference-between-compiled-and-interpreted-language/" 
+                                        target="_blank">Compilation</a></th>
+                                <th><a class= "code-comment" href="https://www.geeksforgeeks.org/what-is-a-typed-language/" 
+                                        target="_blank">Typed</a></th>
                                 <th>Syntax</th>
                                 <th>Use</th>
                             </tr>`;
@@ -196,6 +199,7 @@ export function getHtmlFromLanguageData(targetLanguage, guessedLanguages, includ
 
         //PARADIGM
         let paradigmClass= "";
+        console.log(`guessing lang with target paradigm:${targetLanguage.getParadigm()} and guessed ${guessedLanguage.getParadigm()}`);
         if (targetLanguage.getParadigm()===guessedLanguage.getParadigm()){
             paradigmClass= "table-correct";
         }

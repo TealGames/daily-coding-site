@@ -97,7 +97,7 @@
                         <p class="inline code-local-variable">LEARN_HOW_TO_PLAY</p>
                         <p class="inline code-default">:</p>
                         <p class="code-new-line"></p>
-                        <button type="button" class="button dark-on-hover">
+                        <button type="button" class="button dark-on-hover instruction-button">
                             <div>
                                 <p class="inline code-2-tab-space code-method">ShowInstructions</p>
                                 <p class="inline code-default body-text-shrink">();</p>
@@ -173,9 +173,93 @@
                 </div>
             </div>
 
-            <div id="game-display" class="body-text">
-                <div id="game-return-main-container">
+            <div id="game-instructions">
+                <div>
                     <p class="inline code-special-keyword">if</p>
+                    <p class="inline code-default">(</p>
+                    <p class="inline code-local-variable">wantToGoBack</p>
+                    <p class="inline code-default ">) {</p>
+                    <p class="code-new-line"></p>
+                    <div id="instructions-return-container">
+                        <div id="instructions-main-return-container">
+                            <button type="button" class="button return-main-button dark-on-hover">
+                                <div>
+                                    <p class="inline code-tab-space code-method">ReturnToMain</p>
+                                    <p class="inline code-default body-text-shrink">();</p>
+                                </div>
+                            </button>
+                        </div>
+                        <div id="instructions-game-return-container">
+                            <button type="button" id= "return-game-button" class="button dark-on-hover">
+                                <div>
+                                    <p class="inline code-tab-space code-method">ReturnToGame</p>
+                                    <p class="inline code-default body-text-shrink">();</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-default">}</p>
+                    <p class="code-2-new-line"></p>
+                </div>
+
+                <div id="default-mode-instructions">
+                    <p class="inline code-comment">//Default Mode</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-comment">/* In default mode you have to guess the correct</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-comment">programming language from a snippet of code.</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-comment">When you guess incorrectly, another line of code</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-comment">will appear. Your goal: guess the language in 5 attempts! */</p>
+                </div>
+
+                <p class="code-2-new-line"></p>
+                
+                <div id="table-mode-instructions">
+                    <p></p>
+                    <p class="inline code-comment">//Table Mode</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-comment">/* In table mode you have to guess the correct </p>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-comment">programming language from the language</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-comment">categories. After you guess a language, a row of that</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-comment">language's values in the different categories</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-comment">will show up in 1 of 3 colors: red for wrong, yellow</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-comment"> for partially right and green for right. If you are</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-comment">unsure what the category means, click on the category title</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-comment">to get redirected to a page that explains it.</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-comment">You will have 5 attempts to guess the language! */</p>
+                </div>
+            </div>
+
+            <div id="game-display" class="body-text">
+                <div>
+                    <p class="inline code-special-keyword">if</p>
+                    <p class="inline code-default">(</p>
+                    <p class="inline code-local-variable">unsureHowToPlay</p>
+                    <p class="inline code-default ">) {</p>
+                    <p class="code-new-line"></p>
+                    <button type="button" class="button dark-on-hover instruction-button ">
+                        <div>
+                            <p class="inline code-tab-space code-method">LearnRules</p>
+                            <p class="inline code-default body-text-shrink">();</p>
+                        </div>
+                    </button>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-default">}</p>
+                </div>
+
+                <div id="game-return-main-container">
+                    <p class="inline code-special-keyword">else if</p>
                     <p class="inline code-default">(</p>
                     <p class="inline code-local-variable">wantToGoBack</p>
                     <p class="inline code-default ">) {</p>
@@ -192,7 +276,6 @@
                 </div>
                 
                 
-                
                 <div class="body-text">
                     <button id="language-pick-toggle" type="button" class="button dark-on-hover">
                         <div>
@@ -206,7 +289,6 @@
                     <p class="code-2-new-line"></p>
 
                     <div id="game-display-container">
-                        
                     </div>
                 </div>
             </div>
@@ -237,6 +319,7 @@
     <script type="module" src="js/DailyCodeData.js"></script>
     <script type="module" src="js/DailyCodeManager.js"></script>
     <script type="module" src="js/PlayGameChecker.js"></script>
+    <script type="module" src="js/InstructionPanel.js"></script>
 </body>
 
 </html>

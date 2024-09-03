@@ -44,7 +44,7 @@ function setButtonsIfPage(pageId)
 
 function checkPlayed(e)
 {
-    setButtonsIfPage(e.detail);
+    setButtonsIfPage(e.detail.pageEnabledId);
 }
 
 (function listenForEvents()
