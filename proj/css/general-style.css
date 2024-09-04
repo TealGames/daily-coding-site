@@ -55,3 +55,8 @@ ul,
     align-content:flex-start;
 }
 
+.no-link-underline
+{
+    text-decoration: none;
+}
+

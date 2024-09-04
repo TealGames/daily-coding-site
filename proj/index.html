@@ -72,24 +72,7 @@
                             <p class="inline code-2-tab-space code-special-keyword">break</p>
                             <p class="inline code-default">;</p>
                         </button>
-                        <p class="code-2-new-line"></p>
-                    </div>
-
-                    <div>
-                        <p class="inline code-tab-space code-special-keyword">case</p>
-                        <p class="inline code-local-variable">TOP_PLAYERS</p>
-                        <p class="inline code-default">:</p>
                         <p class="code-new-line"></p>
-                        <button type="button" class="button dark-on-hover">
-                            <div>
-                                <p class="inline code-2-tab-space code-method">ShowLeaderboard</p>
-                                <p class="inline code-default body-text-shrink">();</p>
-                            </div>
-                            <p class="code-new-line"></p>
-                            <p class="inline code-2-tab-space code-special-keyword">break</p>
-                            <p class="inline code-default">;</p>
-                        </button>
-                        <p class="code-2-new-line"></p>
                     </div>
 
                     <div>
@@ -106,6 +89,46 @@
                             <p class="inline code-2-tab-space code-special-keyword">break</p>
                             <p class="inline code-default">;</p>
                         </button>
+                        <p class="code-new-line"></p>
+                    </div>
+
+                    <div>
+                        <p class="inline code-tab-space code-special-keyword">case</p>
+                        <p class="inline code-local-variable">FOUND_BUG</p>
+                        <p class="inline code-default">:</p>
+                        <p class="code-new-line"></p>
+                        <a class= "no-link-underline" 
+                        href="https://docs.google.com/forms/d/e/1FAIpQLSdzX185MoBgEK1kefthcCt_wuStFyD4B_uP76nIjqvJbe9e4w/viewform" target="_blank">
+                            <button type="button" class="button dark-on-hover">
+                                <div>
+                                    <p class="inline code-2-tab-space code-method">ReportBug</p>
+                                    <p class="inline code-default body-text-shrink">();</p>
+                                </div>
+                                <p class="code-new-line"></p>
+                                <p class="inline code-2-tab-space code-special-keyword">break</p>
+                                <p class="inline code-default">;</p>
+                            </button>
+                        </a>
+                        <p class="code-new-line"></p>
+                    </div>
+
+                    <div>
+                        <p class="inline code-tab-space code-special-keyword">case</p>
+                        <p class="inline code-local-variable">HAVE_CODE_SUGGESTION</p>
+                        <p class="inline code-default">:</p>
+                        <p class="code-new-line"></p>
+                        <a class= "no-link-underline" 
+                        href="https://docs.google.com/forms/d/e/1FAIpQLSd2WKun60IMQ6mSMlSO_qWcVqOJwNqnpN2Bzy0ndjpl2UYdvA/viewform" target="_blank">
+                            <button type="button" class="button dark-on-hover">
+                                <div>
+                                    <p class="inline code-2-tab-space code-method">SubmitCode</p>
+                                    <p class="inline code-default body-text-shrink">();</p>
+                                </div>
+                                <p class="code-new-line"></p>
+                                <p class="inline code-2-tab-space code-special-keyword">break</p>
+                                <p class="inline code-default">;</p>
+                            </button>
+                        </a>
                         <p class="code-new-line"></p>
                         <p class="inline code-default">}</p>
                         <p class="code-2-new-line"></p>
@@ -242,52 +265,57 @@
             </div>
 
             <div id="game-display" class="body-text">
-                <div>
-                    <p class="inline code-special-keyword">if</p>
-                    <p class="inline code-default">(</p>
-                    <p class="inline code-local-variable">unsureHowToPlay</p>
-                    <p class="inline code-default ">) {</p>
-                    <p class="code-new-line"></p>
-                    <button type="button" class="button dark-on-hover instruction-button ">
-                        <div>
-                            <p class="inline code-tab-space code-method">LearnRules</p>
-                            <p class="inline code-default body-text-shrink">();</p>
-                        </div>
-                    </button>
-                    <p class="code-new-line"></p>
-                    <p class="inline code-default">}</p>
+
+                <div id="non-gameplay-code" class="body-text unfocused-code">
+                    <div>
+                        <p class="inline code-special-keyword">if</p>
+                        <p class="inline code-default">(</p>
+                        <p class="inline code-local-variable">unsureHowToPlay</p>
+                        <p class="inline code-default ">) {</p>
+                        <p class="code-new-line"></p>
+                        <button type="button" class="button dark-on-hover instruction-button ">
+                            <div>
+                                <p class="inline code-tab-space code-method">LearnRules</p>
+                                <p class="inline code-default body-text-shrink">();</p>
+                            </div>
+                        </button>
+                        <p class="code-new-line"></p>
+                        <p class="inline code-default">}</p>
+                    </div>
+    
+                    <div id="game-return-main-container">
+                        <p class="inline code-special-keyword">else if</p>
+                        <p class="inline code-default">(</p>
+                        <p class="inline code-local-variable">wantToGoBack</p>
+                        <p class="inline code-default ">) {</p>
+                        <p class="code-new-line"></p>
+                        <button type="button" class="button return-main-button dark-on-hover">
+                            <div>
+                                <p class="inline code-tab-space code-method">ReturnToMain</p>
+                                <p class="inline code-default body-text-shrink">();</p>
+                            </div>
+                        </button>
+                        <p class="code-new-line"></p>
+                        <p class="inline code-default">}</p>
+                        <p class="code-2-new-line"></p>
+                    </div>
+    
+                    <div>
+                        <button id="language-pick-toggle" type="button" class="button dark-on-hover">
+                            <div>
+                                <p class="inline code-default-keyword">boolean</p>
+                                <p class="inline code-local-variable">showLanguageDropdown</p>
+                                <p class="inline code-default">=</p>
+                                <p id= "language-pick-toggle-state" class="inline code-default-keyword">true</p>
+                                <p class="inline code-default">;</p>
+                            </div>
+                        </button>
+                        <p class="code-2-new-line"></p>
+                    </div>
                 </div>
 
-                <div id="game-return-main-container">
-                    <p class="inline code-special-keyword">else if</p>
-                    <p class="inline code-default">(</p>
-                    <p class="inline code-local-variable">wantToGoBack</p>
-                    <p class="inline code-default ">) {</p>
-                    <p class="code-new-line"></p>
-                    <button type="button" class="button return-main-button dark-on-hover">
-                        <div>
-                            <p class="inline code-tab-space code-method">ReturnToMain</p>
-                            <p class="inline code-default body-text-shrink">();</p>
-                        </div>
-                    </button>
-                    <p class="code-new-line"></p>
-                    <p class="inline code-default">}</p>
-                    <p class="code-2-new-line"></p>
-                </div>
-                
                 
                 <div class="body-text">
-                    <button id="language-pick-toggle" type="button" class="button dark-on-hover">
-                        <div>
-                            <p class="inline code-default-keyword">boolean</p>
-                            <p class="inline code-local-variable">showLanguageDropdown</p>
-                            <p class="inline code-default">=</p>
-                            <p id= "language-pick-toggle-state" class="inline code-default-keyword">true</p>
-                            <p class="inline code-default">;</p>
-                        </div>
-                    </button>
-                    <p class="code-2-new-line"></p>
-
                     <div id="game-display-container">
                     </div>
                 </div>

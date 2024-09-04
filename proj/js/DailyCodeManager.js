@@ -17,14 +17,16 @@ const tableModeButtonId= "play-table-button";
 
 let today = null;
 let todaysCodeDisplay = null;
-let todaysCodeIndex = 0;
+let appearOrderIndex = 0;
+let appearLineIndices=[];
 let code=null;
 
 let table=null;
 let guessedLanguages=[];
 
 let previousInput=[];
-const totalAttempts=5;
+const defaultTotalAttempts=5;
+let currentTotalAttempts=defaultTotalAttempts;
 let currentAttempts=0;
 
 let playedDailyDefault=false;
@@ -40,12 +42,15 @@ function initGameDisplay() {
     code = getTodaysCodeDataUTC();
     table= getTodaysTableDataUTC();
     todaysCodeDisplay = getHtmlFromCodeData(code);
-    todaysCodeIndex = -1;
+    appearOrderIndex = -1;
+    appearLineIndices=[];
     previousInput=[];
 
     currentAttempts=0;
     playedDailyDefault=false;
 
+    //To make sure the game does not break, we use the appear order length, (should be 5, but just in case)
+    currentTotalAttempts= playingDefaultGame? todaysCodeDisplay.getAppearOrder().length : defaultTotalAttempts;
     HelperFunctions.disableElement(gameReturnMenuContainerId);
     enableInput();
     clearDisplay();
@@ -53,26 +58,37 @@ function initGameDisplay() {
 
 function nextLine() {
     if(playingDefaultGame){
-        todaysCodeIndex++;
+        appearOrderIndex++;
         const allLines= todaysCodeDisplay.getLines();
         const allHtmlLines= todaysCodeDisplay.getHtmlLines();
-
-        if (todaysCodeIndex > allHtmlLines.length - 1) {
-            console.warn(`tried to procede to next line of code but has passed lines bounds`);
+        const appearOrder=todaysCodeDisplay.getAppearOrder();
+        
+       
+        if (appearOrderIndex > appearOrder.length - 1) {
+            console.warn(`tried to procede to next line of code but has passed appear order bounds`);
             return;
         }
 
+        //Every new line to appear gets added
+        for (let i=0; i<appearOrder[appearOrderIndex].length; i++){
+            appearLineIndices.push(appearOrder[appearOrderIndex][i]);
+        }
+        console.log(`html: ${allHtmlLines.length} appear order: ${appearOrder} current: ${appearLineIndices}`);
+        
         let html="";
+
+        //Iterate over every html line, if it is in the appear array, it means it can be shown, 
+        //otherwise we set as hidden
         for (let i=0; i<allHtmlLines.length; i++)
         {
             console.log("print line"+ allHtmlLines[i]);
-            if (i<=todaysCodeIndex)
+            if (HelperFunctions.arrayContains(appearLineIndices, i))
             {
                 html+=allHtmlLines[i];
             }
             else{
                 const repeated= ("*").repeat(allLines[i].length);
-                const repeatedHtml= `<p class="inline body-text code-default">${repeated}</p><p class="code-new-line"></p>`;
+                const repeatedHtml= `<p class="inline body-text code-comment">${repeated}</p><p class="code-new-line"></p>`;
                 html+=repeatedHtml;
             }
         }
@@ -91,7 +107,7 @@ function showAllCodeLines()
 
     const allHtmlLines= todaysCodeDisplay.getHtmlLines();
     let html="";
-    for (let i=todaysCodeIndex+1; i<allHtmlLines.length; i++){
+    for (let i=appearOrderIndex+1; i<allHtmlLines.length; i++){
         html+=allHtmlLines[i];
     }
 
@@ -146,12 +162,12 @@ function checkInput(e)
     if (playingDefaultGame) rightInput= text===code.getLang().toLowerCase();
     else rightInput= text===table.getLang().toLowerCase();
 
-    const maxAttemptsReached= currentAttempts>=totalAttempts;
+    const maxAttemptsReached= currentAttempts>=currentTotalAttempts;
     inputField.dispatchEvent(new CustomEvent("validGuess", {detail: 
         {
             "Input": text,
             "CorrectGuess": rightInput,
-            "MaxAttempts": totalAttempts,
+            "MaxAttempts": currentTotalAttempts,
             "CurrentAttempts": currentAttempts,
             "AllAttemptsUsed": maxAttemptsReached,
         }

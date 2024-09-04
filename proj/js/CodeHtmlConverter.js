@@ -44,15 +44,23 @@ function getCSSClassFromTag(tag)
 }
 
 export class CodeHtmlData{
-    #lines="";
+    #linesText;
     #htmlLines="";
     #html="";
+    #lineAppearOrder;
 
-    constructor(lines, html, htmlLines)
+    /**
+     * @param {String[]} linesText - just the text (no tags) of each line in program structure
+     * @param {String} html - the full html in program structure
+     * @param {String[]} htmlLines - each lines's html in program structure
+     * @param {Number[][]} appearOrder - the line(s) that should appear
+     */
+    constructor(linesText, html, htmlLines, appearOrder)
     {
-        this.#lines= lines;
+        this.#linesText= linesText;
         this.#html= html;
         this.#htmlLines= htmlLines;
+        this.#lineAppearOrder= appearOrder;
     }
 
     /**
@@ -60,7 +68,7 @@ export class CodeHtmlData{
      */
     getLines()
     {
-        return this.#lines;
+        return this.#linesText;
     }
 
     /**
@@ -72,11 +80,19 @@ export class CodeHtmlData{
     }
     
     /**
-     * @returns {string}
+     * @returns {String[]}
      */
     getHtmlLines()
     {
         return this.#htmlLines;
+    }
+
+    /**
+     * @returns {Number[][]}
+     */
+    getAppearOrder()
+    {
+        return this.#lineAppearOrder;
     }
 }
 
@@ -87,6 +103,7 @@ export class CodeHtmlData{
 export function getHtmlFromCodeData(data)
 {
     const code= data.getCode();
+    console.log(`code length: ${code.length}`);
     let html="";
     let currentTag=null;
 
@@ -98,53 +115,65 @@ export function getHtmlFromCodeData(data)
 
     for (let i=0; i<code.length; i++)
     {
-        const c= code.charAt(i);
-        if(c==="<" && i+1<code.length)
+        const fullLine= code[i];
+        for (let j=0; j<fullLine.length; j++)
         {
-            //If we are at closing tag, we can skip to the next text (since we know it has to be
-            //of the form </TAG>) so we have to do / + tag length + > and next space
-            if (code[i+1]==="/")
+            const c= fullLine.charAt(j);
+            if(c==="<" && j+1<fullLine.length)
             {
-                i+= currentTag.length+2;
-                currentTag="";
-                currentLine+="</p>";
-            }
-
-            //Otherwise we are an opening tag, so we get the current tag and then we
-            //increase to next character past tag so tag + > and next space
-            else
-            {
-                currentTag= code.substring(i+1, i+1+tagLength);
-                i+=tagLength+1;
-                
-                if (currentTag===newLineTag)
+                //If we are at closing tag, we can skip to the next text (since we know it has to be
+                //of the form </TAG>) so we have to do / + tag length + > and next space
+                if (fullLine[j+1]==="/")
                 {
-                    currentLine+="<p class=\"code-new-line\"></p>";
-
-                    lines.push(currentLine);
-                    linesText.push(currentLineText);
-
-                    html+=currentLine;
-                    currentLine="";
-                    currentLineText="";
+                    j+= currentTag.length+2;
+                    currentTag="";
+                    currentLine+="</p>";
                 }
-                else{
-                    currentLine+=`<p class=\"inline ${getCSSClassFromTag(currentTag)}\">`;
+
+                //Otherwise we are an opening tag, so we get the current tag and then we
+                //increase to next character past tag so tag + > and next space
+                else
+                {
+                    currentTag= fullLine.substring(j+1, j+1+tagLength);
+                    j+=tagLength+1;
+                    
+                    if (currentTag===newLineTag && j)
+                    {
+                        currentLine+="<p class=\"code-new-line\"></p>";
+
+                        //lines.push(currentLine);
+                        //linesText.push(currentLineText);
+
+                        html+=currentLine;
+                        //currentLine="";
+                        //currentLineText="";
+                    }
+                    else{
+                        currentLine+=`<p class=\"inline ${getCSSClassFromTag(currentTag)}\">`;
+                    }
                 }
             }
+            else{
+                currentLine+=c;
+                currentLineText+=c;
+            }
         }
-        else{
-            currentLine+=c;
-            currentLineText+=c;
-        }
+
+        //If we still have a line at the end not cleared (meaning we did not end on END tag)
+        //we then add it here
+        //if (currentLine) lines.push(currentLine);
+        //if (currentLineText) linesText.push(currentLineText);
+
+        //We add a new line at the end no matter what
+        currentLine+="<p class=\"code-new-line\"></p>";
+        console.log(`pushing line: ${currentLine}`);
+        lines.push(currentLine);
+        currentLine="";
+        linesText.push(currentLineText);
+        currentLineText="";
     }
 
-    //If we still have a line at the end not cleared (meaning we did not end on END tag)
-    //we then add it here
-    if (currentLine) lines.push(currentLine);
-    if (currentLineText) linesText.push(currentLineText);
-
-    return new CodeHtmlData(linesText, html, lines);
+    return new CodeHtmlData(linesText, html, lines, data.getLineOrder());
 }
 
 /**

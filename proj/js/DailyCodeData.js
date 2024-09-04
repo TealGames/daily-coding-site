@@ -1,5 +1,7 @@
 import { HelperFunctions } from "./HelperFunctions.js";
 
+const getCodeRandomly=false;
+
 export const CodingLanguage = Object.freeze(
     {
         //OOP
@@ -54,18 +56,21 @@ export const CodingLanguage = Object.freeze(
 
 export class CodeData {
     #day;
-    #code = "";
+    #codeLines;
     #lang;
+    #lineAppearOrder;
 
     /**
      * @param {Date} day - day's code
-     * @param {string} code - the code for the day
+     * @param {string[]} codeLines - the code for the day
      * @param {CodingLanguage} lang - language
+     * @param {Number[][]} lineAppearOrder - order lines appear (as indices)
      */
-    constructor(day, code, lang) {
+    constructor(day, lang, codeLines, lineAppearOrder) {
         this.#day = day;
-        this.#code = code;
+        this.#codeLines = codeLines;
         this.#lang = lang;
+        this.#lineAppearOrder= lineAppearOrder;
     }
 
     /**
@@ -78,25 +83,33 @@ export class CodeData {
     }
 
     /**
-     * @returns {string}
-     */
-    getCode() {
-        return this.#code;
-    }
-
-    /**
      * @returns {CodingLanguage}
      */
     getLang() {
         return this.#lang;
     }
+
+    /**
+     * @returns {string[]}
+     */
+    getCode() {
+        return this.#codeLines;
+    }
+
+    /**
+     * @returns {Number[][]}
+     */
+    getLineOrder(){
+        return this.#lineAppearOrder;
+    }
 }
 
 const dailyCode = [
-    new CodeData(new Date(2024, 8, 2), "<spc>if </spc><def>(</def><var>reallyCool</var><def>){</def>"+
-    "<new><def>someText</def>"+
-    "<new><def>someText</def><def>evenmorenew</def>"+
-    "<new><def>someText</def><def>here</def>", CodingLanguage.Java),
+    new CodeData(new Date(2024, 8, 3), CodingLanguage.Java, 
+    ["<spc>if </spc><def>(</def><var>reallyCool</var><def>){</def><new><spc>else if</spc><def>(</def><var>poophead</var><def>){</def>",
+    "<def>someText</def>",
+    "<def>someText</def><def>evenmorenew</def>",
+    "<def>someText</def><def>here</def>"], [[2, 0], [3], [1]]),
 ];
 
 /**
@@ -105,6 +118,11 @@ const dailyCode = [
  */
 function getTodaysDataUTC(collection)
 {
+    if (getCodeRandomly){
+        const randomIndex= Math.floor(Math.random()*collection.length);
+        return collection[randomIndex];
+    }
+
     const todayLocal= new Date();
     const todayUTC= HelperFunctions.convertToUTC(todayLocal);
     
@@ -129,7 +147,7 @@ function getTodaysDataUTC(collection)
 }
 
 /**
-* @returns {Object}
+* @returns {CodeData}
 */
 export function getTodaysCodeDataUTC() {
     return getTodaysDataUTC(dailyCode);
