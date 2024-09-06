@@ -9,6 +9,7 @@ const labelElementId= "input-label-text";
 const languageDropdownButtonId= "language-pick-toggle";
 const languageDropdownTextId= "language-pick-toggle-state";
 const languageDropdownId= "language-select";
+const bottomGradientId="bottom-gradient";
 
 let languageDropdownButton=null;
 let languageDropdownText=null;
@@ -19,6 +20,7 @@ let footer= null;
 
 let label=null;
 let inputField=null;
+let bottomGradient=null;
 let previousInput=[];
 
 const newLineHeightChange=1;
@@ -30,6 +32,9 @@ function updateStyle()
     footer.style.bottom= "0%";
     footer.style.width= "100%";
     footer.style.height= `${currentLineHeight}%`;
+
+    bottomGradient.style.top=`${100-footer.style.height-bottomGradient.style.width}%`;
+    bottomGradient.style.bottom=`${footer.style.height}%`;
 }
 
 function addStyleHeight()
@@ -140,6 +145,7 @@ function updateLabelText(e)
 
 (function start() {
     footer = document.getElementById(footerId);
+    bottomGradient= document.getElementById(bottomGradientId);
     hideConsole();
 
     languageDropdownText= document.getElementById(languageDropdownTextId);

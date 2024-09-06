@@ -7,10 +7,14 @@
     background-color: #292929;
 }
 
-.header {
-    background-color: rgb(26, 25, 25);
-    padding-bottom: 2%;
-    margin-bottom:2%;
+.shadow
+{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0,0,0,0));
+}
+
+.inversed-shadow
+{
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0,0,0,0));
 }
 
 .console
@@ -56,6 +60,10 @@
 .title-text {
     font-size: 3rem;
     text-align: center;
+}
+
+.small-text{
+    font-size: 1em;
 }
 
 .text-new-line
