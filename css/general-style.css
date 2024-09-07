@@ -34,41 +34,39 @@ ul,
     text-align: left;
 }
 
-.flex-center
-{
-    display:flex;
+.flex-center {
+    display: flex;
     align-items: flex-start;
     justify-content: flex-start;
     flex-direction: row;
     gap: 20px;
 }
 
-.flex-right
-{
-    display:flex;
-    align-content:flex-end;
+.flex-right {
+    display: flex;
+    align-content: flex-end;
 }
 
-.flex-left
-{
-    display:flex;
-    align-content:flex-start;
+.flex-left {
+    display: flex;
+    align-content: flex-start;
 }
 
-.no-link-underline
-{
+.no-link-underline {
     text-decoration: none;
 }
 
-.contain-all{
+.contain-all {
     display: table;
-    clear: both; 
+    clear: both;
 }
 
-.vertical-line
-{
-    float:inline-start;
-    height:85vh;
-    width:0.2vw;
+.vertical-line {
+    float: inline-start;
+    height: 85vh;
+    width: 0.2vw;
 }
 
+.disabled {
+    display: none;
+}

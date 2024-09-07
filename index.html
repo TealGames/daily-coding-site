@@ -26,12 +26,12 @@
                 <p class="inline code-method">Codedle</p>
                 <p class="inline code-default">();</p>
             </div>
-            
+
             <div id="title-subtitle" class="inline centered body-text code-comment">//A daily code game</div>
         </div>
         <hr id="header-line" class="no-margins">
-        
-        
+
+
         <div id="top-gradient" class="shadow"></div>
     </div>
 
@@ -70,7 +70,7 @@
 
         <div id="vertical-line-border" class="no-margins vertical-line"></div>
         <div id="right-panel">
-            
+
             <div id="main">
                 <div>
                     <p class="inline code-special-keyword">switch</p>
@@ -120,8 +120,9 @@
                         <p class="inline code-local-variable">FOUND_BUG</p>
                         <p class="inline code-default">:</p>
                         <p class="code-new-line"></p>
-                        <a class= "no-link-underline" 
-                        href="https://docs.google.com/forms/d/e/1FAIpQLSdzX185MoBgEK1kefthcCt_wuStFyD4B_uP76nIjqvJbe9e4w/viewform" target="_blank">
+                        <a class="no-link-underline"
+                            href="https://docs.google.com/forms/d/e/1FAIpQLSdzX185MoBgEK1kefthcCt_wuStFyD4B_uP76nIjqvJbe9e4w/viewform"
+                            target="_blank">
                             <button type="button" class="button dark-on-hover">
                                 <div>
                                     <p class="inline code-2-tab-space code-method">ReportBug</p>
@@ -140,8 +141,9 @@
                         <p class="inline code-local-variable">HAVE_CODE_SUGGESTION</p>
                         <p class="inline code-default">:</p>
                         <p class="code-new-line"></p>
-                        <a class= "no-link-underline" 
-                        href="https://docs.google.com/forms/d/e/1FAIpQLSd2WKun60IMQ6mSMlSO_qWcVqOJwNqnpN2Bzy0ndjpl2UYdvA/viewform" target="_blank">
+                        <a class="no-link-underline"
+                            href="https://docs.google.com/forms/d/e/1FAIpQLSd2WKun60IMQ6mSMlSO_qWcVqOJwNqnpN2Bzy0ndjpl2UYdvA/viewform"
+                            target="_blank">
                             <button type="button" class="button dark-on-hover">
                                 <div>
                                     <p class="inline code-2-tab-space code-method">SubmitCode</p>
@@ -162,7 +164,7 @@
 
             </div>
 
-            <div id="mode-select" style="display:none">
+            <div id="mode-select" class="disabled">
                 <div class="body-text">
                     <div>
                         <p class="inline code-comment">//guess the language from a code snippet</p>
@@ -219,7 +221,7 @@
                 </div>
             </div>
 
-            <div id="game-instructions" style="display:none">
+            <div id="game-instructions" class="disabled">
                 <div>
                     <p class="inline code-special-keyword">if</p>
                     <p class="inline code-default">(</p>
@@ -236,7 +238,7 @@
                             </button>
                         </div>
                         <div id="instructions-game-return-container">
-                            <button type="button" id= "return-game-button" class="button dark-on-hover">
+                            <button type="button" id="return-game-button" class="button dark-on-hover">
                                 <div>
                                     <p class="inline code-tab-space code-method">ReturnToGame</p>
                                     <p class="inline code-default body-text-shrink">();</p>
@@ -262,7 +264,7 @@
                 </div>
 
                 <p class="code-2-new-line"></p>
-                
+
                 <div id="table-mode-instructions">
                     <p></p>
                     <p class="inline code-comment">//Table Mode</p>
@@ -287,7 +289,7 @@
                 </div>
             </div>
 
-            <div id="game-display" class="body-text" style="display:none">
+            <div id="game-display" class="body-text" class="disabled">
 
                 <div id="non-gameplay-code" class="body-text unfocused-code">
                     <div>
@@ -305,7 +307,7 @@
                         <p class="code-new-line"></p>
                         <p class="inline code-default">}</p>
                     </div>
-    
+
                     <div id="game-return-main-container">
                         <p class="inline code-special-keyword">else if</p>
                         <p class="inline code-default">(</p>
@@ -322,14 +324,14 @@
                         <p class="inline code-default">}</p>
                         <p class="code-2-new-line"></p>
                     </div>
-    
+
                     <div>
                         <button id="language-pick-toggle" type="button" class="button dark-on-hover">
                             <div>
                                 <p class="inline code-default-keyword">boolean</p>
                                 <p class="inline code-local-variable">showLanguageDropdown</p>
                                 <p class="inline code-default">=</p>
-                                <p id= "language-pick-toggle-state" class="inline code-default-keyword">true</p>
+                                <p id="language-pick-toggle-state" class="inline code-default-keyword">true</p>
                                 <p class="inline code-default">;</p>
                             </div>
                         </button>
@@ -337,14 +339,14 @@
                     </div>
                 </div>
 
-                
+
                 <div class="body-text">
                     <p class="inline code-comment">//Guess from code:</p>
                     <div id="code-display-area">
                         <div id="game-display-container">
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -360,13 +362,14 @@
         <div id="language-input" class="body-text">
             <p class="inline code-comment">C:\Users\Anonymous\Programs\Codedle</p>
             <div id="input-label-text"></div>
-            <input type="text" maxlength= "10" placeholder="type here..." 
-                    id= "input-field" class="body-text terminal">
+            <input type="text" maxlength="10" placeholder="type here..." id="input-field" class="body-text terminal">
 
-            <select id="language-select" placeholder="language select" class="body-text code-comment" ></select>
+            <!-- <label class="body-text terminal">Options:</label> -->
+            <select id="language-select" title="options" placeholder="language select"
+                class="body-text code-comment"></select>
         </div>
 
-        
+
         <div id="footer-details" class="body-text small-text">
             <p class="inline no-margins code-comment">Made by Teal Games</p>
             <a href="https://x.com/teal_games" target="_blank" class="code-comment">
@@ -379,12 +382,13 @@
                 <p class="inline code-comment">Itch.io</p>
             </a>
         </div>
-        
+
     </div>
 
 
     <!-- jquery -->
     <script src="js/jquery-3.7.1.js"></script>
+    <script type="module" src="js/Extensions.js"></script>
     <script type="module" src="js/CommentDisplay.js"></script>
     <script type="module" src="js/PageSwitcher.js"></script>
     <script type="module" src="js/CodeConsole.js"></script>

@@ -99,6 +99,8 @@ export class HelperFunctions {
 
     static #timeoutIds = new HashTable();
 
+    static #disableCSSClass = "disabled";
+
     static delay(seconds, outCancelId) {
         const promise = new Promise((resolve, reject) => {
             if (seconds === 0) {
@@ -142,6 +144,7 @@ export class HelperFunctions {
     //-------------------------------------------------------------------------------------------------
     // HTML
     //-------------------------------------------------------------------------------------------------
+
     static addHtmlToStart(element, html) {
         element.html(html + element.html());
         console.log(`Adding html ${html} to element ${element} new html: ${element.html()}`);
@@ -149,10 +152,6 @@ export class HelperFunctions {
 
     static addHtmlToEnd(element, html) {
         element.html(element.html() + html);
-    }
-
-    static isSpecialCharacter(c) {
-        return this.specialCharacters.indexOf(c) != -1;
     }
 
     static windowWidthShrunk() {
@@ -165,7 +164,10 @@ export class HelperFunctions {
 
     static disableElement(elementId) {
         const disableElement = document.getElementById(elementId);
-        disableElement.style.display = "none";
+
+        //To prevent multiple accumulating, we simply replace all of them to be empty and add one
+        enableElement.className = enableElement.className.ex_replaceAll(disableCSSClass, "");
+        disableElement.className += disableCSSClass;
     }
 
     static enableElement(elementId) {
@@ -175,17 +177,46 @@ export class HelperFunctions {
         //Block elements need to be changed to display as blocks, while others are inline
         if (nodeType === "DIV" || nodeType === "P") enableElement.style.display = "block";
         else enableElement.style.display = "inline";
+
+        //To prevent class conflicts, we replace the disable class
+        enableElement.className = enableElement.className.ex_replaceAll(disableCSSClass, "");
+
     }
 
-    static clearInput(inputTag)
-    {
-        inputTag.value="";
+    static clearInput(inputTag) {
+        inputTag.value = "";
         console.log(`clearing tag ${inputTag} to value: ${inputTag.value}`);
     }
 
     //-------------------------------------------------------------------------------------------------
     // REPETITION
     //-------------------------------------------------------------------------------------------------
+    /**
+     * @param {String} c 
+     * @returns {Boolean}
+     */
+    static isSpecialCharacter(c) {
+        return this.specialCharacters.indexOf(c) != -1;
+    }
+
+    /**
+     * Replaces ALL occurences on a string. While it is already implemented in the string class
+     * in JS, it does not work on IE, so this is an alternative to that function.
+     * @param {String} target 
+     * @param {String} replaceVal
+     * @param {String} newVal
+     * @returns {String} 
+     */
+    static replaceAll(target, replaceVal, newVal) {
+        let result = target;
+        let valIndex = target.indexOf(replaceVal);
+        while (valIndex >= 0) {
+            result = result.substring(0, index) + newVal + result.substring(index + replaceVal.length);
+            valIndex = target.indexOf(replaceVal);
+        }
+        return result;
+    }
+
     static getObjFromJson(json) {
         return JSON.parse(json);
     }
@@ -198,18 +229,17 @@ export class HelperFunctions {
      * @param {Date} date 
      * @returns {Date}
      */
-    static deepCopyDate(date)
-    {
-        return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 
-        date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+    static deepCopyDate(date) {
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate(),
+            date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
     }
-    
+
     /**
      * @param {Number} month - month- where 0 is January, 1 is February, etc.
      * @param {Number} year -  full year
      * @returns {boolean}
      */
-    static daysInMonth (month, year) {
+    static daysInMonth(month, year) {
         return new Date(year, month, 0).getDate();
     }
 
@@ -218,8 +248,7 @@ export class HelperFunctions {
      * @param {Date} day2 -  second day to compare
      * @returns {boolean}
      */
-    static isSameWeekday(day1, day2)
-    {
+    static isSameWeekday(day1, day2) {
         return day1.getDay() === day2.getDay();
     }
 
@@ -228,9 +257,8 @@ export class HelperFunctions {
      * @param {Date} day2 -  second day to compare
      * @returns {boolean}
      */
-    static isSameMonth(day1, day2)
-    {
-        return day1.getMonth()===day2.getMonth();
+    static isSameMonth(day1, day2) {
+        return day1.getMonth() === day2.getMonth();
     }
 
     /**
@@ -238,8 +266,7 @@ export class HelperFunctions {
      * @param {Date} day2 -  second day to compare
      * @returns {boolean}
      */
-    static isSameDayNumber(day1, day2)
-    {
+    static isSameDayNumber(day1, day2) {
         return day1.getDate() === day2.getDate();
     }
 
@@ -248,9 +275,8 @@ export class HelperFunctions {
      * @param {Date} day2 -  second day to compare
      * @returns {boolean}
      */
-    static isSameYear(day1, day2)
-    {
-        return day1.getFullYear()===day2.getFullYear();
+    static isSameYear(day1, day2) {
+        return day1.getFullYear() === day2.getFullYear();
     }
 
     /**
@@ -259,8 +285,8 @@ export class HelperFunctions {
      * @returns {boolean}
      */
     static isSameDay(day1, day2) {
-        return this.isSameDayNumber(day1, day2) && 
-        this.isSameYear(day1, day2) && this.isSameMonth(day1, day2);
+        return this.isSameDayNumber(day1, day2) &&
+            this.isSameYear(day1, day2) && this.isSameMonth(day1, day2);
     }
 
     /**
@@ -268,10 +294,9 @@ export class HelperFunctions {
      * @param {Date} day2 -  second day to compare
      * @returns {boolean}
      */
-    static isSameDayAndTime(day1, day2)
-    {
-        return this.isSameDay(day1, day2) && day1.getHours()===day2.getHours() && 
-               day1.getMinutes()===day2.getMinutes() && day1.getSeconds() ===day2.getSeconds();
+    static isSameDayAndTime(day1, day2) {
+        return this.isSameDay(day1, day2) && day1.getHours() === day2.getHours() &&
+            day1.getMinutes() === day2.getMinutes() && day1.getSeconds() === day2.getSeconds();
     }
 
     /**
@@ -279,19 +304,18 @@ export class HelperFunctions {
      * @param {Date} day2 -  second day to compare
      * @returns {boolean}
      */
-    static isTomorrow(day1, day2)
-    {
-        const sameMonth= this.isSameYear(day1, day2) && this.isSameMonth(day1, day2) &&
-                         day2.getDate()===day1.getDate()+1;
+    static isTomorrow(day1, day2) {
+        const sameMonth = this.isSameYear(day1, day2) && this.isSameMonth(day1, day2) &&
+            day2.getDate() === day1.getDate() + 1;
 
-        const nextMonth= this.isSameYear(day1, day2) && 
-                         this.daysInMonth(day1.getMonth(), day1.getFullYear())===day1.getDate()
-                         && day2.getDate() ===1 && day1.getMonth()+1===day2.getMonth() 
+        const nextMonth = this.isSameYear(day1, day2) &&
+            this.daysInMonth(day1.getMonth(), day1.getFullYear()) === day1.getDate()
+            && day2.getDate() === 1 && day1.getMonth() + 1 === day2.getMonth()
 
-        const nextYear= day1.getFullYear()+1===day2.getFullYear() && day1.getMonth()===11 && 
-                        this.daysInMonth(day1.getMonth(), day1.getFullYear())===day1.getDate() 
-                        && day2.getMonth() ===0 && day2.getDate()===1;
-        
+        const nextYear = day1.getFullYear() + 1 === day2.getFullYear() && day1.getMonth() === 11 &&
+            this.daysInMonth(day1.getMonth(), day1.getFullYear()) === day1.getDate()
+            && day2.getMonth() === 0 && day2.getDate() === 1;
+
         return sameMonth || nextMonth || nextYear;
     }
 
@@ -301,18 +325,16 @@ export class HelperFunctions {
      * @param {Date} date 
      * @returns {Date}
      */
-    static convertToUTC(date)
-    {
-        return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 
-        date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
+    static convertToUTC(date) {
+        return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+            date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
     }
 
     /**
      * @param {Date} date 
      * @returns {Date}
      */
-    static getDateAsMidnight(date)
-    {
+    static getDateAsMidnight(date) {
         return new Date(date.getFullYear(), date.getMonth(), date.getDate());
     }
 
@@ -321,12 +343,11 @@ export class HelperFunctions {
      * @param {Date} time2
      * @returns {Object} - {Hours, Minutes, Seconds} *hours from 0-23
      */
-    static getTimeDifference(time1, time2)
-    {
+    static getTimeDifference(time1, time2) {
         //Since the time may get messed up if we do each time unit separately
         //(if next day's time unit,like min, is smaller, it will be wrong even if further day)
-        const diffInUnixTime= Math.abs(time2.getTime()-time1.getTime());
-        const timeObj= this.getTimeFromMilliseconds(diffInUnixTime);
+        const diffInUnixTime = Math.abs(time2.getTime() - time1.getTime());
+        const timeObj = this.getTimeFromMilliseconds(diffInUnixTime);
 
         return {
             Hours: timeObj.Hours,
@@ -339,14 +360,13 @@ export class HelperFunctions {
      * @param {Number} milliseconds 
      * @returns {Object} - {Hours, Minutes, Seconds}
      */
-    static getTimeFromMilliseconds(milliseconds)
-    {
-        const millisecondsForHour= (1000*60*60);
-        const millisecondsForMinute= (1000*60);
+    static getTimeFromMilliseconds(milliseconds) {
+        const millisecondsForHour = (1000 * 60 * 60);
+        const millisecondsForMinute = (1000 * 60);
 
-        const hours= Math.floor(milliseconds/millisecondsForHour);
-        const minutes= Math.floor(milliseconds%millisecondsForHour/millisecondsForMinute);
-        const seconds= Math.floor(milliseconds%millisecondsForHour%millisecondsForMinute/1000);
+        const hours = Math.floor(milliseconds / millisecondsForHour);
+        const minutes = Math.floor(milliseconds % millisecondsForHour / millisecondsForMinute);
+        const seconds = Math.floor(milliseconds % millisecondsForHour % millisecondsForMinute / 1000);
 
         return {
             Hours: hours,
@@ -372,14 +392,12 @@ export class HelperFunctions {
      * @param {Object} type 
      * @returns {Number} obj property values
      */
-    static getAllFlagEnumProperties(type)
-    {
-        const values= this.getPropertiesOfObject(type);
+    static getAllFlagEnumProperties(type) {
+        const values = this.getPropertiesOfObject(type);
 
-        let result=values[0];
-        for (let i=1; i<values.length; i++)
-        {
-            result|=values[i];
+        let result = values[0];
+        for (let i = 1; i < values.length; i++) {
+            result |= values[i];
         }
         return result;
     }
@@ -392,11 +410,10 @@ export class HelperFunctions {
      * @param {Number} valueToCheck
      * @returns {Boolean}
      */
-    static flagEnumHasProperty(flagEnumValue, valueToCheck)
-    {
+    static flagEnumHasProperty(flagEnumValue, valueToCheck) {
         //We need to check the result is the same as the value to check (and cant do !==0) 
         //because if value to check has multiple bits, all of them need to appear in the value not just 1
-        return (flagEnumValue & valueToCheck)===valueToCheck;
+        return (flagEnumValue & valueToCheck) === valueToCheck;
     }
 
     /**
@@ -408,9 +425,8 @@ export class HelperFunctions {
      * @param {Number} valueToCheck
      * @returns {Boolean}
      */
-    static flagEnumHasAnyProperty(flagEnumValue, valueToCheck)
-    {
-        return (flagEnumValue & valueToCheck)!=0;
+    static flagEnumHasAnyProperty(flagEnumValue, valueToCheck) {
+        return (flagEnumValue & valueToCheck) != 0;
     }
 
     /**
@@ -418,18 +434,16 @@ export class HelperFunctions {
      * @param {Number} flagEnumValue
      * @returns {String}
      */
-    static flagEnumToString(type, flagEnumValue)
-    {
-        let str="";
+    static flagEnumToString(type, flagEnumValue) {
+        let str = "";
         for (let key in type) {
-            if ((flagEnumValue & type[key])!==0)
-            {
-                str+=key+", ";
+            if ((flagEnumValue & type[key]) !== 0) {
+                str += key + ", ";
             }
         }
-        str=str.trim();
-        const lastComma= str.lastIndexOf(",");
-        if (lastComma>=0) str=str.substring(0, lastComma);
+        str = str.trim();
+        const lastComma = str.lastIndexOf(",");
+        if (lastComma >= 0) str = str.substring(0, lastComma);
 
         return str;
     }
@@ -439,10 +453,9 @@ export class HelperFunctions {
      * @param {Number} exceptValue
      * @returns {Object}
      */
-    static getFullFlagEnumExcept(type, exceptValue)
-    {
-        const allProperties= this.getAllFlagEnumProperties(type);
-        const allIndividual= this.getPropertiesOfObject(type);
+    static getFullFlagEnumExcept(type, exceptValue) {
+        const allProperties = this.getAllFlagEnumProperties(type);
+        const allIndividual = this.getPropertiesOfObject(type);
 
         //By changing the exception values to the inverse and using and, the spots not in the enum
         //get cancelled by the all properties 0 bits, and the ones that all has 
@@ -455,12 +468,10 @@ export class HelperFunctions {
      * @param {any} value 
      * @returns {boolean}
      */
-    static arrayContains(array, value)
-    {
-        const contains= array.some((el, idx, arr) =>
-        {
-            console.log(`element ${el} is value: ${value} ${el===value}`);
-            return el===value;
+    static arrayContains(array, value) {
+        const contains = array.some((el, idx, arr) => {
+            console.log(`element ${el} is value: ${value} ${el === value}`);
+            return el === value;
         });
         console.log(`array ${array} contains ${value} ${contains}`);
         return contains;
