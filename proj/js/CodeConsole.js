@@ -33,8 +33,9 @@ function updateStyle()
     footer.style.width= "100%";
     footer.style.height= `${currentLineHeight}%`;
 
-    bottomGradient.style.top=`${100-footer.style.height-bottomGradient.style.width}%`;
-    bottomGradient.style.bottom=`${footer.style.height}%`;
+    console.log(`update style`);
+    bottomGradient.style.top=`${100-footer.style.height-bottomGradient.style.height}%`;
+    bottomGradient.style.bottom=`${currentLineHeight}%`;
 }
 
 function addStyleHeight()

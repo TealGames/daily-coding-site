@@ -40,7 +40,7 @@ ul,
     align-items: flex-start;
     justify-content: flex-start;
     flex-direction: row;
-    gap: 30px;
+    gap: 20px;
 }
 
 .flex-right
@@ -63,5 +63,12 @@ ul,
 .contain-all{
     display: table;
     clear: both; 
+}
+
+.vertical-line
+{
+    float:inline-start;
+    height:85vh;
+    width:0.2vw;
 }
 

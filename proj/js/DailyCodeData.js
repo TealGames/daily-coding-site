@@ -1,6 +1,6 @@
 import { HelperFunctions } from "./HelperFunctions.js";
 
-const getCodeRandomly=false;
+const getCodeRandomly=true;
 
 export const CodingLanguage = Object.freeze(
     {
