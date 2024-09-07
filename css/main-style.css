@@ -2,43 +2,38 @@
     background-color: #1E1E1E;
 }
 
-.background-2
-{
+.background-2 {
     background-color: #292929;
 }
 
-.shadow
-{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0,0,0,0));
+.shadow {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
 }
 
-.inversed-shadow
-{
-    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.3), rgba(0,0,0,0));
+.inversed-shadow {
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
 }
 
-.console
-{
+.console {
     background-color: rgb(26, 25, 25);
-    position: absolute;
+    /* position: absolute; */
 }
 
 .hidden-console {
     background-color: rgb(26, 25, 25);
     position: absolute;
     top: 90%;
-    bottom:0%;
-    width:100%;
+    bottom: 0%;
+    width: 100%;
     height: 10%;
 }
 
-.displayed-console
-{
+.displayed-console {
     background-color: rgb(26, 25, 25);
     position: absolute;
     top: 70%;
-    bottom:0%;
-    width:100%;
+    bottom: 0%;
+    width: 100%;
     height: 30%;
 }
 
@@ -59,43 +54,44 @@
 
 .title-text {
     font-size: 3rem;
-    text-align: center;
 }
 
-.small-text{
-    font-size: 1em;
+.medium-text {
+    font-size: 2rem;
 }
 
-.text-new-line
-{
+.small-text {
+    font-size: 1rem;
+}
+
+.text-new-line {
     white-space: pre-wrap;
 }
 
-.body-text-shrink
-{
+.body-text-shrink {
     margin-left: -1vw;
 }
 
-input{
+input {
     background-color: transparent;
-    border:none;
+    border: none;
     width: 25vw;
     height: 3vh;
 }
 
-select
-{
+select {
     background-color: rgb(42, 42, 43);
-    border:none;
+    border: none;
     width: 25vw;
     height: 3vh;
 }
 
-table{
+table {
     table-layout: fixed;
 }
 
-th, td{
+th,
+td {
     background-color: #1E1E1E;
     border: 2px solid rgb(61, 61, 61);
     border-radius: 5px;
