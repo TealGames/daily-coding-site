@@ -2,11 +2,25 @@
     margin-left: -1%;
 }
 
+#title-container
+{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2%;
+}
+
+#title-subtitle
+{
+    display: flex;
+    align-self: center;
+}
+
 #header
 {
     background-color: rgb(26, 25, 25);
 }
-
 
 #center-content
 {
@@ -84,6 +98,7 @@
 #code-display-area
 {
     background-color:#292929;
+    border: 2px solid rgb(61, 61, 61);
     border-radius: 5px;
     padding-left: 10px;
     padding-right: 10px;

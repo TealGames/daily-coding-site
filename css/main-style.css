@@ -96,7 +96,9 @@ table{
 }
 
 th, td{
-    background-color: rgb(42, 42, 43);
+    background-color: #1E1E1E;
+    border: 2px solid rgb(61, 61, 61);
+    border-radius: 5px;
     width: 10%;
     height: 10%;
     font-size: 60%;
