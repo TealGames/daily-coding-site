@@ -116,6 +116,7 @@ function clearDisplay() {
 }
 
 (function listenForPageChange() {
+    console.log("listen for page change");
     const defaultModeButton = document.getElementById(defaultModeButtonId);
     defaultModeButton.addEventListener("click", (e) => {
         playingDefaultGame = true;
@@ -129,7 +130,7 @@ function clearDisplay() {
         initGameDisplay();
         nextLine();
     });
-}());
+})();
 
 function disableInput() {
     HelperFunctions.disableElement(inputFieldId);

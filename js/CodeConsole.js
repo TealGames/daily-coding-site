@@ -134,7 +134,7 @@ function updateLabelText(e) {
 
     const inputField = document.getElementById(inputElementId);
     inputField.addEventListener("validGuess", updateLabelText);
-}());
+})();
 
 (function start() {
     footer = document.getElementById(footerId);
@@ -172,4 +172,4 @@ function updateLabelText(e) {
         languageDropdown.innerHTML += `<option value="${langs[i]}">${langs[i]}</option>`;
     }
 
-}());
+})();

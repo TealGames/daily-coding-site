@@ -11,7 +11,7 @@
     /* margin-bottom: 1%; */
 }
 
-@media screen and (max-width: 600px) {
+@media (max-width: 600px) {
     #title-container {
         flex-direction: column;
     }
@@ -73,9 +73,8 @@
     height: 3vh;
 }
 
-#footer
-{
-    position:absolute;
+#footer {
+    position: absolute;
 }
 
 #footer-details {
@@ -88,7 +87,7 @@
     bottom: 0%;
     width: 100%;
     height: 5%;
-    padding-left:1%;
+    padding-left: 1%;
 }
 
 #footer-line {
@@ -114,7 +113,9 @@
     padding-bottom: 10px;
 }
 
-#code-id-display
-{
-    
+#code-id-display {}
+
+#credits {
+    margin-left: auto;
+    margin-right: 2%;
 }
