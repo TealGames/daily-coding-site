@@ -100,6 +100,8 @@ export class HelperFunctions {
     static #timeoutIds = new HashTable();
 
     static #disableCSSClass = "disabled";
+    static #enableBlockCSSClass= "block-display";
+    static #enableInlineCSSClass= "inline-display";
 
     static delay(seconds, outCancelId) {
         const promise = new Promise((resolve, reject) => {
@@ -154,6 +156,127 @@ export class HelperFunctions {
         element.html(element.html() + html);
     }
 
+     /**
+     * @param {Element} element 
+     * @returns {String[]}
+     */
+    static getClassesList(element)
+    {
+        if (!element || !element.className) return [];
+
+        return element.className.split(" ");
+    }
+
+    /**
+     * @param {Element} element 
+     * @param {String} cssClass
+     * @returns {Boolean} true if has it
+     */
+    static hasClass(element, cssClass)
+    {
+        if (!element || !cssClass) return; 
+        cssClass= this.replaceAll(cssClass, " ", "-").trim();
+
+        const classes= this.getClassesList(element);
+        if (!classes || classes.length==0) return false;
+
+        return classes.indexOf(cssClass) >= 0;
+    }
+
+    /**
+     * @param {Element} element 
+     * @param {String} cssClass 
+     */
+    static addClass(element, cssClass)
+    {
+        if (!element || !cssClass) return;
+        cssClass= this.replaceAll(cssClass, " ", "-").trim();
+
+        if (this.hasClass(element, cssClass))
+        {
+            console.warn(`Tried to add the CSS class ${cssClass} to element `+
+                `${element} with id ${element.id} but its classes (${element.className}) already has it!`);
+            return;
+        }
+
+        if (element.classList)
+        {
+            element.classList.add(cssClass);
+        }
+        else{
+
+            //If we already have classes, we add it with a space 
+            //(so other classes are not ruined)
+            if (element.className)
+            {
+                element.className+=` ${cssClass}`;
+            }
+    
+            //Otherwise, we can just set it if we know there are no other classes
+            else
+            {
+                element.className=cssClass;
+            }
+        }
+    }
+
+    /**
+     * @param {Element} element 
+     * @param {String} cssClass 
+     * @returns {Boolean} returns true if success
+     */
+    static tryRemoveClass(element, cssClass)
+    {
+        if (!element || !cssClass) return false;
+        cssClass= this.replaceAll(cssClass, " ", "-").trim();
+
+        const className= element.className;
+        if (!className) return false;
+
+        //If we don't have it, we exit now
+        if (!HelperFunctions.hasClass(element, cssClass)) return false;
+
+        if (element.classList)
+        {
+            element.classList.remove(cssClass);
+        }
+
+        //Note: this has potentially to not work if the css class to remove
+        //is a stirng part of another larger css class, so it might remove parts
+        //of another class if they share the same string (how indexOf works)
+        else{
+            const index= element.indexOf(className, cssClass);
+            if (index<0) return false;
+
+            let resultClass= className.substring(0, index)+ className.substring(index+cssClass.length);
+            resultClass= resultClass.trim();
+
+            if (!resultClass) return false;
+
+            element.className=resultClass;
+        }
+        return true;
+    }
+
+    /**
+     * @param {Element} element 
+     * @param {String[]} cssClasses
+     * @returns {Boolean} returns true if all are removed
+     */
+    static tryRemoveClasses(element, cssClasses)
+    {
+        if (!element || !cssClasses) return false;
+
+        let allRemoved=true;
+        for (let i=0; i<cssClasses.length; i++)
+        {
+            const removed= this.tryRemoveClass(element, cssClasses[i]);
+            if (!removed) allRemoved=false;
+        }
+        return allRemoved;
+    }
+
+
     static windowWidthShrunk() {
         return window.innerWidth < this.startWidth;
     }
@@ -163,24 +286,26 @@ export class HelperFunctions {
     }
 
     static disableElement(elementId) {
+        console.log(`disabling element ${elementId}`);
         const disableElement = document.getElementById(elementId);
-
-        //To prevent multiple accumulating, we simply replace all of them to be empty and add one
-        enableElement.className = enableElement.className.ex_replaceAll(disableCSSClass, "");
-        disableElement.className += disableCSSClass;
+        
+        //To prevent conflicts with disable class, we remove any enable classes we might have added
+        HelperFunctions.tryRemoveClasses(disableElement, [this.#enableBlockCSSClass, this.#enableInlineCSSClass]);
+        HelperFunctions.addClass(disableElement, this.#disableCSSClass);
     }
 
     static enableElement(elementId) {
         const enableElement = document.getElementById(elementId);
         const nodeType = enableElement.nodeName;
 
-        //Block elements need to be changed to display as blocks, while others are inline
-        if (nodeType === "DIV" || nodeType === "P") enableElement.style.display = "block";
-        else enableElement.style.display = "inline";
-
         //To prevent class conflicts, we replace the disable class
-        enableElement.className = enableElement.className.ex_replaceAll(disableCSSClass, "");
+        HelperFunctions.tryRemoveClass(enableElement, this.#disableCSSClass);
 
+        //Block elements need to be changed to display as blocks, while others are inline
+        if (nodeType === "DIV" || nodeType === "P") HelperFunctions.addClass(enableElement, this.#enableBlockCSSClass);
+        else HelperFunctions.addClass(enableElement, this.#enableInlineCSSClass);
+
+        if (!enableElement.className) return;
     }
 
     static clearInput(inputTag) {
@@ -208,11 +333,48 @@ export class HelperFunctions {
      * @returns {String} 
      */
     static replaceAll(target, replaceVal, newVal) {
+        console.log(`replace all ${replaceVal} of ${target} with ${newVal}`);
+        if (!target || !replaceVal)
+        {
+            console.warn(`Tried to use replaceAll with args (target: ${target} replace: ${replaceVal} new: ${newVal}) `+
+                `but either target or replace value is undefined!`);
+            return target;
+        }
+        
         let result = target;
         let valIndex = target.indexOf(replaceVal);
-        while (valIndex >= 0) {
-            result = result.substring(0, index) + newVal + result.substring(index + replaceVal.length);
+        while (valIndex >= 0 && result.length>0) {
+            let newStr = result.substring(0, valIndex) + newVal + result.substring(valIndex + replaceVal.length);
+            console.log(` result ${result} is now ${newStr}`);
+            result=newStr;
+            return "";
+
             valIndex = target.indexOf(replaceVal);
+        }
+        return result;
+    }
+
+    /**
+     * Replaces ALL occurences on a string. While it is already implemented in the string class
+     * in JS, it does not work on IE, so this is an alternative to that function.
+     * @param {String} target 
+     * @param {String[]} replaceVals
+     * @param {String} newVal
+     * @returns {String} 
+     */
+    static replaceAllMultiple(target, replaceVals, newVal)
+    {
+        if (!target || !replaceVals)
+            {
+                console.warn(`Tried to use replaceAll with args (target: ${target} replace: ${replaceVal} new: ${newVal}) `+
+                    `but either target or replace value is undefined!`);
+                return target;
+            }
+
+        let result= target;
+        for (let i=0; i<replaceVals.length; i++)
+        {
+            result= HelperFunctions.replaceAll(target, replaceVals[i], newVal);
         }
         return result;
     }

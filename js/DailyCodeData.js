@@ -543,9 +543,10 @@ export function getDataFromLanguage(language) {
  * @returns {LanguageData}
  */
 export function getDataFromLanguageString(str) {
-    str = str.toLowerCase().ex_replaceAll(" ", "").trim();
+    str = HelperFunctions.replaceAll(str," ", "").trim().toLowerCase();
+    
     for (let i = 0; i < langaugeData.length; i++) {
-        const simplified = langaugeData[i].getLang().toLowerCase().ex_replaceAll(" ", "").trim();
+        const simplified = HelperFunctions.replaceAll(langaugeData[i].getLang(), " ", "").toLowerCase().trim();
         if (str === simplified) {
             return langaugeData[i];
         }

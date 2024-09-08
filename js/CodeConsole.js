@@ -27,14 +27,14 @@ const newLineHeightChange = 1;
 let currentLineHeight = 0;
 
 function updateStyle() {
-    footer.style.top = `${100 - currentLineHeight}%`;
+    footer.style.top = `${100 - currentLineHeight}vh`;
     footer.style.bottom = "0%";
     footer.style.width = "100%";
-    footer.style.height = `${currentLineHeight}%`;
+    footer.style.height = `${currentLineHeight}vh`;
 
     console.log(`update style`);
-    bottomGradient.style.top = `${100 - footer.style.height - bottomGradient.style.height}%`;
-    bottomGradient.style.bottom = `${currentLineHeight}%`;
+    bottomGradient.style.top = `${100 - footer.style.height - bottomGradient.style.height}vh`;
+    bottomGradient.style.bottom = `${currentLineHeight}vh`;
 }
 
 function addStyleHeight() {
@@ -144,7 +144,7 @@ function updateLabelText(e) {
     languageDropdownText = document.getElementById(languageDropdownTextId);
     languageDropdownButton = document.getElementById(languageDropdownButtonId);
     languageDropdownButton.addEventListener("click", (e) => {
-        const currentValue = languageDropdownText.innerHTML.ex_replaceAll(" ", "").toLowerCase();
+        const currentValue = HelperFunctions.replaceAll(languageDropdownText.innerHTML, " ", "").toLowerCase();
 
         //Actions for false
         if (currentValue === "true") {

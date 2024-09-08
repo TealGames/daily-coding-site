@@ -52,6 +52,10 @@ ul,
     align-content: flex-start;
 }
 
+.bottom-aligned{
+    text-align:end;
+}
+
 .no-link-underline {
     text-decoration: none;
 }
@@ -63,10 +67,20 @@ ul,
 
 .vertical-line {
     float: inline-start;
-    height: 100vh;
+    height: 85vh;
     width: 0.2vw;
 }
 
 .disabled {
     display: none;
+}
+
+.block-display
+{
+    display:block;
+}
+
+.inline-display
+{
+    display:inline;
 }

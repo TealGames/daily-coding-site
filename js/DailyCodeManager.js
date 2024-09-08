@@ -186,7 +186,7 @@ function checkInput(e) {
 }
 
 function cleanInput(input) {
-    const cleaned = input.toLowerCase().ex_replaceAll(" ", "").ex_replaceAll("<", "").ex_replaceAll(">", "");
+    const cleaned = HelperFunctions.replaceAllMultiple(input, [" ", "<", ">"], "").toLowerCase();
     return cleaned;
 }
 
