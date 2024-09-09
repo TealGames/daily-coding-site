@@ -6,6 +6,10 @@
     background-color: #242424;
 }
 
+.accent-color {
+    background-color: #2f2f2f;
+}
+
 .shadow {
     background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
 }
@@ -86,13 +90,17 @@
 
 input {
     background-color: transparent;
+    border-radius: 5px;
     border: none;
     width: 25vw;
     height: 3vh;
 }
 
-select {
+select,
+.terminal-ui {
     background-color: rgb(42, 42, 43);
+    border: 2px solid rgb(61, 61, 61);
+    border-radius: 5px;
     border: none;
     width: 25vw;
     height: 3vh;

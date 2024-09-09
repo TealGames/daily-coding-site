@@ -10,11 +10,15 @@ const languageDropdownButtonId = "language-pick-toggle";
 const languageDropdownTextId = "language-pick-toggle-state";
 const languageDropdownId = "language-select";
 const bottomGradientId = "bottom-gradient";
+const submitLanguageButtonId = "submit-language-button";
 
 let languageDropdownButton = null;
 let languageDropdownText = null;
 let languageDropdown = null;
+let submitLanguageButton = null;
+
 let allowLanguageDropdowns = false;
+const doRating = true;
 
 let footer = null;
 
@@ -48,12 +52,14 @@ function showConsole() {
 
     label = document.getElementById(labelElementId);
     inputField = document.getElementById(inputElementId);
+    submitLanguageButton = document.getElementById(submitLanguageButtonId);
 
     HelperFunctions.enableElement(inputContainerId);
     const input = document.getElementById(inputContainerId);
     clearLabelText();
     updateLabelText(null);
 
+    checkLanguageDropdownState();
     HelperFunctions.clearInput(inputField);
     inputField.focus();
 
@@ -108,14 +114,18 @@ function updateLabelText(e) {
         if (e) {
             addStyleHeight();
             if (e.detail.AllAttemptsUsed) {
+                clearLabelText();
                 label.innerHTML += `<p class=\"code-new-line\"></p>` +
                     `<p class=\"inline terminal-error\">max attempts reached: ` +
                     `${e.detail.MaxAttempts}/${e.detail.CurrentAttempts}</p>`;
+                requestRating();
                 return;
             }
             else if (e.detail.CorrectGuess) {
+                clearLabelText();
                 label.innerHTML += `<p class=\"code-new-line\"></p>` +
                     `<p class=\"inline terminal-success\">correct input</p>`;
+                requestRating();
                 return;
 
             }
@@ -127,6 +137,48 @@ function updateLabelText(e) {
     }
     addStyleHeight();
     label.innerHTML += targetTextFull;
+}
+
+function requestRating() {
+    if (!doRating) return;
+
+    HelperFunctions.disableElement(languageDropdownId);
+    const html = `
+            <p class=\"code-new-line\"></p>
+            <p class=\"inline terminal\">How would you rate today's code from ★(1) to ★★★★★(5)?</p>
+            <p class=\"code-new-line\"></p>
+            <form id="rating-form" action="https://formspree.io/f/xzzpwwad" method="POST">
+                <input id="rating-field" name="rating-number" type="number" max="5" min="1" placeholder="type rating..." form="rating-form"
+                required class="body-text terminal">
+
+                <button id="submit-rating-button" type="submit" class="terminal-ui code-comment dark-on-hover ">
+                Submit Rating</button>
+            </form>`;
+    label.innerHTML += html;
+}
+
+function checkLanguageDropdownState() {
+    const currentValue = HelperFunctions.replaceAll(languageDropdownText.innerHTML, " ", "").toLowerCase();
+
+    //Actions for false
+    if (currentValue === "true") {
+        languageDropdownText.innerHTML = "false";
+        allowLanguageDropdowns = false;
+        HelperFunctions.disableElement(languageDropdownId);
+        HelperFunctions.disableElement(submitLanguageButtonId);
+
+        HelperFunctions.enableElement(inputElementId);
+    }
+
+    //Actions for true
+    else {
+        languageDropdownText.innerHTML = "true";
+        allowLanguageDropdowns = true;
+        HelperFunctions.enableElement(languageDropdownId);
+        HelperFunctions.enableElement(submitLanguageButtonId);
+
+        HelperFunctions.disableElement(inputElementId);
+    }
 }
 
 (function listenForConsoleEvents() {
@@ -143,28 +195,16 @@ function updateLabelText(e) {
 
     languageDropdownText = document.getElementById(languageDropdownTextId);
     languageDropdownButton = document.getElementById(languageDropdownButtonId);
-    languageDropdownButton.addEventListener("click", (e) => {
-        const currentValue = HelperFunctions.replaceAll(languageDropdownText.innerHTML, " ", "").toLowerCase();
-
-        //Actions for false
-        if (currentValue === "true") {
-            languageDropdownText.innerHTML = "false";
-            allowLanguageDropdowns = false;
-            HelperFunctions.disableElement(languageDropdownId);
-        }
-
-        //Actions for true
-        else {
-            languageDropdownText.innerHTML = "true";
-            allowLanguageDropdowns = true;
-            HelperFunctions.enableElement(languageDropdownId);
-        }
-    });
+    languageDropdownButton.addEventListener("click", (e) => checkLanguageDropdownState());
 
     languageDropdown = document.getElementById(languageDropdownId);
     languageDropdown.addEventListener("change", async (e) => {
         inputField.value = e.target.value + " ";
         inputField.focus();
+    });
+
+    submitLanguageButton.addEventListener("click", (e) => {
+
     });
 
     const langs = HelperFunctions.getPropertiesOfObject(CodingLanguage).sort();

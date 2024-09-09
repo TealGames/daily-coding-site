@@ -6,6 +6,12 @@ import { CodeHtmlData } from "./CodeHtmlConverter.js";
 const inputFieldId = "input-field";
 let inputField = null;
 
+const submitLanguageButtonId = "submit-language-button";
+let submitLanguageButton = null;
+
+const languageDropdownId = "language-select";
+let languageDropdown = null;
+
 const gameReturnMenuContainerId = "game-return-main-container";
 let gameReturnMenuContainer = null;
 
@@ -15,8 +21,8 @@ let displayContainer = null;
 const defaultModeButtonId = "play-default-button";
 const tableModeButtonId = "play-table-button";
 
-const codeIdTextId= "code-id-tab-text";
-let codeIdText=null;
+const codeIdTextId = "code-id-tab-text";
+let codeIdText = null;
 
 let today = null;
 let todaysCodeDisplay = null;
@@ -37,21 +43,23 @@ let playedDailyTable = false;
 
 let playingDefaultGame = true;
 
-let lastGameWasSuccess=false;
+let lastGameWasSuccess = false;
 
 function initGameDisplay() {
     inputField = document.getElementById(inputFieldId);
     displayContainer = document.querySelector(`#${dislayContainerId}`);
     gameReturnMenuContainer = document.getElementById(gameReturnMenuContainerId);
-    codeIdText=document.getElementById(codeIdTextId);
+    codeIdText = document.getElementById(codeIdTextId);
+    submitLanguageButton = document.getElementById(submitLanguageButtonId);
+    languageDropdown = document.getElementById(languageDropdownId);
 
     code = getTodaysCodeDataUTC();
     table = getTodaysTableDataUTC();
     todaysCodeDisplay = getHtmlFromCodeData(code);
 
-    const idWith0s= HelperFunctions.padWithLeadingZeros(code.getId(), maxCodeIdLength);
-    if (code) codeIdText.innerHTML=`#${idWith0s}`;
-    else codeIdText.innerHTML="null_id";
+    const idWith0s = HelperFunctions.padWithLeadingZeros(code.getId(), maxCodeIdLength);
+    if (code) codeIdText.innerHTML = `#${idWith0s}`;
+    else codeIdText.innerHTML = "null_id";
 
     appearOrderIndex = -1;
     appearLineIndices = [];
@@ -167,7 +175,7 @@ function checkInput(e) {
     else rightInput = text === table.getLang().toLowerCase();
 
     const maxAttemptsReached = currentAttempts >= currentTotalAttempts;
-    inputField.dispatchEvent(new CustomEvent("validGuess", {
+    document.dispatchEvent(new CustomEvent("validGuess", {
         detail:
         {
             "Input": text,
@@ -197,6 +205,16 @@ function checkInput(e) {
     }
 }
 
+function checkDropdown(e) {
+    currentAttempts++;
+
+    const text = cleanInput(languageDropdown.value.toString());
+
+    let rightInput = false;
+    if (playingDefaultGame) rightInput = text === code.getLang().toLowerCase();
+    else rightInput = text === table.getLang().toLowerCase();
+}
+
 function cleanInput(input) {
     const cleaned = HelperFunctions.replaceAllMultiple(input, [" ", "<", ">"], "").toLowerCase();
     return cleaned;
@@ -205,10 +223,12 @@ function cleanInput(input) {
 (function listenForInput() {
     const element = document.getElementById("input-field");
     element.addEventListener("change", checkInput);
+
+    submitLanguageButton.addEventListener("click", checkDropdown);
 }());
 
 function gameEnd(isSuccess) {
-    lastGameWasSuccess=isSuccess;
+    lastGameWasSuccess = isSuccess;
     disableInput();
     HelperFunctions.enableElement(gameReturnMenuContainerId);
 
@@ -231,6 +251,6 @@ export function getTodaysCodeData() {
 /**
  * @returns {Boolean}
  */
-export function wasLastGameSuccess(){
+export function wasLastGameSuccess() {
     return lastGameWasSuccess;
 }

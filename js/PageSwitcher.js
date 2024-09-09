@@ -1,12 +1,12 @@
 import { HelperFunctions } from "./HelperFunctions.js";
 
-let currentPageId="";
+let currentPageId = "";
 
 /**
  * @param {string} disablePageId 
  */
 function disablePage(disablePageId) {
-    console.log("disabling page "+ disablePageId);
+    console.log("disabling page " + disablePageId);
     HelperFunctions.disableElement(disablePageId);
 }
 
@@ -24,14 +24,15 @@ function disablePageAll(disablePageIds) {
  */
 function enablePage(enablePageId) {
     HelperFunctions.enableElement(enablePageId);
-    document.dispatchEvent(new CustomEvent("enablePage", { detail: 
+    document.dispatchEvent(new CustomEvent("enablePage", {
+        detail:
         {
             pageEnabledId: enablePageId,
             pastPageId: currentPageId,
         }
     }));
 
-    currentPageId= enablePageId;
+    currentPageId = enablePageId;
 }
 
 /**
@@ -58,7 +59,7 @@ export const PageId = Object.freeze(
         "ModeSelect": "mode-select",
         "GameDisplay": "game-display",
         "GameInstructions": "game-instructions",
-        "RatingPage": "rating-display",
+        //"RatingPage": "rating-display",
     }
 );
 
@@ -97,7 +98,7 @@ function getAllPageIds() {
         });
     }
 
-    const returnToGameButton= document.getElementById("return-game-button");
+    const returnToGameButton = document.getElementById("return-game-button");
     returnToGameButton.addEventListener("click", () => {
         switchPage(PageId.GameInstructions, PageId.GameDisplay);
     });
