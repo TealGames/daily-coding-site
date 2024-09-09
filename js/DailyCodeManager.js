@@ -1,5 +1,5 @@
 import { HelperFunctions } from "./HelperFunctions.js";
-import { CodingLanguage, getDataFromLanguage, getDataFromLanguageString, getTodaysCodeDataUTC, getTodaysTableDataUTC } from "./DailyCodeData.js";
+import { CodingLanguage, getDataFromLanguage, getDataFromLanguageString, getTodaysCodeDataUTC, getTodaysTableDataUTC, maxCodeIdLength } from "./DailyCodeData.js";
 import { getHtmlFromCodeData, getHtmlFromLanguageData } from "./CodeHtmlConverter.js";
 import { CodeHtmlData } from "./CodeHtmlConverter.js";
 
@@ -14,6 +14,9 @@ let displayContainer = null;
 
 const defaultModeButtonId = "play-default-button";
 const tableModeButtonId = "play-table-button";
+
+const codeIdTextId= "code-id-tab-text";
+let codeIdText=null;
 
 let today = null;
 let todaysCodeDisplay = null;
@@ -34,14 +37,22 @@ let playedDailyTable = false;
 
 let playingDefaultGame = true;
 
+let lastGameWasSuccess=false;
+
 function initGameDisplay() {
     inputField = document.getElementById(inputFieldId);
     displayContainer = document.querySelector(`#${dislayContainerId}`);
     gameReturnMenuContainer = document.getElementById(gameReturnMenuContainerId);
+    codeIdText=document.getElementById(codeIdTextId);
 
     code = getTodaysCodeDataUTC();
     table = getTodaysTableDataUTC();
     todaysCodeDisplay = getHtmlFromCodeData(code);
+
+    const idWith0s= HelperFunctions.padWithLeadingZeros(code.getId(), maxCodeIdLength);
+    if (code) codeIdText.innerHTML=`#${idWith0s}`;
+    else codeIdText.innerHTML="null_id";
+
     appearOrderIndex = -1;
     appearLineIndices = [];
     previousInput = [];
@@ -197,6 +208,7 @@ function cleanInput(input) {
 }());
 
 function gameEnd(isSuccess) {
+    lastGameWasSuccess=isSuccess;
     disableInput();
     HelperFunctions.enableElement(gameReturnMenuContainerId);
 
@@ -214,4 +226,11 @@ export function hasPlayedTodaysTable() {
 
 export function getTodaysCodeData() {
     return code;
+}
+
+/**
+ * @returns {Boolean}
+ */
+export function wasLastGameSuccess(){
+    return lastGameWasSuccess;
 }

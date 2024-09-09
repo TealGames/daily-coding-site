@@ -313,6 +313,21 @@ export class HelperFunctions {
         console.log(`clearing tag ${inputTag} to value: ${inputTag.value}`);
     }
 
+    /**
+     * Will pad the start with the target length specified
+     * Example 1: (5, 3) -> 005
+     * Example 2: (69, 3) -> 069
+     * Example 3: (420, 3) -> 420
+     * Example 4: (1234, 3) -> 1234
+     * @param {Number} num 
+     * @param {Number} totalLength 
+     * @returns {String}
+     */
+    static padWithLeadingZeros(num, totalLength) {
+        const numStr= num.toString();
+        return numStr.padStart(totalLength, '0');
+    }
+
     //-------------------------------------------------------------------------------------------------
     // REPETITION
     //-------------------------------------------------------------------------------------------------
@@ -379,10 +394,35 @@ export class HelperFunctions {
         return result;
     }
 
+    /**
+     * @param {String} json 
+     * @returns {Object}
+     */
     static getObjFromJson(json) {
         return JSON.parse(json);
     }
 
+    /**
+     * @param {String} filePath path relative to HelperFunctions file, 
+     * including the file extension (.json, .js, etc.)
+     * @param {Boolean} logSuccess
+     * @returns {String} string of the result file text
+     */
+    static async getFileText(filePath, logSuccess=true)
+    {
+        let result="";
+
+        try {
+            const response = await fetch(filePath);
+            result = await response.text();
+            if (logSuccess) console.log(`Successfully found the data ${result} at path ${filePath}`);
+        } catch (error) {
+            console.error(`Error fetching the file at ${filePath}:`, error);
+        }
+
+        return result;
+    }
+    
     static clamp(value, min, max) {
         return Math.max(Math.min(value, max), min);
     }

@@ -1,6 +1,7 @@
 import { HelperFunctions } from "./HelperFunctions.js";
 
 const getCodeRandomly = true;
+export const maxCodeIdLength=4;
 
 export const CodingLanguage = Object.freeze(
     {
@@ -55,22 +56,32 @@ export const CodingLanguage = Object.freeze(
 );
 
 export class CodeData {
+    #id;
     #day;
     #codeLines;
     #lang;
     #lineAppearOrder;
 
     /**
+     * @param {String} id
      * @param {Date} day - day's code
      * @param {string[]} codeLines - the code for the day
      * @param {CodingLanguage} lang - language
      * @param {Number[][]} lineAppearOrder - order lines appear (as indices)
      */
-    constructor(day, lang, codeLines, lineAppearOrder) {
+    constructor(id, day, lang, codeLines, lineAppearOrder) {
+        this.#id= id;
         this.#day = day;
         this.#codeLines = codeLines;
         this.#lang = lang;
         this.#lineAppearOrder = lineAppearOrder;
+    }
+
+    /**
+     * @returns {Number}
+     */
+    getId(){
+        return this.#id;
     }
 
     /**
@@ -105,7 +116,7 @@ export class CodeData {
 }
 
 const dailyCode = [
-    new CodeData(new Date(2024, 8, 3), CodingLanguage.Java,
+    new CodeData(1, new Date(2024, 8, 3), CodingLanguage.Java,
         ["<spc>if </spc><def>(</def><var>reallyCool</var><def>){</def><new><spc>else if</spc><def>(</def><var>poophead</var><def>){</def>",
             "<def>someText</def>",
             "<def>someText</def><def>evenmorenew</def>",

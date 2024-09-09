@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/main-style.css">
     <link rel="stylesheet" href="css/id-style.css">
     <link rel="stylesheet" href="css/coding-style.css">
-    <title>Guess The Code</title>
+    <title>Codedle</title>
 </head>
 
 <body class="no-margins background">
@@ -334,6 +334,17 @@
                 <div class="body-text">
                     <p class="inline code-comment">//Guess from code:</p>
                     <div id="code-display-area">
+
+                        <div id="code-id-tab">
+                            <div class="flex-centered code-comment">
+                                <p class="no-margins inline small-text">ID:</p>
+                                <b>
+                                    <p id="code-id-tab-text" class="no-margins inline medium-text"></p>
+                                </b>
+                            </div>
+                            
+                        </div>
+
                         <div id="game-display-container">
                         </div>
                     </div>
@@ -341,19 +352,33 @@
                 </div>
             </div>
 
-            <div id="credits" class="body-text disabled">
-                <div id="credits-main-return-container">
-                    <button type="button" class="button return-main-button dark-on-hover">
+            <div id="rating-display" class="body-text disabled">
+                <p class="inline code-comment">//How would you rate today's code?</p>
+                <p class="code-new-line"></p>
+                <p class="inline code-object">String</p>
+                <p class="inline code-local-variable">rating</p>
+                <p class="inline code-default">=</p>
+                <p class="inline code-string">"</p>
+
+                <form id="rating-form">
+                    <div id="stars-container">
+                        <button id= "star-1" type="button" class="button inline code-string">★</button>
+                        <button id= "star-2" type="button" class="button inline code-string">★</button>
+                        <button id= "star-3" type="button" class="button inline code-string">★</button>
+                        <button id= "star-4" type="button" class="button inline code-string">☆</button>
+                        <button id= "star-5" type="button" class="button inline code-string">☆</button>
+                    </div>
+                    <p class="inline code-string">"</p>
+    
+                    <button id="submit-rating-button" type="submit" class="button dark-on-hover ">
                         <div>
-                            <p class="inline code-tab-space code-method">ReturnToMain</p>
-                            <p class="inline code-default body-text-shrink">();</p>
+                            <p class="inline code-tab-space code-method">SubmitRating</p>
+                            <p class="inline code-default body-text-shrink">(</p>
+                            <p class="inline code-local-variable body-text-shrink">rating</p>
+                            <p class="inline code-default body-text-shrink">);</p>
                         </div>
                     </button>
-                </div>
-
-                <div id="credit-names">
-
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -377,23 +402,21 @@
         </div>
 
         <div id="footer-details" class="body-text small-text">
-            <p class="inline body-text code-comment">Made by Teal Games</p>
-
-            <p class="inline code-comment">
-                <a href="https://x.com/teal_games" target="_blank" class="body-text code-comment">Twitter</a>
+            <p id="credits" class="inline small-text code-comment">
+                <a href="./html/credits.html" target="_blank" class=" code-comment">Credits</a>
             </p>
-
-            <p class="inline code-comment">
-                <a href="mailto:tealgamesstudio@gmail.com" target="_blank" class="body-text code-comment">Email</a>
+            
+            <p class="inline small-text code-comment">Made by Teal Games</p>
+            <p class="inline small-text code-comment">
+                <a href="https://x.com/teal_games" target="_blank" class="code-comment">Twitter</a>
             </p>
-
-            <p class="inline code-comment">
-                <a href="https://tealgames.itch.io/" target="_blank" class="body-text code-comment">Itch.io</a>
+            <p class="inline small-text code-comment">
+                <a href="mailto:tealgamesstudio@gmail.com" target="_blank" class="code-comment">Email</a>
             </p>
-
-            <p id="credits" class="inline code-comment">
-                <a href="./html/credits.html" target="_blank" class="body-text code-comment">Credits</a>
+            <p id="last-footer-link" class="inline small-text code-comment">
+                <a href="https://tealgames.itch.io/" target="_blank" class="code-comment">Itch.io</a>
             </p>
+           
         </div>
 
     </div>

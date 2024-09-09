@@ -30,6 +30,12 @@ ul,
     text-align: center;
 }
 
+.flex-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .left-aligned {
     text-align: left;
 }

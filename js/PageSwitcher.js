@@ -58,6 +58,7 @@ export const PageId = Object.freeze(
         "ModeSelect": "mode-select",
         "GameDisplay": "game-display",
         "GameInstructions": "game-instructions",
+        "RatingPage": "rating-display",
     }
 );
 
