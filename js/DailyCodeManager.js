@@ -50,7 +50,6 @@ function initGameDisplay() {
     displayContainer = document.querySelector(`#${dislayContainerId}`);
     gameReturnMenuContainer = document.getElementById(gameReturnMenuContainerId);
     codeIdText = document.getElementById(codeIdTextId);
-    submitLanguageButton = document.getElementById(submitLanguageButtonId);
     languageDropdown = document.getElementById(languageDropdownId);
 
     code = getTodaysCodeDataUTC();
@@ -159,15 +158,14 @@ function enableInput() {
     HelperFunctions.enableElement(inputFieldId);
 }
 
-function checkInput(e) {
-    currentAttempts++;
-    const text = cleanInput(inputField.value);
+function checkInput(text){
     console.log(`input has submit to ${text}`);
 
     //Don't allow duplicate guessing
     if (!text || (previousInput && HelperFunctions.arrayContains(previousInput, text))) {
         return;
     }
+    currentAttempts++;
     previousInput.push(text);
 
     let rightInput = false;
@@ -205,16 +203,6 @@ function checkInput(e) {
     }
 }
 
-function checkDropdown(e) {
-    currentAttempts++;
-
-    const text = cleanInput(languageDropdown.value.toString());
-
-    let rightInput = false;
-    if (playingDefaultGame) rightInput = text === code.getLang().toLowerCase();
-    else rightInput = text === table.getLang().toLowerCase();
-}
-
 function cleanInput(input) {
     const cleaned = HelperFunctions.replaceAllMultiple(input, [" ", "<", ">"], "").toLowerCase();
     return cleaned;
@@ -222,9 +210,12 @@ function cleanInput(input) {
 
 (function listenForInput() {
     const element = document.getElementById("input-field");
-    element.addEventListener("change", checkInput);
+    element.addEventListener("change", (e) => checkInput(cleanInput(inputField.value)));
 
-    submitLanguageButton.addEventListener("click", checkDropdown);
+    submitLanguageButton= document.getElementById(submitLanguageButtonId);
+    submitLanguageButton.addEventListener("click", (e) => {
+        checkInput(cleanInput(languageDropdown.value));
+    });
 }());
 
 function gameEnd(isSuccess) {

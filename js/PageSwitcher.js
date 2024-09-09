@@ -6,7 +6,6 @@ let currentPageId = "";
  * @param {string} disablePageId 
  */
 function disablePage(disablePageId) {
-    console.log("disabling page " + disablePageId);
     HelperFunctions.disableElement(disablePageId);
 }
 
@@ -105,7 +104,6 @@ function getAllPageIds() {
 })();
 
 (function disableAllOtherPages() {
-    console.log(`disable all pages: ${getAllPageIds()}`);
     disablePagesAndEnable(getAllPageIds(), PageId.MainPage);
 })();
 

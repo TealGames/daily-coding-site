@@ -25,7 +25,6 @@ let footer = null;
 let label = null;
 let inputField = null;
 let bottomGradient = null;
-let previousInput = [];
 
 const newLineHeightChange = 1;
 let currentLineHeight = 0;
@@ -36,7 +35,6 @@ function updateStyle() {
     footer.style.width = "100%";
     footer.style.height = `${currentLineHeight}vh`;
 
-    console.log(`update style`);
     bottomGradient.style.top = `${100 - footer.style.height - bottomGradient.style.height}vh`;
     bottomGradient.style.bottom = `${currentLineHeight}vh`;
 }
@@ -52,8 +50,7 @@ function showConsole() {
 
     label = document.getElementById(labelElementId);
     inputField = document.getElementById(inputElementId);
-    submitLanguageButton = document.getElementById(submitLanguageButtonId);
-
+    
     HelperFunctions.enableElement(inputContainerId);
     const input = document.getElementById(inputContainerId);
     clearLabelText();
@@ -62,8 +59,6 @@ function showConsole() {
     checkLanguageDropdownState();
     HelperFunctions.clearInput(inputField);
     inputField.focus();
-
-    previousInput = [];
 }
 
 function hideConsole() {
@@ -91,10 +86,7 @@ function clearLabelText() {
 
 function updateLabelText(e) {
     const label = document.getElementById(labelElementId);
-    const inputField = document.getElementById(inputElementId);
-
     const input = e ? e.detail.Input : "";
-    const repeatInput = HelperFunctions.arrayContains(previousInput, input);
 
     const targetTextStart = `<p class=\"code-new-line\"></p>
                  <p class=\"inline terminal\">language guess:`;
@@ -143,6 +135,7 @@ function requestRating() {
     if (!doRating) return;
 
     HelperFunctions.disableElement(languageDropdownId);
+    HelperFunctions.disableElement(submitLanguageButtonId);
     const html = `
             <p class=\"code-new-line\"></p>
             <p class=\"inline terminal\">How would you rate today's code from ★(1) to ★★★★★(5)?</p>
@@ -151,9 +144,15 @@ function requestRating() {
                 <input id="rating-field" name="rating-number" type="number" max="5" min="1" placeholder="type rating..." form="rating-form"
                 required class="body-text terminal">
 
-                <button id="submit-rating-button" type="submit" class="terminal-ui code-comment dark-on-hover ">
+                <button id="submit-rating-button" type="submit" class="terminal-ui code-comment body-text dark-on-hover ">
                 Submit Rating</button>
-            </form>`;
+            </form>
+            <p class=\"code-2-new-line\"></p>
+            <p class=\"inline terminal\">If you want to leave specific code feedback, you can do so</p>
+            <p class="inline body-text code-comment">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfls32E6ZBS75Upn12TMfx2DXJwOMGud9Vyxbxn82YrEY_-0Q/viewform" target="_blank" class="code-comment">here</a>
+            </p>;`;
+           
     label.innerHTML += html;
 }
 
@@ -183,9 +182,7 @@ function checkLanguageDropdownState() {
 
 (function listenForConsoleEvents() {
     document.addEventListener("enablePage", checkPageForConsole);
-
-    const inputField = document.getElementById(inputElementId);
-    inputField.addEventListener("validGuess", updateLabelText);
+    document.addEventListener("validGuess", updateLabelText);
 })();
 
 (function start() {
@@ -201,10 +198,6 @@ function checkLanguageDropdownState() {
     languageDropdown.addEventListener("change", async (e) => {
         inputField.value = e.target.value + " ";
         inputField.focus();
-    });
-
-    submitLanguageButton.addEventListener("click", (e) => {
-
     });
 
     const langs = HelperFunctions.getPropertiesOfObject(CodingLanguage).sort();

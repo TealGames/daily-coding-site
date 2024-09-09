@@ -149,7 +149,6 @@ export class HelperFunctions {
 
     static addHtmlToStart(element, html) {
         element.html(html + element.html());
-        console.log(`Adding html ${html} to element ${element} new html: ${element.html()}`);
     }
 
     static addHtmlToEnd(element, html) {
@@ -286,7 +285,6 @@ export class HelperFunctions {
     }
 
     static disableElement(elementId) {
-        console.log(`disabling element ${elementId}`);
         const disableElement = document.getElementById(elementId);
         
         //To prevent conflicts with disable class, we remove any enable classes we might have added
@@ -310,7 +308,6 @@ export class HelperFunctions {
 
     static clearInput(inputTag) {
         inputTag.value = "";
-        console.log(`clearing tag ${inputTag} to value: ${inputTag.value}`);
     }
 
     /**
@@ -348,7 +345,6 @@ export class HelperFunctions {
      * @returns {String} 
      */
     static replaceAll(target, replaceVal, newVal) {
-        console.log(`replace all ${replaceVal} of ${target} with ${newVal}`);
         if (!target || !replaceVal)
         {
             console.warn(`Tried to use replaceAll with args (target: ${target} replace: ${replaceVal} new: ${newVal}) `+
@@ -360,9 +356,7 @@ export class HelperFunctions {
         let valIndex = target.indexOf(replaceVal);
         while (valIndex >= 0 && result.length>0) {
             let newStr = result.substring(0, valIndex) + newVal + result.substring(valIndex + replaceVal.length);
-            console.log(` result ${result} is now ${newStr}`);
             result=newStr;
-            return "";
 
             valIndex = target.indexOf(replaceVal);
         }
@@ -672,10 +666,8 @@ export class HelperFunctions {
      */
     static arrayContains(array, value) {
         const contains = array.some((el, idx, arr) => {
-            console.log(`element ${el} is value: ${value} ${el === value}`);
             return el === value;
         });
-        console.log(`array ${array} contains ${value} ${contains}`);
         return contains;
     }
 }

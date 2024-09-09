@@ -16,7 +16,6 @@ let intervalId=0;
 
 function setButtonsIfPage(pageId)
 {
-    console.log("set buttons");
     const playedDefault= hasPlayedTodaysDefault();
     const playedTable= hasPlayedTodaysTable();
 

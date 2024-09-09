@@ -8,7 +8,6 @@ const gameReturnContainerId= "instructions-game-return-container";
 {
     document.addEventListener("enablePage", (e) =>
     {
-        console.log(`past page: ${e.detail.pastPageId}`);
         if (!e || e.detail.pageEnabledId !==PageId.GameInstructions) return;
         
         const pastPage= e.detail.pastPageId;
