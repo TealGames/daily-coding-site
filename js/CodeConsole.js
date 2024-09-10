@@ -140,6 +140,8 @@ function requestRating() {
             <p class=\"code-new-line\"></p>
             <p class=\"inline terminal\">How would you rate today's code from ★(1) to ★★★★★(5)?</p>
             <p class=\"code-new-line\"></p>
+            <p class=\"inline terminal\">(Your response will be anonymous)</p>
+            <p class=\"code-new-line\"></p>
             <form id="rating-form" action="https://formspree.io/f/xzzpwwad" method="POST">
                 <input id="rating-field" name="rating-number" type="number" max="5" min="1" placeholder="type rating..." form="rating-form"
                 required class="body-text terminal">
