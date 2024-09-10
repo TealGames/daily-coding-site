@@ -26,17 +26,17 @@ let label = null;
 let inputField = null;
 let bottomGradient = null;
 
-const newLineHeightChange = 1;
+const newLineHeightChange = 3;
 let currentLineHeight = 0;
 
 function updateStyle() {
-    footer.style.top = `${100 - currentLineHeight}vh`;
+    footer.style.top = `${100 - currentLineHeight}%`;
     footer.style.bottom = "0%";
     footer.style.width = "100%";
-    footer.style.height = `${currentLineHeight}vh`;
+    footer.style.height = `${currentLineHeight}%`;
 
-    bottomGradient.style.top = `${100 - footer.style.height - bottomGradient.style.height}vh`;
-    bottomGradient.style.bottom = `${currentLineHeight}vh`;
+    bottomGradient.style.top = `${100 - footer.style.height - bottomGradient.style.height}%`;
+    bottomGradient.style.bottom = `${currentLineHeight}%`;
 }
 
 function addStyleHeight() {
