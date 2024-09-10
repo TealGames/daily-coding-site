@@ -18,7 +18,6 @@ function commentDisplay(containerId, comment) {
     const newLine = `<p class=\"no-margins code-comment\" id=\"${elementId}\"></p>`;
 
     maxLineChars = Math.floor(window.innerWidth / 20);
-    console.log(`chars: ${maxLineChars}`);
 
     //elementContainer.innerHTML="<p class=\"code-new-line\"></p>"+newLine+ elementContainer.innerHTML;
     elementContainer.innerHTML = newLine + elementContainer.innerHTML;

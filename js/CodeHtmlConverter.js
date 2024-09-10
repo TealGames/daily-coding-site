@@ -103,7 +103,6 @@ export class CodeHtmlData{
 export function getHtmlFromCodeData(data)
 {
     const code= data.getCode();
-    console.log(`code length: ${code.length}`);
     let html="";
     let currentTag=null;
 
@@ -166,7 +165,7 @@ export function getHtmlFromCodeData(data)
 
         //We add a new line at the end no matter what
         currentLine+="<p class=\"code-new-line\"></p>";
-        console.log(`pushing line: ${currentLine}`);
+
         lines.push(currentLine);
         currentLine="";
         linesText.push(currentLineText);
