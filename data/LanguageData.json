@@ -1,0 +1,21 @@
+[
+    
+    {
+        "Language" : "JavaScript",
+        "Release" : 1995,
+        "Paradigm" : ["Object-Oriented", "Functional"],
+        "Compilation" : "Interpreted",
+        "Typing" : ["Weak", "Dynamic"],
+        "Syntax" : "C-like",
+        "Use" : ["Web", "Server"]
+    },
+    {
+        "Language" : "C#",
+        "Release" : 2001,
+        "Paradigm" : ["Object-Oriented", "Functional", "Structural"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "C-like",
+        "Use" : ["Game Development", "Applications"]
+    }
+]

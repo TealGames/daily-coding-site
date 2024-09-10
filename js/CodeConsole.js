@@ -26,15 +26,26 @@ let label = null;
 let inputField = null;
 let bottomGradient = null;
 
+const startShowConsoleHeight=30;
+const hideConsoleHeight=10;
 const newLineHeightChange = 3;
 let currentLineHeight = 0;
 
 function updateStyle() {
-    footer.style.top = `${100 - currentLineHeight}%`;
-    footer.style.bottom = "0%";
+    //footer.style.top = `${100 - currentLineHeight}%`;
+   
+    console.log(`not fit: ${HelperFunctions.doesContentNotFitPage()}`);
+   
     footer.style.width = "100%";
     footer.style.height = `${currentLineHeight}%`;
-
+    //if (footer.style.height===`${hideConsoleHeight}%`) footer.style.bottom="0%";
+    if (HelperFunctions.doesContentNotFitPage()){
+        footer.style.top = `$80%`;
+    }
+    else{
+        footer.style.top = `${100 - footer.style.height}%`;
+    }
+   
     bottomGradient.style.top = `${100 - footer.style.height - bottomGradient.style.height}%`;
     bottomGradient.style.bottom = `${currentLineHeight}%`;
 }
@@ -45,7 +56,7 @@ function addStyleHeight() {
 }
 
 function showConsole() {
-    currentLineHeight = 30;
+    currentLineHeight = startShowConsoleHeight
     updateStyle();
 
     label = document.getElementById(labelElementId);
@@ -63,7 +74,7 @@ function showConsole() {
 
 function hideConsole() {
     const element = document.getElementById(footerId);
-    currentLineHeight = 10;
+    currentLineHeight = hideConsoleHeight;
     updateStyle();
 
     HelperFunctions.disableElement(inputContainerId);
@@ -169,6 +180,7 @@ function checkLanguageDropdownState() {
         HelperFunctions.disableElement(submitLanguageButtonId);
 
         HelperFunctions.enableElement(inputElementId);
+        inputField.focus();
     }
 
     //Actions for true

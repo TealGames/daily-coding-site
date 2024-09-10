@@ -75,11 +75,13 @@
 
 #language-input {
     padding-left: 1%;
+    padding-bottom: 7%;
 }
 
 #footer {
     position: absolute;
     background-color: #212121;
+    padding-bottom: 5%;
 }
 
 #footer-details {

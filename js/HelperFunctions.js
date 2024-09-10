@@ -155,6 +155,12 @@ export class HelperFunctions {
         element.html(element.html() + html);
     }
 
+    static doesContentNotFitPage() {
+        console.log(`document: ${document.body.offsetHeight} window: ${window.innerHeight}`);
+        const b= document.body;
+        return b.scrollHeight > b.offsetHeight || b.scrollWidth > b.offsetWidth
+      }
+
      /**
      * @param {Element} element 
      * @returns {String[]}
@@ -570,6 +576,7 @@ export class HelperFunctions {
             Seconds: seconds,
         }
     }
+    
 
     /**
      * @param {Object} obj 
@@ -660,6 +667,24 @@ export class HelperFunctions {
     }
 
     /**
+     * @param {Object} type 
+     * @param {String[]} stringArray 
+     * @returns {Number} result
+     */
+    static getFlagEnumFromString(type, stringArray){
+        let result=0;
+
+        for (let key in type) {
+            
+            if (this.arrayContains(stringArray, key)) {
+                result|=type[key];
+            }
+        }
+        console.log(`the result for ${stringArray} is ${result}`);
+        return result;
+    }
+
+    /**
      * @param {any[]} array 
      * @param {any} value 
      * @returns {boolean}
@@ -668,6 +693,7 @@ export class HelperFunctions {
         const contains = array.some((el, idx, arr) => {
             return el === value;
         });
+        console.log(`array ${array} contains ${value} ${contains}`);
         return contains;
     }
 }

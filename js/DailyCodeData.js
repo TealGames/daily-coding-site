@@ -1,6 +1,9 @@
 import { HelperFunctions } from "./HelperFunctions.js";
 
 const getCodeRandomly = true;
+const useJson= false;
+const languageDataJsonPath= "./data/LanguageData.json";
+
 export const maxCodeIdLength=4;
 
 export const CodingLanguage = Object.freeze(
@@ -351,7 +354,22 @@ export class LanguageData {
     }
 }
 
-const langaugeData = [
+/**
+ * @param {Object} json
+ * @returns {LanguageData}
+ */
+function getLanguageDataFromJSON(json){
+    const paradigm= HelperFunctions.getFlagEnumFromString(LanguageParadigm, json.Paradigm);
+    const typing= HelperFunctions.getFlagEnumFromString(LanguageTyping, json.Typing);
+    const use= HelperFunctions.getFlagEnumFromString(LanguageUse, json.Use);
+
+    const data= new LanguageData(json.Language, json.Release, paradigm, json.Compilation, 
+        typing, json.Syntax,  use);
+    console.log(`data for json ${json} is ${data.getCompilationType()}`);
+    return data;
+}
+
+let langaugeData = [
     //----------------------------------------------------------------------------------------------------------
     // INTERPRETED LANGUAGES
     //----------------------------------------------------------------------------------------------------------
@@ -548,6 +566,20 @@ export function getDataFromLanguage(language) {
     console.error(`Could not find the language data from argument ${language}`);
     return null;
 }
+
+(async function initLanguageData()
+{
+    if (!useJson) return;
+
+    const json= await HelperFunctions.getFileText(languageDataJsonPath);
+    console.log(`json text: ${json}`);
+    const jsonObj= HelperFunctions.getObjFromJson(json);
+
+    langaugeData=[];
+    for (let i=0; i<jsonObj.length; i++){
+        langaugeData.push(getLanguageDataFromJSON(jsonObj[i]));
+    }
+})();
 
 /**
  * @param {String} str 

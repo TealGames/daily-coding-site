@@ -21,6 +21,7 @@ let displayContainer = null;
 const defaultModeButtonId = "play-default-button";
 const tableModeButtonId = "play-table-button";
 
+const codeIdTabId= "code-id-tab";
 const codeIdTextId = "code-id-tab-text";
 let codeIdText = null;
 
@@ -70,6 +71,10 @@ function initGameDisplay() {
     //To make sure the game does not break, we use the appear order length, (should be 5, but just in case)
     currentTotalAttempts = playingDefaultGame ? todaysCodeDisplay.getAppearOrder().length : defaultTotalAttempts;
     HelperFunctions.disableElement(gameReturnMenuContainerId);
+
+    if (playingDefaultGame) HelperFunctions.enableElement(codeIdTabId);
+    else HelperFunctions.disableElement(codeIdTabId);
+
     enableInput();
     clearDisplay();
 }
