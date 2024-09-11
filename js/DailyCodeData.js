@@ -1,7 +1,7 @@
 import { HelperFunctions } from "./HelperFunctions.js";
 
 const getCodeRandomly = true;
-const useJson= false;
+const useJson= true;
 const languageDataJsonPath= "./data/LanguageData.json";
 
 export const maxCodeIdLength=4;
@@ -354,11 +354,19 @@ export class LanguageData {
     }
 }
 
+function validateJSON(jsonObj, errorOnWrong){
+    if (errorOnWrong){
+        console.error(`The object ${obj} `);
+    }
+}
+
 /**
  * @param {Object} json
  * @returns {LanguageData}
  */
-function getLanguageDataFromJSON(json){
+function getLanguageDataFromJSON(json, throwOnWrongPropertyName=true){
+
+
     const paradigm= HelperFunctions.getFlagEnumFromString(LanguageParadigm, json.Paradigm);
     const typing= HelperFunctions.getFlagEnumFromString(LanguageTyping, json.Typing);
     const use= HelperFunctions.getFlagEnumFromString(LanguageUse, json.Use);

@@ -592,6 +592,17 @@ export class HelperFunctions {
     }
 
     /**
+     * @param {Object} obj 
+     * @param {String} propertyName 
+     * @returns {Boolean[]} true if valid property (has to follow exact string)
+     */
+    static isProperty(obj, propertyName){
+        const properties= this.getPropertiesOfObject(obj);
+        const rightName= this.arrayContains(properties, propertyName);
+        return rightName;
+    }
+
+    /**
      * @param {Object} type 
      * @returns {Number} obj property values
      */

@@ -10,6 +10,34 @@
         "Use" : ["Web", "Server"]
     },
     {
+        "Language" : "TypeScript",
+        "Release" : 2012,
+        "Paradigm" : ["Object-Oriented", "Functional"],
+        "Compilation" : "Interpreted",
+        "Typing" : ["Other"],
+        "Syntax" : "C-like",
+        "Use" : ["Web", "Server"]
+    },
+    {
+        "Language" : "Python",
+        "Release" : 1991,
+        "Paradigm" : ["Object-Oriented", "Functional", "Procedural","Structural"],
+        "Compilation" : "Interpreted",
+        "Typing" : ["Strong", "Dynamic"],
+        "Syntax" : "ALGOL-like",
+        "Use" : ["AI", "Scripting", "Science", "Web"]
+    },
+    {
+        "Language" : "HTML",
+        "Release" : 1993,
+        "Paradigm" : ["Declarative"],
+        "Compilation" : "Interpreted",
+        "Typing" : ["Other"],
+        "Syntax" : "XML-like",
+        "Use" : ["Web", "Server"]
+    },
+    
+    {
         "Language" : "C#",
         "Release" : 2001,
         "Paradigm" : ["Object-Oriented", "Functional", "Structural"],
