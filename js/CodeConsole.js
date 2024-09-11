@@ -38,16 +38,17 @@ function updateStyle() {
    
     footer.style.width = "100%";
     footer.style.height = `${currentLineHeight}%`;
-    //if (footer.style.height===`${hideConsoleHeight}%`) footer.style.bottom="0%";
-    if (HelperFunctions.doesContentNotFitPage()){
-        footer.style.top = `$80%`;
+    if (footer.style.height===`${hideConsoleHeight}%`) footer.style.bottom="0%";
+    else if (HelperFunctions.doesContentNotFitPage()){
+        footer.style.top = `${100-startShowConsoleHeight}%`;
     }
     else{
         footer.style.top = `${100 - footer.style.height}%`;
     }
    
     bottomGradient.style.top = `${100 - footer.style.height - bottomGradient.style.height}%`;
-    bottomGradient.style.bottom = `${currentLineHeight}%`;
+    console.log();
+    bottomGradient.style.bottom = `${footer.style.height+footer.style.bottom}%`;
 }
 
 function addStyleHeight() {
