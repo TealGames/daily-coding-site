@@ -63,7 +63,7 @@ export const PageId = Object.freeze(
 );
 
 function getAllPageIds() {
-    return HelperFunctions.getPropertiesOfObject(PageId);
+    return HelperFunctions.getPropertyValuesOfObject(PageId);
 }
 
 

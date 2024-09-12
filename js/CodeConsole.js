@@ -215,7 +215,7 @@ function checkLanguageDropdownState() {
         inputField.focus();
     });
 
-    const langs = HelperFunctions.getPropertiesOfObject(CodingLanguage).sort();
+    const langs = HelperFunctions.getPropertyValuesOfObject(CodingLanguage).sort();
     for (let i = 0; i < langs.length; i++) {
         languageDropdown.innerHTML += `<option value="${langs[i]}">${langs[i]}</option>`;
     }

@@ -1,5 +1,4 @@
 [
-    
     {
         "Language" : "JavaScript",
         "Release" : 1995,
@@ -36,7 +35,28 @@
         "Syntax" : "XML-like",
         "Use" : ["Web", "Server"]
     },
-    
+    {
+        "Language" : "PHP",
+        "Release" : 1995,
+        "Paradigm" : ["Object-Oriented", "Functional"],
+        "Compilation" : "Interpreted",
+        "Typing" : ["Dynamic", "Weak"],
+        "Syntax" : "Perl-like",
+        "Use" : ["Web", "Server"]
+    },
+
+
+
+
+    {
+        "Language" : "Java",
+        "Release" : 1995,
+        "Paradigm" : ["Object-Oriented", "Functional"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "C-like",
+        "Use" : ["Web", "Applications"]
+    },
     {
         "Language" : "C#",
         "Release" : 2001,
@@ -45,5 +65,242 @@
         "Typing" : ["Static", "Strong"],
         "Syntax" : "C-like",
         "Use" : ["Game Development", "Applications"]
+    },
+    {
+        "Language" : "C",
+        "Release" : 1972,
+        "Paradigm" : ["Structural", "Procedural"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Weak"],
+        "Syntax" : "C-like",
+        "Use" : ["Applications", "Systems"]
+    },
+    {
+        "Language" : "C++",
+        "Release" : 1985,
+        "Paradigm" : ["Functional", "Object-Oriented", "Procedural"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "C-like",
+        "Use" : ["Applications", "Systems", "Game Development"]
+    },
+    {
+        "Language" : "Rust",
+        "Release" : 2015,
+        "Paradigm" : ["Functional", "Structural"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "C-like",
+        "Use" : ["Applications", "Systems", "Scripting"]
+    },
+    {
+        "Language" : "Zig",
+        "Release" : 2016,
+        "Paradigm" : ["Procedural", "Functional"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "C-like",
+        "Use" : ["Applications", "Systems"]
+    },
+    {
+        "Language" : "Lua",
+        "Release" : 1993,
+        "Paradigm" : ["Functional", "Object-Oriented", "Procedural"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "C-like",
+        "Use" : ["Applications", "Game Development", "Scripting"]
+    },
+    {
+        "Language" : "Go",
+        "Release" : 2009,
+        "Paradigm" : ["Functional", "Object-Oriented"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "C-like",
+        "Use" : ["Applications", "Web"]
+    },
+    {
+        "Language" : "Swift",
+        "Release" : 2014,
+        "Paradigm" : ["Functional", "Object-Oriented", "Structural"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "C-like",
+        "Use" : ["Applications"]
+    },
+    {
+        "Language" : "Kotlin",
+        "Release" : 2011,
+        "Paradigm" : ["Functional", "Object-Oriented", "Structural"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "C-like",
+        "Use" : ["Applications", "Web", "Server"]
+    },
+
+
+
+
+    {
+        "Language" : "Ruby",
+        "Release" : 1995,
+        "Paradigm" : ["Functional", "Object-Oriented"],
+        "Compilation" : "Interpreted",
+        "Typing" : ["Dynamic", "Strong"],
+        "Syntax" : "Perl-like",
+        "Use" : ["Web", "Applications", "Scripting"]
+    },
+    {
+        "Language" : "Perl",
+        "Release" : 1987,
+        "Paradigm" : ["Functional", "Object-Oriented", "Procedural"],
+        "Compilation" : "Interpreted",
+        "Typing" : ["Dynamic"],
+        "Syntax" : "Perl-like",
+        "Use" : ["Server", "Database", "Scripting"]
+    },
+
+
+
+
+    {
+        "Language" : "F#",
+        "Release" : 2005,
+        "Paradigm" : ["Functional", "Object-Oriented"],
+        "Compilation" : "Interpreted",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "Lisp-like",
+        "Use" : ["Science", "Server", "Scripting"]
+    },
+    {
+        "Language" : "Caml",
+        "Release" : 1985,
+        "Paradigm" : ["Functional"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "Lisp-like",
+        "Use" : ["Applications", "Systems", "Scripting"]
+    },
+    {
+        "Language" : "OCaml",
+        "Release" : 1996,
+        "Paradigm" : ["Functional", "Object-Oriented"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "Lisp-like",
+        "Use" : ["Applications", "Systems", "Science"]
+    },
+    {
+        "Language" : "Haskell",
+        "Release" : 1990,
+        "Paradigm" : ["Functional"],
+        "Compilation" : "Compiled or Interpreted",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "Lisp-like",
+        "Use" : ["Applications", "Systems"]
+    },
+    {
+        "Language" : "Erlang",
+        "Release" : 1986,
+        "Paradigm" : ["Functional", "Object-Oriented"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Dynamic", "Strong"],
+        "Syntax" : "Lisp-like",
+        "Use" : ["Applications", "Systems", "Server"]
+    },
+    {
+        "Language" : "Elixir",
+        "Release" : 2012,
+        "Paradigm" : ["Functional"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Dynamic", "Strong"],
+        "Syntax" : "Lisp-like",
+        "Use" : ["Applications", "Web", "Server"]
+    },
+    {
+        "Language" : "Lisp",
+        "Release" : 1960,
+        "Paradigm" : ["Functional", "Procedural"],
+        "Compilation" : "Compiled or Interpreted",
+        "Typing" : ["Dynamic", "Strong"],
+        "Syntax" : "Lisp-like",
+        "Use" : ["Applications", "Scripting", "AI"]
+    },
+    {
+        "Language" : "Clojure",
+        "Release" : 2007,
+        "Paradigm" : ["Functional"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Dynamic", "Strong"],
+        "Syntax" : "Lisp-like",
+        "Use" : ["Applications", "Server", "Science"]
+    },
+
+
+
+    
+    {
+        "Language" : "Fortran",
+        "Release" : 1957,
+        "Paradigm" : ["Structural", "Procedural"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "Fortran-like",
+        "Use" : ["Science", "Applications", "Systems"]
+    },
+    {
+        "Language" : "BASIC",
+        "Release" : 1958,
+        "Paradigm" : ["Procedural"],
+        "Compilation" : "Compiled or Interpreted",
+        "Typing" : ["Dynamic", "Weak"],
+        "Syntax" : "Fortran-like",
+        "Use" : ["Scripting", "Applications"]
+    },
+    {
+        "Language" : "COBOL",
+        "Release" : 1959,
+        "Paradigm" : ["Procedural"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Weak"],
+        "Syntax" : "Assembly-like",
+        "Use" : ["Systems", "Applications", "Database"]
+    },
+    {
+        "Language" : "ALGOL",
+        "Release" : 1958,
+        "Paradigm" : ["Procedural", "Structural", "Object-Oriented"],
+        "Compilation" : "Compiled or Interpreted",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "Fortran-like",
+        "Use" : ["Systems", "Applications"]
+    },
+    {
+        "Language" : "Ada",
+        "Release" : 1980,
+        "Paradigm" : ["Procedural", "Object-Oriented"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "ALGOL-like",
+        "Use" : ["Systems", "Applications", "Science"]
+    },
+    {
+        "Language" : "Objective-C",
+        "Release" : 1984,
+        "Paradigm" : ["Object-Oriented"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Weak"],
+        "Syntax" : "C-like",
+        "Use" : ["Systems", "Applications", "Game Development"]
+    },
+    {
+        "Language" : "Pascal",
+        "Release" : 1970,
+        "Paradigm" : ["Structural", "Procedural"],
+        "Compilation" : "Compiled",
+        "Typing" : ["Static", "Strong"],
+        "Syntax" : "ALGOL-like",
+        "Use" : ["Systems", "Applications"]
     }
 ]

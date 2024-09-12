@@ -576,13 +576,25 @@ export class HelperFunctions {
             Seconds: seconds,
         }
     }
-    
+
+    /**
+     * @param {Object} obj 
+     * @returns {String[]} obj property names
+     */
+    static getPropertiesOfObject(obj) {
+        let props = [];
+        for (let key in obj) {
+            props.push(key);
+        }
+
+        return props;
+    }
 
     /**
      * @param {Object} obj 
      * @returns {Object[]} obj property values
      */
-    static getPropertiesOfObject(obj) {
+    static getPropertyValuesOfObject(obj) {
         let vals = [];
         for (let key in obj) {
             vals.push(obj[key]);
@@ -594,12 +606,56 @@ export class HelperFunctions {
     /**
      * @param {Object} obj 
      * @param {String} propertyName 
-     * @returns {Boolean[]} true if valid property (has to follow exact string)
+     * @returns {Boolean} true if valid property (has to follow exact string)
      */
-    static isProperty(obj, propertyName){
+    static hasProperty(obj, propertyName){
         const properties= this.getPropertiesOfObject(obj);
         const rightName= this.arrayContains(properties, propertyName);
         return rightName;
+    }
+
+    /**
+     * @param {Object} obj 
+     * @param {String} propertyName 
+     * @returns {*} returns the value of property if exists, otherwise null is returned
+     */
+    static getProperty(obj, propertyName){
+        if (this.hasProperty(obj, propertyName)) return obj[propertyName];
+        else return null;
+    }
+
+    /**
+     * @param {Object} obj 
+     * @param {String} propertyName 
+     * @param {Any[]} acceptableValues 
+     * @returns {Boolean}
+     */
+    static propertyHasValue(obj, propertyName, acceptableValues){
+        if (!obj || !acceptableValues) return false;
+
+        const value= this.getProperty(obj, propertyName);
+        if (!value) return false;
+        
+        for (let i=0; i<acceptableValues.length; i++){
+            if (acceptableValues[i]===value) return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param {Object} obj 
+     */
+    static objAsString(obj){
+        let str="{";
+        for (let key in obj) {
+            str+=`${key}:${obj[key]},`;
+        }
+        const lastCommaIndex= str.indexOf(",");
+        if (lastCommaIndex>=0){
+            str=str.substring(0, lastCommaIndex);
+        }
+        str+="}";
+        return str;
     }
 
     /**
@@ -607,7 +663,7 @@ export class HelperFunctions {
      * @returns {Number} obj property values
      */
     static getAllFlagEnumProperties(type) {
-        const values = this.getPropertiesOfObject(type);
+        const values = this.getPropertyValuesOfObject(type);
 
         let result = values[0];
         for (let i = 1; i < values.length; i++) {
@@ -669,7 +725,7 @@ export class HelperFunctions {
      */
     static getFullFlagEnumExcept(type, exceptValue) {
         const allProperties = this.getAllFlagEnumProperties(type);
-        const allIndividual = this.getPropertiesOfObject(type);
+        const allIndividual = this.getPropertyValuesOfObject(type);
 
         //By changing the exception values to the inverse and using and, the spots not in the enum
         //get cancelled by the all properties 0 bits, and the ones that all has 
@@ -704,7 +760,6 @@ export class HelperFunctions {
         const contains = array.some((el, idx, arr) => {
             return el === value;
         });
-        console.log(`array ${array} contains ${value} ${contains}`);
         return contains;
     }
 }
