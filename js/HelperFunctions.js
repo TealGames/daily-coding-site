@@ -100,8 +100,8 @@ export class HelperFunctions {
     static #timeoutIds = new HashTable();
 
     static #disableCSSClass = "disabled";
-    static #enableBlockCSSClass= "block-display";
-    static #enableInlineCSSClass= "inline-display";
+    static #enableBlockCSSClass = "block-display";
+    static #enableInlineCSSClass = "inline-display";
 
     static delay(seconds, outCancelId) {
         const promise = new Promise((resolve, reject) => {
@@ -157,16 +157,15 @@ export class HelperFunctions {
 
     static doesContentNotFitPage() {
         console.log(`document: ${document.body.offsetHeight} window: ${window.innerHeight}`);
-        const b= document.body;
+        const b = document.body;
         return b.scrollHeight > b.offsetHeight || b.scrollWidth > b.offsetWidth
-      }
+    }
 
-     /**
-     * @param {Element} element 
-     * @returns {String[]}
-     */
-    static getClassesList(element)
-    {
+    /**
+    * @param {Element} element 
+    * @returns {String[]}
+    */
+    static getClassesList(element) {
         if (!element || !element.className) return [];
 
         return element.className.split(" ");
@@ -177,13 +176,12 @@ export class HelperFunctions {
      * @param {String} cssClass
      * @returns {Boolean} true if has it
      */
-    static hasClass(element, cssClass)
-    {
-        if (!element || !cssClass) return; 
-        cssClass= this.replaceAll(cssClass, " ", "-").trim();
+    static hasClass(element, cssClass) {
+        if (!element || !cssClass) return;
+        cssClass = this.replaceAll(cssClass, " ", "-").trim();
 
-        const classes= this.getClassesList(element);
-        if (!classes || classes.length==0) return false;
+        const classes = this.getClassesList(element);
+        if (!classes || classes.length == 0) return false;
 
         return classes.indexOf(cssClass) >= 0;
     }
@@ -192,35 +190,30 @@ export class HelperFunctions {
      * @param {Element} element 
      * @param {String} cssClass 
      */
-    static addClass(element, cssClass)
-    {
+    static addClass(element, cssClass) {
         if (!element || !cssClass) return;
-        cssClass= this.replaceAll(cssClass, " ", "-").trim();
+        cssClass = this.replaceAll(cssClass, " ", "-").trim();
 
-        if (this.hasClass(element, cssClass))
-        {
-            console.warn(`Tried to add the CSS class ${cssClass} to element `+
+        if (this.hasClass(element, cssClass)) {
+            console.warn(`Tried to add the CSS class ${cssClass} to element ` +
                 `${element} with id ${element.id} but its classes (${element.className}) already has it!`);
             return;
         }
 
-        if (element.classList)
-        {
+        if (element.classList) {
             element.classList.add(cssClass);
         }
-        else{
+        else {
 
             //If we already have classes, we add it with a space 
             //(so other classes are not ruined)
-            if (element.className)
-            {
-                element.className+=` ${cssClass}`;
+            if (element.className) {
+                element.className += ` ${cssClass}`;
             }
-    
+
             //Otherwise, we can just set it if we know there are no other classes
-            else
-            {
-                element.className=cssClass;
+            else {
+                element.className = cssClass;
             }
         }
     }
@@ -230,35 +223,33 @@ export class HelperFunctions {
      * @param {String} cssClass 
      * @returns {Boolean} returns true if success
      */
-    static tryRemoveClass(element, cssClass)
-    {
+    static tryRemoveClass(element, cssClass) {
         if (!element || !cssClass) return false;
-        cssClass= this.replaceAll(cssClass, " ", "-").trim();
+        cssClass = this.replaceAll(cssClass, " ", "-").trim();
 
-        const className= element.className;
+        const className = element.className;
         if (!className) return false;
 
         //If we don't have it, we exit now
         if (!HelperFunctions.hasClass(element, cssClass)) return false;
 
-        if (element.classList)
-        {
+        if (element.classList) {
             element.classList.remove(cssClass);
         }
 
         //Note: this has potentially to not work if the css class to remove
         //is a stirng part of another larger css class, so it might remove parts
         //of another class if they share the same string (how indexOf works)
-        else{
-            const index= element.indexOf(className, cssClass);
-            if (index<0) return false;
+        else {
+            const index = element.indexOf(className, cssClass);
+            if (index < 0) return false;
 
-            let resultClass= className.substring(0, index)+ className.substring(index+cssClass.length);
-            resultClass= resultClass.trim();
+            let resultClass = className.substring(0, index) + className.substring(index + cssClass.length);
+            resultClass = resultClass.trim();
 
             if (!resultClass) return false;
 
-            element.className=resultClass;
+            element.className = resultClass;
         }
         return true;
     }
@@ -268,15 +259,13 @@ export class HelperFunctions {
      * @param {String[]} cssClasses
      * @returns {Boolean} returns true if all are removed
      */
-    static tryRemoveClasses(element, cssClasses)
-    {
+    static tryRemoveClasses(element, cssClasses) {
         if (!element || !cssClasses) return false;
 
-        let allRemoved=true;
-        for (let i=0; i<cssClasses.length; i++)
-        {
-            const removed= this.tryRemoveClass(element, cssClasses[i]);
-            if (!removed) allRemoved=false;
+        let allRemoved = true;
+        for (let i = 0; i < cssClasses.length; i++) {
+            const removed = this.tryRemoveClass(element, cssClasses[i]);
+            if (!removed) allRemoved = false;
         }
         return allRemoved;
     }
@@ -292,7 +281,7 @@ export class HelperFunctions {
 
     static disableElement(elementId) {
         const disableElement = document.getElementById(elementId);
-        
+
         //To prevent conflicts with disable class, we remove any enable classes we might have added
         HelperFunctions.tryRemoveClasses(disableElement, [this.#enableBlockCSSClass, this.#enableInlineCSSClass]);
         HelperFunctions.addClass(disableElement, this.#disableCSSClass);
@@ -327,7 +316,7 @@ export class HelperFunctions {
      * @returns {String}
      */
     static padWithLeadingZeros(num, totalLength) {
-        const numStr= num.toString();
+        const numStr = num.toString();
         return numStr.padStart(totalLength, '0');
     }
 
@@ -351,18 +340,17 @@ export class HelperFunctions {
      * @returns {String} 
      */
     static replaceAll(target, replaceVal, newVal) {
-        if (!target || !replaceVal)
-        {
-            console.warn(`Tried to use replaceAll with args (target: ${target} replace: ${replaceVal} new: ${newVal}) `+
+        if (!target || !replaceVal) {
+            console.warn(`Tried to use replaceAll with args (target: ${target} replace: ${replaceVal} new: ${newVal}) ` +
                 `but either target or replace value is undefined!`);
             return target;
         }
-        
+
         let result = target;
         let valIndex = target.indexOf(replaceVal);
-        while (valIndex >= 0 && result.length>0) {
+        while (valIndex >= 0 && result.length > 0) {
             let newStr = result.substring(0, valIndex) + newVal + result.substring(valIndex + replaceVal.length);
-            result=newStr;
+            result = newStr;
 
             valIndex = target.indexOf(replaceVal);
         }
@@ -377,19 +365,16 @@ export class HelperFunctions {
      * @param {String} newVal
      * @returns {String} 
      */
-    static replaceAllMultiple(target, replaceVals, newVal)
-    {
-        if (!target || !replaceVals)
-            {
-                console.warn(`Tried to use replaceAll with args (target: ${target} replace: ${replaceVal} new: ${newVal}) `+
-                    `but either target or replace value is undefined!`);
-                return target;
-            }
+    static replaceAllMultiple(target, replaceVals, newVal) {
+        if (!target || !replaceVals) {
+            console.warn(`Tried to use replaceAll with args (target: ${target} replace: ${replaceVal} new: ${newVal}) ` +
+                `but either target or replace value is undefined!`);
+            return target;
+        }
 
-        let result= target;
-        for (let i=0; i<replaceVals.length; i++)
-        {
-            result= HelperFunctions.replaceAll(target, replaceVals[i], newVal);
+        let result = target;
+        for (let i = 0; i < replaceVals.length; i++) {
+            result = HelperFunctions.replaceAll(target, replaceVals[i], newVal);
         }
         return result;
     }
@@ -408,9 +393,8 @@ export class HelperFunctions {
      * @param {Boolean} logSuccess
      * @returns {String} string of the result file text
      */
-    static async getFileText(filePath, logSuccess=true)
-    {
-        let result="";
+    static async getFileText(filePath, logSuccess = true) {
+        let result = "";
 
         try {
             const response = await fetch(filePath);
@@ -422,7 +406,7 @@ export class HelperFunctions {
 
         return result;
     }
-    
+
     static clamp(value, min, max) {
         return Math.max(Math.min(value, max), min);
     }
@@ -608,9 +592,9 @@ export class HelperFunctions {
      * @param {String} propertyName 
      * @returns {Boolean} true if valid property (has to follow exact string)
      */
-    static hasProperty(obj, propertyName){
-        const properties= this.getPropertiesOfObject(obj);
-        const rightName= this.arrayContains(properties, propertyName);
+    static hasProperty(obj, propertyName) {
+        const properties = this.getPropertiesOfObject(obj);
+        const rightName = this.arrayContains(properties, propertyName);
         return rightName;
     }
 
@@ -619,7 +603,7 @@ export class HelperFunctions {
      * @param {String} propertyName 
      * @returns {*} returns the value of property if exists, otherwise null is returned
      */
-    static getProperty(obj, propertyName){
+    static getProperty(obj, propertyName) {
         if (this.hasProperty(obj, propertyName)) return obj[propertyName];
         else return null;
     }
@@ -630,14 +614,14 @@ export class HelperFunctions {
      * @param {Any[]} acceptableValues 
      * @returns {Boolean}
      */
-    static propertyHasValue(obj, propertyName, acceptableValues){
+    static propertyHasValue(obj, propertyName, acceptableValues) {
         if (!obj || !acceptableValues) return false;
 
-        const value= this.getProperty(obj, propertyName);
+        const value = this.getProperty(obj, propertyName);
         if (!value) return false;
-        
-        for (let i=0; i<acceptableValues.length; i++){
-            if (acceptableValues[i]===value) return true;
+
+        for (let i = 0; i < acceptableValues.length; i++) {
+            if (acceptableValues[i] === value) return true;
         }
         return false;
     }
@@ -645,16 +629,16 @@ export class HelperFunctions {
     /**
      * @param {Object} obj 
      */
-    static objAsString(obj){
-        let str="{";
+    static objAsString(obj) {
+        let str = "{";
         for (let key in obj) {
-            str+=`${key}:${obj[key]},`;
+            str += `${key}:${obj[key]},`;
         }
-        const lastCommaIndex= str.indexOf(",");
-        if (lastCommaIndex>=0){
-            str=str.substring(0, lastCommaIndex);
+        const lastCommaIndex = str.lastIndexOf(",");
+        if (lastCommaIndex >= 0) {
+            str = str.substring(0, lastCommaIndex);
         }
-        str+="}";
+        str += "}";
         return str;
     }
 
@@ -738,16 +722,16 @@ export class HelperFunctions {
      * @param {String[]} stringArray 
      * @returns {Number} result
      */
-    static getFlagEnumFromString(type, stringArray){
-        let result=0;
+    static getFlagEnumFromString(type, stringArray) {
+        let result = 0;
 
         for (let key in type) {
-            
+
             if (this.arrayContains(stringArray, key)) {
-                result|=type[key];
+                result |= type[key];
             }
         }
-        console.log(`the result for ${stringArray} is ${result}`);
+        //console.log(`the result for ${stringArray} is ${result}`);
         return result;
     }
 

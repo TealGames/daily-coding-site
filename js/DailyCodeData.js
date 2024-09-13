@@ -1,12 +1,13 @@
 import { HelperFunctions } from "./HelperFunctions.js";
-import { validateLanguageDataJSON } from "./JsonValidator.js";
+import { validateCodeDataJSON, validateLanguageDataJSON, validateTableDataJSON } from "./JsonValidator.js";
 
 const getCodeRandomly = true;
-const useJson= true;
-const languageDataJsonPath= "./data/LanguageData.json";
-const tableDataJsonPath="./data/TableData.json";
+const useJson = true;
+const languageDataJsonPath = "./data/LanguageData.json";
+const tableDataJsonPath = "./data/TableData.json";
+const codeDataJsonPath = "./data/CodeData.json";
 
-export const maxCodeIdLength=4;
+export const maxCodeIdLength = 4;
 
 export const CodingLanguage = Object.freeze(
     {
@@ -75,7 +76,7 @@ export class CodeData {
      * @param {Number[][]} lineAppearOrder - order lines appear (as indices)
      */
     constructor(id, day, lang, codeLines, lineAppearOrder) {
-        this.#id= id;
+        this.#id = id;
         this.#day = day;
         this.#codeLines = codeLines;
         this.#lang = lang;
@@ -85,7 +86,7 @@ export class CodeData {
     /**
      * @returns {Number}
      */
-    getId(){
+    getId() {
         return this.#id;
     }
 
@@ -120,12 +121,12 @@ export class CodeData {
     }
 }
 
-const dailyCode = [
-    new CodeData(1, new Date(2024, 8, 3), CodingLanguage.Java,
-        ["<spc>if </spc><def>(</def><var>reallyCool</var><def>){</def><new><spc>else if</spc><def>(</def><var>poophead</var><def>){</def>",
-            "<def>someText</def>",
-            "<def>someText</def><def>evenmorenew</def>",
-            "<def>someText</def><def>here</def>"], [[2, 0], [3], [1]]),
+let dailyCode = [
+    // new CodeData(1, new Date(2024, 8, 3), CodingLanguage.Java,
+    //     ["<spc>if </spc><def>(</def><var>reallyCool</var><def>){</def><new><spc>else if</spc><def>(</def><var>poophead</var><def>){</def>",
+    //         "<def>someText</def>",
+    //         "<def>someText</def><def>evenmorenew</def>",
+    //         "<def>someText</def><def>here</def>"], [[2, 0], [3], [1]]),
 ];
 
 /**
@@ -154,7 +155,7 @@ function getTodaysDataUTC(collection) {
         dayToCheck.setMilliseconds(todayLocal.getMilliseconds());
         const utcTime = HelperFunctions.convertToUTC(dayToCheck);
 
-        console.log(`testing day ${todayUTC} with ${utcTime} (or: ${collection[i].getDay()}) ${HelperFunctions.isSameDay(todayUTC, utcTime)}`);
+        //console.log(`testing day ${todayUTC} with ${utcTime} (or: ${collection[i].getDay()}) ${HelperFunctions.isSameDay(todayUTC, utcTime)}`);
         if (HelperFunctions.isSameDay(todayUTC, utcTime)) {
             return collection[i];
         }
@@ -350,9 +351,13 @@ export class LanguageData {
         return this.#syntax;
     }
 
+    toString() {
+        return `{${this.getLang()} released:${this.getReleaseYear()} paradigm:${HelperFunctions.flagEnumToString(LanguageParadigm, this.getParadigm())} ` +
+            `(${this.getParadigm()}) complile:${this.getCompilationType()} typed:${this.getTypedType()} use:${this.getUse()} syntax:${this.getSyntax()}}`;
+    }
+
     printObj() {
-        console.log(`{${this.getLang()} released:${this.getReleaseYear()} paradigm:${HelperFunctions.flagEnumToString(LanguageParadigm, this.getParadigm())} ` +
-            `(${this.getParadigm()}) complile:${this.getCompilationType()} typed:${this.getTypedType()} use:${this.getUse()} syntax:${this.getSyntax()}}`);
+        console.log(this.toString());
     }
 }
 
@@ -360,24 +365,49 @@ export class LanguageData {
  * @param {Object} json
  * @returns {LanguageData}
  */
-function getLanguageDataFromJSON(json, throwOnWrongPropertyName=true){
-
+function getLanguageDataFromJSON(json) {
     validateLanguageDataJSON(json);
 
-    const paradigm= HelperFunctions.getFlagEnumFromString(LanguageParadigm, json.Paradigm);
-    const typing= HelperFunctions.getFlagEnumFromString(LanguageTyping, json.Typing);
-    const use= HelperFunctions.getFlagEnumFromString(LanguageUse, json.Use);
+    const paradigm = HelperFunctions.getFlagEnumFromString(LanguageParadigm, json.Paradigm);
+    const typing = HelperFunctions.getFlagEnumFromString(LanguageTyping, json.Typing);
+    const use = HelperFunctions.getFlagEnumFromString(LanguageUse, json.Use);
 
-    const data= new LanguageData(json.Language, json.Release, paradigm, json.Compilation, 
-        typing, json.Syntax,  use);
-    console.log(`data for json ${json} is ${data.getCompilationType()}`);
+    const data = new LanguageData(json.Language, json.Release, paradigm, json.Compilation,
+        typing, json.Syntax, use);
+    //console.log(`LANGUAGE data for json ${HelperFunctions.objAsString(json)} is ${data} ${HelperFunctions.objAsString(data)}`);
+    return data;
+}
+
+/**
+ * @param {Object} json
+ * @returns {TableData}
+ */
+function getTableDataFromJSON(json) {
+    validateTableDataJSON(json);
+
+    const data = new TableData(new Date(json.Year, json.Month, json.Day), json.Language);
+    //console.log(`data for json ${HelperFunctions.objAsString(json)} is ${HelperFunctions.objAsString(data)}`);
+    return data;
+}
+
+/**
+ * @param {Object} json
+ * @returns {CodeData}
+ */
+function getCodeDataFromJSON(json) {
+    validateCodeDataJSON(json);
+
+    const data = new CodeData(json.ID, new Date(json.Year, json.Month, json.Day), json.Language,
+        json.Code, json.Order);
+    // console.log(`data for json ${HelperFunctions.objAsString(json)} is ${json.Language}` +
+    //     `${HelperFunctions.objAsString(data)}`);
     return data;
 }
 
 let langaugeData = [];
 
-const dailyTable = [
-    new TableData(new Date(2024, 8, 2), CodingLanguage["C#"]),
+let dailyTable = [
+    // new TableData(new Date(2024, 8, 2), CodingLanguage["C#"]),
 ];
 
 /**
@@ -391,22 +421,66 @@ export function getDataFromLanguage(language) {
         }
     }
 
-    console.error(`Could not find the language data from argument ${language}`);
+    console.warn(`Could not find the language data from argument ${language}`);
     return null;
 }
 
-(async function initLanguageData()
-{
+/**
+ * @callback addDataAction
+ * @param {Object} jsonObject
+ * @returns {*}
+ */
+/**
+ * @param {String} path 
+ * @param {*[]} dataArray 
+ * @param {addDataAction} actionOnObject 
+ * @returns 
+ */
+async function initJsonData(path, dataArray, actionOnObject) {
     if (!useJson) return;
 
-    const json= await HelperFunctions.getFileText(languageDataJsonPath);
-    console.log(`json text: ${json}`);
-    const jsonObj= HelperFunctions.getObjFromJson(json);
+    const json = await HelperFunctions.getFileText(path);
+    const jsonObj = HelperFunctions.getObjFromJson(json);
+    //console.log(`for json at path ${ path } found ${ json } the obj: ${ jsonObj.length } `);
+    //dataArray.length = 0;
 
-    langaugeData=[];
-    for (let i=0; i<jsonObj.length; i++){
-        langaugeData.push(getLanguageDataFromJSON(jsonObj[i]));
+    for (let i = 0; i < jsonObj.length; i++) {
+        dataArray.push(actionOnObject(jsonObj[i]));
+        console.log(`added to data array obj: ${dataArray[dataArray.length - 1]}`);
     }
+}
+
+(async function initAllJsonData() {
+
+    await initJsonData(languageDataJsonPath, langaugeData, (object) => {
+        return getLanguageDataFromJSON(object);
+    });
+
+    await initJsonData(tableDataJsonPath, dailyTable, (object) => {
+        return getTableDataFromJSON(object);
+    });
+
+    await initJsonData(codeDataJsonPath, dailyCode, (object) => {
+        return getCodeDataFromJSON(object);
+    });
+
+    console.log(`language data: ${langaugeData} `);
+    console.log(`daily table data: ${dailyTable} `);
+    console.log(`daily code data: ${dailyCode} `);
+
+    // const languageJson = await HelperFunctions.getFileText(languageDataJsonPath);
+    // const languageJsonObj = HelperFunctions.getObjFromJson(languageJson);
+    // langaugeData = [];
+    // for (let i = 0; i < languageJsonObj.length; i++) {
+    //     langaugeData.push(getLanguageDataFromJSON(languageJsonObj[i]));
+    // }
+
+    // const tableJson = await HelperFunctions.getFileText(tableDataJsonPath);
+    // const tableJsonObj = HelperFunctions.getObjFromJson(languageJson);
+    // dailyTable = [];
+    // for (let i = 0; i < languageJsonObj.length; i++) {
+    //     langaugeData.push(getLanguageDataFromJSON(languageJsonObj[i]));
+    // }
 })();
 
 /**
@@ -414,8 +488,8 @@ export function getDataFromLanguage(language) {
  * @returns {LanguageData}
  */
 export function getDataFromLanguageString(str) {
-    str = HelperFunctions.replaceAll(str," ", "").trim().toLowerCase();
-    
+    str = HelperFunctions.replaceAll(str, " ", "").trim().toLowerCase();
+
     for (let i = 0; i < langaugeData.length; i++) {
         const simplified = HelperFunctions.replaceAll(langaugeData[i].getLang(), " ", "").toLowerCase().trim();
         if (str === simplified) {
@@ -423,7 +497,7 @@ export function getDataFromLanguageString(str) {
         }
     }
 
-    console.error(`Could not find the language data from argument (str) ${str}`);
+    console.warn(`Could not find the language data from argument(str) ${str} `);
     return null;
 }
 
@@ -431,6 +505,17 @@ export function getDataFromLanguageString(str) {
 * @returns {TableData}
 */
 export function getTodaysTableDataUTC() {
+
+    //If we get todays table data and we get randomly, we can just choose a random langauge
+    //and we don't need to care about a specific day's data
+    //time should also not matter since it is never used and only used for specific day data retrieval
+    if (getCodeRandomly) {
+        const allLangs = HelperFunctions.getPropertiesOfObject(CodingLanguage);
+        const randomIndex = Math.floor(Math.random() * allLangs.length);
+        const data = new TableData(new Date(), allLangs[randomIndex]);
+        return data;
+    }
+
     return getTodaysDataUTC(dailyTable);
 }
 

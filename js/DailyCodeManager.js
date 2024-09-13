@@ -21,7 +21,7 @@ let displayContainer = null;
 const defaultModeButtonId = "play-default-button";
 const tableModeButtonId = "play-table-button";
 
-const codeIdTabId= "code-id-tab";
+const codeIdTabId = "code-id-tab";
 const codeIdTextId = "code-id-tab-text";
 let codeIdText = null;
 
@@ -55,6 +55,9 @@ function initGameDisplay() {
 
     code = getTodaysCodeDataUTC();
     table = getTodaysTableDataUTC();
+
+    console.log(`todays code: ${HelperFunctions.objAsString(code)}`);
+    console.log(`todays table: ${HelperFunctions.objAsString(table)}`);
     todaysCodeDisplay = getHtmlFromCodeData(code);
 
     const idWith0s = HelperFunctions.padWithLeadingZeros(code.getId(), maxCodeIdLength);
@@ -117,7 +120,13 @@ function nextLine() {
     }
     else {
         const languageData = getDataFromLanguage(table.getLang());
+        //To prevent errors, we need to exit if the language name does not match
+        if (!languageData) {
+            return;
+        }
+
         let html = getHtmlFromLanguageData(languageData, guessedLanguages, true);
+        console.log(`get html from lang data guessed: ${guessedLanguages} html: ${html}`);
         displayContainer.innerHTML = html;
     }
 }
@@ -163,7 +172,7 @@ function enableInput() {
     HelperFunctions.enableElement(inputFieldId);
 }
 
-function checkInput(text){
+function checkInput(text) {
     console.log(`input has submit to ${text}`);
 
     //Don't allow duplicate guessing
@@ -191,10 +200,14 @@ function checkInput(text){
 
     //NO matter what we show the current attempt for table game
     if (!playingDefaultGame) {
-        guessedLanguages.unshift(getDataFromLanguageString(text));
+        const foundData = getDataFromLanguageString(text);
+        if (foundData) {
+            if (guessedLanguages.length > 0) guessedLanguages.unshift(foundData);
+            else guessedLanguages.push(foundData);
+        }
     }
-    if (maxAttemptsReached) gameEnd(false);
 
+    if (maxAttemptsReached) gameEnd(false);
     else if (!rightInput) {
         nextLine();
     }
@@ -217,7 +230,7 @@ function cleanInput(input) {
     const element = document.getElementById("input-field");
     element.addEventListener("change", (e) => checkInput(cleanInput(inputField.value)));
 
-    submitLanguageButton= document.getElementById(submitLanguageButtonId);
+    submitLanguageButton = document.getElementById(submitLanguageButtonId);
     submitLanguageButton.addEventListener("click", (e) => {
         checkInput(cleanInput(languageDropdown.value));
     });
