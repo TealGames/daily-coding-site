@@ -63,6 +63,8 @@
     font-size: 1rem;
 }
 
+@media (max-width: 700px) {}
+
 @media (max-width: 660px),
 (max-height: 780px) {
 
@@ -71,34 +73,74 @@
         font-size: 1rem;
     }
 
-    .medium-text{
-        font-size: 1rem;
+    .medium-text {
+        font-size: 0.8rem;
     }
 
-    .small-text{
+    .small-text {
         font-size: 0.7rem;
     }
 
-    .input{
-        width:60%;
+    .input {
+        width: 60%;
     }
 }
 
-@media (max-width:480px){
+@media (max-width:550px) {
+
     .body-text,
     .button {
         font-size: 0.8rem;
     }
+
+    .medium-text {
+        font-size: 0.7rem;
+    }
 }
 
-@media (max-width:410px){
+@media (max-width:450px) {
+
     .body-text,
-    .button{
+    .button {
         font-size: 0.6rem;
     }
 
-    .small-text{
+    .medium-text {
         font-size: 0.6rem;
+    }
+
+    .small-text {
+        font-size: 0.6rem;
+    }
+
+    .terminal-ui {
+        font-size: 0.8rem;
+        margin-top: 3%;
+        width: 40%;
+    }
+}
+
+@media (max-width:250px) {
+
+    .title-text {
+        font-size: 1.8rem;
+    }
+
+    .body-text,
+    .button {
+        font-size: 0.5rem;
+    }
+
+    .medium-text {
+        font-size: 0.5rem;
+    }
+
+    .small-text {
+        font-size: 0.4rem;
+    }
+
+    .terminal-ui {
+        font-size: 0.8rem;
     }
 }
 
@@ -115,17 +157,19 @@ input {
     border-radius: 5px;
     border: none;
     width: 35%;
-    height:10%;
+    height: 10%;
 }
 
-select,
+/* select, */
 .terminal-ui {
+    color: #707070;
     background-color: rgb(42, 42, 43);
     border: 2px solid rgb(61, 61, 61);
     border-radius: 5px;
     border: none;
-    width: 25vw;
-    height: 3vh;
+    margin-top: 10px;
+    width: 180px;
+    height: 30px;
 }
 
 table {

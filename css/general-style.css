@@ -58,8 +58,8 @@ ul,
     align-content: flex-start;
 }
 
-.bottom-aligned{
-    text-align:end;
+.bottom-aligned {
+    text-align: end;
 }
 
 .no-link-underline {
@@ -81,12 +81,10 @@ ul,
     display: none;
 }
 
-.block-display
-{
-    display:block;
+.block-display {
+    display: block;
 }
 
-.inline-display
-{
-    display:inline;
+.inline-display {
+    display: inline;
 }

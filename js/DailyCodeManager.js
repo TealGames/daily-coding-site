@@ -183,11 +183,11 @@ function checkInput(text) {
     previousInput.push(text);
 
     let rightInput = false;
-    let correctLanguage= "";
-    if (playingDefaultGame){
-        correctLanguage= code.getLang().toLowerCase(); 
+    let correctLanguage = "";
+    if (playingDefaultGame) {
+        correctLanguage = code.getLang().toLowerCase();
     }
-    else{
+    else {
         correctLanguage = table.getLang().toLowerCase();
     }
     rightInput = text === correctLanguage;
@@ -198,7 +198,7 @@ function checkInput(text) {
         {
             "Input": text,
             "CorrectGuess": rightInput,
-            "CorrectLanguage" : correctLanguage,
+            "CorrectLanguage": correctLanguage,
             "MaxAttempts": currentTotalAttempts,
             "CurrentAttempts": currentAttempts,
             "AllAttemptsUsed": maxAttemptsReached,

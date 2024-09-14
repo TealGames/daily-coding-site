@@ -1,15 +1,28 @@
 [
     {
-        "ID": 0,
+        "ID": 1,
         "Year": 2024,
         "Month": 8,
         "Day": 2,
         "Language": "Java",
         "Code": [
-            "<spc>if </spc><def>(</def><var>reallyCool</var><def>){</def><new><spc>else if</spc><def>(</def><var>poophead</var><def>){</def>",
-            "<def>someText</def>",
-            "<def>someText</def><def>evenmorenew</def>",
-            "<def>someText</def><def>here</def>"
+            "<key>class</key> <obj>Main</obj>",
+            "<def>{</def>",
+            "<key>public static void</key> <fnc>main</fnc><def>(</def><obj>String</obj><def>[]</def> <var>args</var><def>)</def>",
+            "<def>{<def>",
+            "<obj>Scanner<obj> sc = new Scanner(System.in);",
+            "",
+            "System.out.println(\"What is your username?\");",
+            "String username= sc.nextLine();",
+            "System.out.println(\"Your username is \"+ username);",
+            "}",
+            "}",
+            "}",
+            "}",
+            "}",
+            "}",
+            "}",
+            "}"
         ],
         "Order": [
             [

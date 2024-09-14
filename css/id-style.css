@@ -59,7 +59,6 @@
 
 #right-panel {
     position: relative;
-    width: 75%;
 }
 
 #top-gradient {
@@ -68,12 +67,26 @@
 }
 
 #bottom-gradient {
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 3vh;
+    top: -40px;
+}
+
+@media (max-width: 550px) {
+    #bottom-gradient {
+        top: -35px;
+    }
+}
+
+@media (max-width: 450px) {
+    #bottom-gradient {
+        top: -30px;
+    }
 }
 
 #language-input {
+    margin-top: -15px;
     padding-left: 1%;
     padding-bottom: 7%;
 }
@@ -82,6 +95,7 @@
     position: absolute;
     background-color: #212121;
     padding-bottom: 5%;
+    margin-top: 1%;
 }
 
 #footer-details {
@@ -94,6 +108,12 @@
     bottom: 0%;
     width: 100%;
     height: 3vh;
+}
+
+@media (max-width:400px) {
+    #footer-details {
+        top: 95vh;
+    }
 }
 
 #footer-line {
@@ -115,7 +135,7 @@
     border-radius: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    padding-top: 10px;
+    padding-top: 6px;
     padding-bottom: 10px;
     margin-right: 0%;
 }
@@ -125,12 +145,19 @@
     border: 2px solid rgb(61, 61, 61);
     border-radius: 5px;
     position: relative;
-    right:0%;
+    right: 0%;
     margin-bottom: 1%;
     top: 0%;
 
     width: 100px;
-    height: 25px;
+    height: 20px;
+}
+
+@media (max-width:450px) {
+    #code-id-tab {
+        width: 70px;
+        height: 10px;
+    }
 }
 
 #credits {

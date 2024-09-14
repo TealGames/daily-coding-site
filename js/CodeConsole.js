@@ -12,11 +12,15 @@ const languageDropdownId = "language-select";
 const bottomGradientId = "bottom-gradient";
 const submitLanguageButtonId = "submit-language-button";
 
+const dislayContainerId = "game-display-container";
+let displayContainer = null;
+
 let languageDropdownButton = null;
 let languageDropdownText = null;
 let languageDropdown = null;
 let submitLanguageButton = null;
 
+let isConsoleShown = false;
 let allowLanguageDropdowns = false;
 const doRating = true;
 
@@ -26,29 +30,48 @@ let label = null;
 let inputField = null;
 let bottomGradient = null;
 
-const startShowConsoleHeight=30;
-const hideConsoleHeight=10;
+const startShowConsoleHeight = 30;
+const hideConsoleHeight = 10;
 const newLineHeightChange = 3;
 let currentLineHeight = 0;
 
+const gradientHeight = 5;
+
 function updateStyle() {
     //footer.style.top = `${100 - currentLineHeight}%`;
-   
+
     console.log(`not fit: ${HelperFunctions.doesContentNotFitPage()}`);
-   
     footer.style.width = "100%";
-    footer.style.height = `${currentLineHeight}%`;
-    if (footer.style.height===`${hideConsoleHeight}%`) footer.style.bottom="0%";
-    else if (HelperFunctions.doesContentNotFitPage()){
-        footer.style.top = `${100-startShowConsoleHeight}%`;
+
+    const footerHeight = currentLineHeight;
+    footer.style.height = `${footerHeight}%`;
+
+    // if (footer.style.height === `${hideConsoleHeight}%`) {
+    //     footer.style.bottom = "0%";
+    // }
+    if (!isConsoleShown) {
+        footer.style.bottom = "0%";
     }
-    else{
-        footer.style.top = `${100 - footer.style.height}%`;
+    // else (HelperFunctions.doesContentNotFitPage()) {
+    //     footer.style.top = `${100 - startShowConsoleHeight}%`;
+    // }
+    // else {
+    //     footer.style.top = `${100 - startShowConsoleHeight}%`;
+    // }
+    //footer.style.top = `${100 - startShowConsoleHeight}%`;
+    else {
+        console.log(`choosing strict height top: ${100 - footer.style.height}`);
+        footer.style.removeProperty(`bottom`);
+        //footer.style.top = `${100 - footer.style.height}%`;
     }
-   
-    bottomGradient.style.top = `${100 - footer.style.height - bottomGradient.style.height}%`;
-    console.log();
-    bottomGradient.style.bottom = `${footer.style.height+footer.style.bottom}%`;
+    //footer.style.top = `${100 - footer.style.height}%`;
+
+    //bottomGradient.style.top = `${100 - footerHeight}%`;
+    // bottomGradient.style.bottom = `${footerHeight + gradientHeight}%`;
+    // console.log(`update gradient: ${bottomGradient} new top: ${100 - footerHeight} actual: ${bottomGradient.style.top}`);
+
+    const gameDisplayRect = displayContainer.getBoundingClientRect();
+    const gameDisplayBottomPos = gameDisplayRect.y + gameDisplayRect.height;
 }
 
 function addStyleHeight() {
@@ -57,12 +80,13 @@ function addStyleHeight() {
 }
 
 function showConsole() {
+    isConsoleShown = true;
     currentLineHeight = startShowConsoleHeight
     updateStyle();
 
     label = document.getElementById(labelElementId);
     inputField = document.getElementById(inputElementId);
-    
+
     HelperFunctions.enableElement(inputContainerId);
     const input = document.getElementById(inputContainerId);
     clearLabelText();
@@ -74,6 +98,7 @@ function showConsole() {
 }
 
 function hideConsole() {
+    isConsoleShown = false;
     const element = document.getElementById(footerId);
     currentLineHeight = hideConsoleHeight;
     updateStyle();
@@ -101,7 +126,7 @@ function updateLabelText(e) {
     const input = e ? e.detail.Input : "";
 
     const targetTextStart = `<p class=\"code-new-line\"></p>
-                 <p class=\"inline terminal\">language guess:`;
+    <p class=\"inline terminal\">language guess:`;
     const targetTextFull = targetTextStart + `</p>`;
 
     const lastIndex = label.innerHTML.lastIndexOf("</p>");
@@ -135,7 +160,7 @@ function updateLabelText(e) {
             }
             else {
                 label.innerHTML += `<p class=\"code-new-line\"></p>` +
-                    `<p class=\"inline terminal-error\"> ->  wrong input  ~~~~~~~~  attempts: `+
+                    `<p class=\"inline terminal-error\"> ->  wrong input  ~~~~~~~~  attempts: ` +
                     `${e.detail.CurrentAttempts}/${e.detail.MaxAttempts}</p>`;
             }
         }
@@ -159,15 +184,15 @@ function requestRating() {
                 <input id="rating-field" name="rating-number" type="number" max="5" min="1" placeholder="type rating..." form="rating-form"
                 required class="body-text terminal">
 
-                <button id="submit-rating-button" type="submit" class="terminal-ui code-comment body-text dark-on-hover ">
+                <button id="submit-rating-button" type="submit" class="terminal-ui code-font body-text dark-on-hover ">
                 Submit Rating</button>
             </form>
             <p class=\"code-2-new-line\"></p>
             <p class=\"inline terminal\">If you want to leave specific code feedback, you can do so</p>
             <p class="inline body-text code-comment">
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSfls32E6ZBS75Upn12TMfx2DXJwOMGud9Vyxbxn82YrEY_-0Q/viewform" target="_blank" class="code-comment">here</a>
-            </p>;`;
-           
+            </p>`;
+
     label.innerHTML += html;
 }
 
@@ -202,6 +227,7 @@ function checkLanguageDropdownState() {
 })();
 
 (function start() {
+    displayContainer = document.getElementById(`${dislayContainerId}`);
     footer = document.getElementById(footerId);
     bottomGradient = document.getElementById(bottomGradientId);
     hideConsole();
