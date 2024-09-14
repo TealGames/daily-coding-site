@@ -746,6 +746,18 @@ export class HelperFunctions {
         });
         return contains;
     }
+
+    /**
+     * @param {String} str 
+     * @returns {Boolean}
+     */
+    static isNumber(str) {
+        if (typeof str != "string") return false;
+        // use type coercion to parse the string
+        //(`parseFloat` alone does not do this)...
+        //...and ensure strings of whitespace fail
+        return !isNaN(str) && !isNaN(parseFloat(str));
+    }
 }
 
 

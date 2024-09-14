@@ -7,6 +7,10 @@ const languageDataJsonPath = "./data/LanguageData.json";
 const tableDataJsonPath = "./data/TableData.json";
 const codeDataJsonPath = "./data/CodeData.json";
 
+let langaugeData = [];
+let dailyTable = [];
+let dailyCode = [];
+
 export const maxCodeIdLength = 4;
 
 export const CodingLanguage = Object.freeze(
@@ -120,14 +124,6 @@ export class CodeData {
         return this.#lineAppearOrder;
     }
 }
-
-let dailyCode = [
-    // new CodeData(1, new Date(2024, 8, 3), CodingLanguage.Java,
-    //     ["<spc>if </spc><def>(</def><var>reallyCool</var><def>){</def><new><spc>else if</spc><def>(</def><var>poophead</var><def>){</def>",
-    //         "<def>someText</def>",
-    //         "<def>someText</def><def>evenmorenew</def>",
-    //         "<def>someText</def><def>here</def>"], [[2, 0], [3], [1]]),
-];
 
 /**
  * @param {Object} collection 
@@ -403,12 +399,6 @@ function getCodeDataFromJSON(json) {
     //     `${HelperFunctions.objAsString(data)}`);
     return data;
 }
-
-let langaugeData = [];
-
-let dailyTable = [
-    // new TableData(new Date(2024, 8, 2), CodingLanguage["C#"]),
-];
 
 /**
  * @param {CodingLanguage} language 

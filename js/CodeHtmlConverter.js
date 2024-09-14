@@ -15,6 +15,95 @@ const commentTag = "cmt";
 //new line is the only tag that does not need a closing pair of tag
 const newLineTag = "new";
 
+class CodeWordTags {
+    #tagName;
+    #keywords;
+
+    /**
+     * @param {String} tagName 
+     * @param {String[]} keywords 
+     */
+    constructor(tagName, keywords) {
+        this.#tagName = tagName;
+        this.#keywords = keywords;
+    }
+
+    /**
+     * @returns {String}
+     */
+    getTagName() {
+        return this.#tagName;
+    }
+
+    /**
+     * @returns {String[]}
+     */
+    getKeywords() {
+        return this.#keywords;
+    }
+}
+
+const codeWordTags =
+    [new CodeWordTags(specialKeywordTag, ["if"])];
+
+/**
+ * @param {String} code 
+ * @returns {String}
+ */
+function tryAddCodeTags(code) {
+    let taggedCode = "";
+
+    const tryAddTag = (index) => {
+        let keyword = "";
+        let keywordEndIndex;
+        let codeTagData = null;
+
+        for (let i = 0; i < codeWordTags.length; i++) {
+            codeTagData = codeWordTags[i];
+            console.log(`keyword: ${codeTagData.getKeywords()}`);
+
+            for (let j = 0; j < codeTagData.getKeywords().length; j++) {
+
+                keyword = codeTagData.getKeywords()[j];
+                keywordEndIndex = index + keyword.length - 1;
+
+                //if we go past the length, we can't do anything
+                if (keywordEndIndex >= code.length) continue;
+
+                const codeStr = code.substring(index, keywordEndIndex + 1);
+                keyword = keyword.toLowerCase();
+                console.log(`testing str ${codeStr} with ${keyword}`);
+
+                //If the next character is not a special one or a space
+                //it means it must be a normal character, so we don't transform
+                //it since it could be part of a variable name for example
+                if (keywordEndIndex + 1 < code.length) {
+                    const nextCode = code.substring(keywordEndIndex + 1, keywordEndIndex + 2);
+
+                    if (nextCode !== " " && !HelperFunctions.isSpecialCharacter(nextCode)) {
+                        console.log(`continue code for ${codeStr} since next is ${nextCode}`);
+                        continue;
+                    }
+                }
+
+                if (codeStr.toLowerCase() === keyword) {
+
+                    const tag = codeTagData.getTagName();
+                    code = code.substring(0, index) + `<${tag}>` + codeStr + `</${tag}>`
+                        + code.substring(keywordEndIndex);
+                    console.log(`code is now ${code}`);
+                    return;
+                }
+            }
+        }
+    }
+
+    for (let i = 0; i < code.length; i++) {
+        tryAddTag(i);
+    }
+    console.log(`transformed ${code} => ${code}`);
+}
+
 function getCSSClassFromTag(tag) {
     switch (tag) {
         case defaultTag:
@@ -194,9 +283,9 @@ export function getHtmlFromLanguageData(targetLanguage, guessedLanguages, includ
     }
 
     console.log(`html conversion for ${guessedLanguages.length}`);
-    const correctClass="table-correct";
-    const halfCorrectClass="table-half-correct";
-    const wrongClass="table-wrong";
+    const correctClass = "table-correct";
+    const halfCorrectClass = "table-half-correct";
+    const wrongClass = "table-wrong";
 
     for (let i = 0; i < guessedLanguages.length; i++) {
         let mainRowHtml = `<tr> `;
