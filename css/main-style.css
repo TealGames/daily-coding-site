@@ -63,9 +63,14 @@
     font-size: 1rem;
 }
 
-@media (max-width: 700px) {}
+@media (max-width: 850px){
+    .body-text,
+    .button {
+        font-size: 1.2rem;
+    }
+}
 
-@media (max-width: 660px),
+@media (max-width: 680px),
 (max-height: 780px) {
 
     .body-text,
@@ -74,11 +79,11 @@
     }
 
     .medium-text {
-        font-size: 0.8rem;
+        font-size: 1rem;
     }
 
     .small-text {
-        font-size: 0.7rem;
+        font-size: 0.9rem;
     }
 
     .input {
@@ -86,15 +91,15 @@
     }
 }
 
-@media (max-width:550px) {
+@media (max-width:570px) {
 
     .body-text,
     .button {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 
     .medium-text {
-        font-size: 0.7rem;
+        font-size: 0.6rem;
     }
 }
 
