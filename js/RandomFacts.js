@@ -4,7 +4,7 @@ export function getFacts()
     const facts= [
         "Ada Lovelace, a mathematician, is often credited as the first computer programmer for her work on Charles Babbage\'s Analytical Engine.",
         "\"Hello, World!\" is a traditional first program to demonstrate basic syntax and functionality when learning a new programming language.",
-        "The term \"bug\" originated in 1947 when a moth caused a computer malfunction. Grace Hopper and her team coined the term “debugging” when they removed the insect.",
+        "Although the story goes that the term \"bug\" originated in 1947 when a moth caused a computer malfunction, it is not true.",
         "Brainf*ck is a minimalistic programming language with only eight commands, yet it is Turing complete, capable of performing any computation.",
         "Computer scientist Scott Fahlman coined the first emoticon, 🙂 , in 1982, to convey humor in an online post.",
         "Python, a programming language, is named after the British comedy group Monty Python",

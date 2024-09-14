@@ -117,15 +117,7 @@ function updateLabelText(e) {
         label.innerHTML = oldHtml + ` ${input}</p>`;
         if (e) {
             addStyleHeight();
-            if (e.detail.AllAttemptsUsed) {
-                clearLabelText();
-                label.innerHTML += `<p class=\"code-new-line\"></p>` +
-                    `<p class=\"inline terminal-error\">max attempts reached: ` +
-                    `${e.detail.MaxAttempts}/${e.detail.CurrentAttempts}</p>`;
-                requestRating();
-                return;
-            }
-            else if (e.detail.CorrectGuess) {
+            if (e.detail.CorrectGuess) {
                 clearLabelText();
                 label.innerHTML += `<p class=\"code-new-line\"></p>` +
                     `<p class=\"inline terminal-success\">correct input</p>`;
@@ -133,9 +125,18 @@ function updateLabelText(e) {
                 return;
 
             }
+            else if (e.detail.AllAttemptsUsed) {
+                clearLabelText();
+                label.innerHTML += `<p class=\"code-new-line\"></p>` +
+                    `<p class=\"inline terminal-error\">max attempts reached: ` +
+                    `${e.detail.MaxAttempts}/${e.detail.CurrentAttempts} correct answer: ${e.detail.CorrectLanguage}</p>`;
+                requestRating();
+                return;
+            }
             else {
                 label.innerHTML += `<p class=\"code-new-line\"></p>` +
-                    `<p class=\"inline terminal-error\"> ->  wrong input  ~~~~~~~~  try again</p>`;
+                    `<p class=\"inline terminal-error\"> ->  wrong input  ~~~~~~~~  attempts: `+
+                    `${e.detail.CurrentAttempts}/${e.detail.MaxAttempts}</p>`;
             }
         }
     }

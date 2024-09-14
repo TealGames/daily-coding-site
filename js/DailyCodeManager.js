@@ -136,7 +136,7 @@ function showAllCodeLines() {
 
     const allHtmlLines = todaysCodeDisplay.getHtmlLines();
     let html = "";
-    for (let i = appearOrderIndex + 1; i < allHtmlLines.length; i++) {
+    for (let i = 0; i < allHtmlLines.length; i++) {
         html += allHtmlLines[i];
     }
 
@@ -183,8 +183,14 @@ function checkInput(text) {
     previousInput.push(text);
 
     let rightInput = false;
-    if (playingDefaultGame) rightInput = text === code.getLang().toLowerCase();
-    else rightInput = text === table.getLang().toLowerCase();
+    let correctLanguage= "";
+    if (playingDefaultGame){
+        correctLanguage= code.getLang().toLowerCase(); 
+    }
+    else{
+        correctLanguage = table.getLang().toLowerCase();
+    }
+    rightInput = text === correctLanguage;
 
     const maxAttemptsReached = currentAttempts >= currentTotalAttempts;
     document.dispatchEvent(new CustomEvent("validGuess", {
@@ -192,6 +198,7 @@ function checkInput(text) {
         {
             "Input": text,
             "CorrectGuess": rightInput,
+            "CorrectLanguage" : correctLanguage,
             "MaxAttempts": currentTotalAttempts,
             "CurrentAttempts": currentAttempts,
             "AllAttemptsUsed": maxAttemptsReached,
@@ -212,11 +219,6 @@ function checkInput(text) {
         nextLine();
     }
     else if (rightInput) {
-        //We show what player did even if they won for table game
-        if (!playingDefaultGame) nextLine();
-
-        //We show remaining lines (if any) for coding game
-        else showAllCodeLines();
         gameEnd(true);
     }
 }
@@ -240,6 +242,11 @@ function gameEnd(isSuccess) {
     lastGameWasSuccess = isSuccess;
     disableInput();
     HelperFunctions.enableElement(gameReturnMenuContainerId);
+
+    //We show what player did even if they won for table game
+    if (!playingDefaultGame) nextLine();
+    //We show remaining lines (if any) for coding game
+    else showAllCodeLines();
 
     if (playingDefaultGame) playedDailyDefault = true;
     else playedDailyTable = true;

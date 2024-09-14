@@ -194,73 +194,76 @@ export function getHtmlFromLanguageData(targetLanguage, guessedLanguages, includ
     }
 
     console.log(`html conversion for ${guessedLanguages.length}`);
+    const correctClass="table-correct";
+    const halfCorrectClass="table-half-correct";
+    const wrongClass="table-wrong";
 
     for (let i = 0; i < guessedLanguages.length; i++) {
-        let mainRowHtml = `< tr > `;
+        let mainRowHtml = `<tr> `;
         let guessedLanguage = guessedLanguages[i];
 
         //LANGUAGE
         const sameLanguage = targetLanguage.getLang() === guessedLanguage.getLang();
-        mainRowHtml += `< td class= ${sameLanguage ? "table-correct" : "table-wrong"} > ${guessedLanguage.getLang()}</td > `;
+        mainRowHtml += `<td class= "${sameLanguage ? correctClass : wrongClass}"> ${guessedLanguage.getLang()}</td >`;
 
         //RELEASE YEAR
         const targetYear = targetLanguage.getReleaseYear();
         const guessedYear = guessedLanguage.getReleaseYear();
         const dirIcon = guessedYear < targetYear ? "▲" : "▼";
         const sameYear = targetYear === guessedYear;
-        mainRowHtml += `< td class= ${sameYear ? "table-correct" : "table-wrong"} > ` +
-            `${guessedLanguage.getReleaseYear()}${sameYear ? "" : dirIcon}</td > `;
+        mainRowHtml += `<td class= "${sameYear ? correctClass : wrongClass}">` +
+            `${guessedLanguage.getReleaseYear()}${sameYear ? "" : dirIcon}</td >`;
 
         //PARADIGM
         let paradigmClass = "";
         console.log(`guessing lang with target paradigm:${targetLanguage.getParadigm()} and guessed ${guessedLanguage.getParadigm()} `);
         if (targetLanguage.getParadigm() === guessedLanguage.getParadigm()) {
-            paradigmClass = "table-correct";
+            paradigmClass = correctClass;
         }
         else if (targetLanguage.hasParadigm(guessedLanguage.getParadigm())) {
-            paradigmClass = "table-half-correct";
+            paradigmClass = halfCorrectClass;
         }
         else {
-            paradigmClass = "table-wrong";
+            paradigmClass = wrongClass;
         }
         const paradigm = guessedLanguage.getParadigm();
-        mainRowHtml += `< td class=${paradigmClass}> ${HelperFunctions.flagEnumToString(LanguageParadigm, paradigm)}</td > `;
+        mainRowHtml += `<td class="${paradigmClass}">${HelperFunctions.flagEnumToString(LanguageParadigm, paradigm)}</td>`;
 
         //COMPILATION TYPE
         const compilationType = targetLanguage.getCompilationType() === guessedLanguage.getCompilationType();
-        mainRowHtml += `< td class=${compilationType ? "table-correct" : "table-wrong"}> ${guessedLanguage.getCompilationType()}</td > `;
+        mainRowHtml += `<td class="${compilationType ? correctClass : wrongClass}">${guessedLanguage.getCompilationType()}</td>`;
 
         //LANGUAGE TYPING
         let typingClass = "";
         if (targetLanguage.getTypedType() === guessedLanguage.getTypedType()) {
-            typingClass = "table-correct";
+            typingClass = correctClass;
         }
         else if (targetLanguage.hasTyped(guessedLanguage.getTypedType())) {
-            typingClass = "table-half-correct";
+            typingClass = halfCorrectClass;
         }
         else {
-            typingClass = "table-wrong";
+            typingClass = wrongClass;
         }
         const typed = guessedLanguage.getTypedType();
-        mainRowHtml += `< td class=${typingClass}> ${HelperFunctions.flagEnumToString(LanguageTyping, typed)}</td > `;
+        mainRowHtml += `<td class="${typingClass}">${HelperFunctions.flagEnumToString(LanguageTyping, typed)}</td>`;
 
         //SYNTAX TYPE
         const syntaxType = targetLanguage.getSyntax() === guessedLanguage.getSyntax();
-        mainRowHtml += `< td class=${syntaxType ? "table-correct" : "table-wrong"}> ${guessedLanguage.getSyntax()}</td > `;
+        mainRowHtml += `<td class="${syntaxType ? correctClass : wrongClass}">${guessedLanguage.getSyntax()}</td>`;
 
         //LANGUAGE USE
         let useClass = "";
         if (targetLanguage.getUse() === guessedLanguage.getUse()) {
-            useClass = "table-correct";
+            useClass = correctClass;
         }
         else if (targetLanguage.hasUse(guessedLanguage.getUse())) {
-            useClass = "table-half-correct";
+            useClass = halfCorrectClass;
         }
         else {
-            useClass = "table-wrong";
+            useClass = wrongClass;
         }
         const use = guessedLanguage.getUse();
-        mainRowHtml += `< td class=${useClass}> ${HelperFunctions.flagEnumToString(LanguageUse, use)}</td >`;
+        mainRowHtml += `<td class="${useClass}">${HelperFunctions.flagEnumToString(LanguageUse, use)}</td>`;
         mainRowHtml += `</tr>`;
 
         html += mainRowHtml;

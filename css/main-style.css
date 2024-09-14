@@ -51,23 +51,6 @@
     font-size: 1.5rem;
 }
 
-@media (max-width: 600px),
-(max-height: 780px) {
-
-    .body-text,
-    .button {
-        font-size: 1rem;
-    }
-}
-
-@media (max-width: 350px) {
-
-    .body-text,
-    .button {
-        font-size: 1rem;
-    }
-}
-
 .title-text {
     font-size: 2.5rem;
 }
@@ -78,6 +61,27 @@
 
 .small-text {
     font-size: 1rem;
+}
+
+@media (max-width: 660px), (max-width: 350px),
+(max-height: 780px) {
+
+    .body-text,
+    .button {
+        font-size: 1rem;
+    }
+
+    .medium-text{
+        font-size: 1rem;
+    }
+
+    .small-text{
+        font-size: 0.7rem;
+    }
+
+    .input{
+        width:60%;
+    }
 }
 
 .text-new-line {
@@ -92,8 +96,8 @@ input {
     background-color: transparent;
     border-radius: 5px;
     border: none;
-    width: 25vw;
-    height: 3vh;
+    width: 35%;
+    height:10%;
 }
 
 select,

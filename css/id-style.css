@@ -124,9 +124,10 @@
     background-color: #292929;
     border: 2px solid rgb(61, 61, 61);
     border-radius: 5px;
-    position: absolute;
-    right: 0vw;
-    top: 19vh;
+    position: relative;
+    right:0%;
+    margin-bottom: 1%;
+    top: 0%;
 
     width: 100px;
     height: 25px;

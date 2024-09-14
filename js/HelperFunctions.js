@@ -367,7 +367,7 @@ export class HelperFunctions {
      */
     static replaceAllMultiple(target, replaceVals, newVal) {
         if (!target || !replaceVals) {
-            console.warn(`Tried to use replaceAll with args (target: ${target} replace: ${replaceVal} new: ${newVal}) ` +
+            console.warn(`Tried to use replaceAll with args (target: ${target} replace: ${replaceVals} new: ${newVal}) ` +
                 `but either target or replace value is undefined!`);
             return target;
         }
