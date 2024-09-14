@@ -83,7 +83,7 @@
     }
 
     .small-text {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
 
     .input {
@@ -103,7 +103,7 @@
     }
 }
 
-@media (max-width:450px) {
+@media (max-width:470px) {
 
     .body-text,
     .button {
