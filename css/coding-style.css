@@ -4,7 +4,33 @@ defining global variables in css*/
 {
     --new-line-width: 5px;
     --new-line-height: 5px;
+    --tab-ident: 50px;
 }
+
+@media (max-width: 660px) {
+    :root{
+        --new-line-width: 4px;
+        --new-line-height: 4px;
+        --tab-ident: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root{
+        --new-line-width: 3px;
+        --new-line-height: 3px;
+        --tab-ident: 30px;
+    }
+}
+
+@media (max-width: 410px) {
+    :root{
+        --new-line-width: 2px;
+        --new-line-height: 2px;
+        --tab-ident: 20px;
+    }
+}
+
 
 input,
 .terminal,
@@ -50,12 +76,12 @@ input,
 
 .code-tab-space
 {
-    margin-left:50px;
+    margin-left:var(--tab-ident);
 }
 
 .code-2-tab-space
 {
-    margin-left:100px;
+    margin-left:calc(2*var(--tab-ident));
 }
 
 .unfocused-code
