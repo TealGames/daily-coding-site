@@ -8,7 +8,7 @@
         "Code": [
             "<key>class</key> <obj>Main</obj>",
             "<def>{</def>",
-            "<key>public static void</key> <fnc>main</fnc><def>(</def><obj>String</obj><def>[]</def> <var>args</var><def>)</def>",
+            "<key>public static void</key><fnc>main</fnc><def>(</def><obj>String</obj><def>[]</def> <var>args</var><def>)</def>",
             "<def>{<def>",
             "<obj>Scanner<obj> sc = new Scanner(System.in);",
             "",
