@@ -63,7 +63,7 @@
     font-size: 1rem;
 }
 
-@media (max-width: 660px), (max-width: 350px),
+@media (max-width: 660px),
 (max-height: 780px) {
 
     .body-text,
@@ -81,6 +81,21 @@
 
     .input{
         width:60%;
+    }
+}
+
+@media (max-width:480px){
+    .body-text,
+    .button {
+        font-size: 0.8rem;
+    }
+
+    .medium-text{
+        font-size: 0.8rem;
+    }
+
+    .small-text{
+        font-size: 0.5rem;
     }
 }
 
