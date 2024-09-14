@@ -154,7 +154,7 @@
     height: 20px;
 }
 
-@media (max-width:450px) {
+@media (max-width:560px) {
     #code-id-tab {
         width: 70px;
         height: 10px;
