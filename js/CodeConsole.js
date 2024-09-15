@@ -35,6 +35,7 @@ const hideConsoleHeight = 10;
 const newLineHeightChange = 3;
 let currentLineHeight = 0;
 
+const extraConsoleBuffer= 100;
 const gradientHeight = 5;
 
 function updateStyle() {
@@ -46,10 +47,12 @@ function updateStyle() {
     const footerHeight = currentLineHeight;
     footer.style.height = `${footerHeight}%`;
 
+    const gameDisplayRect = displayContainer.getBoundingClientRect();
+
     // if (footer.style.height === `${hideConsoleHeight}%`) {
     //     footer.style.bottom = "0%";
     // }
-    console.log(`screen dimensions: ${window.innerWidth} x ${screen.height}`);
+    console.log(`checking window width ${window.innerWidth} new display top ${gameDisplayRect.top}+height${gameDisplayRect.height}`);
     if (!isConsoleShown) {
         footer.style.removeProperty(`top`);
         footer.style.bottom = "0%";
@@ -61,8 +64,12 @@ function updateStyle() {
     //     footer.style.top = `${100 - startShowConsoleHeight}%`;
     // }
     //footer.style.top = `${100 - startShowConsoleHeight}%`;
-    else if (window.innerWidth<=540){
-        footer.style.top = `${100 - startShowConsoleHeight}%`;
+    else if (window.innerWidth<=570){
+        console.log(`top of display: ${gameDisplayRect.top+gameDisplayRect.height}`);
+        //footer.style.removeProperty(`height`);
+        footer.style.removeProperty(`height`);
+        footer.style.top = `${gameDisplayRect.top+gameDisplayRect.height+extraConsoleBuffer}px`;
+        footer.style.bottom="0%";
     }
     else {
         console.log(`choosing strict height top: ${100 - footer.style.height}`);
@@ -76,7 +83,7 @@ function updateStyle() {
     // bottomGradient.style.bottom = `${footerHeight + gradientHeight}%`;
     // console.log(`update gradient: ${bottomGradient} new top: ${100 - footerHeight} actual: ${bottomGradient.style.top}`);
 
-    const gameDisplayRect = displayContainer.getBoundingClientRect();
+    
     const gameDisplayBottomPos = gameDisplayRect.y + gameDisplayRect.height;
 }
 
@@ -114,12 +121,12 @@ function hideConsole() {
 
 function checkPageForConsole(e) {
     console.log("enabled page " + e.detail);
-    if (e.detail.pageEnabledId === PageId.GameDisplay) {
-        showConsole();
-    }
-    else {
+    if (e.detail.pageEnabledId !== PageId.GameDisplay) {
         hideConsole();
     }
+    // else {
+    //     showConsole();
+    // }
 }
 
 function clearLabelText() {
@@ -231,6 +238,7 @@ function checkLanguageDropdownState() {
     document.addEventListener("enablePage", checkPageForConsole);
     document.addEventListener("validGuess", updateLabelText);
     window.addEventListener("resize", (e) => updateStyle());
+    document.addEventListener("gameDisplayInit", (e) => showConsole());
 })();
 
 (function start() {

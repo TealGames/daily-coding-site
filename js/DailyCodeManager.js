@@ -154,6 +154,7 @@ function clearDisplay() {
         playingDefaultGame = true;
         initGameDisplay();
         nextLine();
+        document.dispatchEvent(new CustomEvent("gameDisplayInit"));
     });
 
     const tableModeButton = document.getElementById(tableModeButtonId);
@@ -161,6 +162,7 @@ function clearDisplay() {
         playingDefaultGame = false;
         initGameDisplay();
         nextLine();
+        document.dispatchEvent(new CustomEvent("gameDisplayInit"));
     });
 })();
 
