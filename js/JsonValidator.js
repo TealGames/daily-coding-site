@@ -1,5 +1,6 @@
 import { HelperFunctions } from "./HelperFunctions.js";
 import { LanguageParadigm, CompilationType, LanguageTyping, LanguageSyntax, LanguageUse, CodingLanguage } from "./DailyCodeData.js";
+import { codeStylesPassesTests } from "./CodeHtmlConverter.js";
 
 const languageJsonProperties =
     ["Language", "Release", "Paradigm", "Compilation", "Typing", "Syntax", "Use"];
@@ -94,6 +95,8 @@ export function validateCodeDataJSON(jsonObj) {
 
     const validLanguage = propertyHasValue(jsonObj, codeJsonProperties[4], HelperFunctions.getPropertiesOfObject(CodingLanguage));
     if (!validLanguage) return false;
+
+    if (!codeStylesPassesTests(jsonObj[codeJsonProperties[5]])) return false;
 
     return true;
 }

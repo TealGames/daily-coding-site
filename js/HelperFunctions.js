@@ -371,6 +371,36 @@ export class HelperFunctions {
     }
 
     /**
+     * Gets the indices of all the occurences of instanceStr in string
+     * @param {String} string 
+     * @param {String} instanceStr 
+     * @returns {Number[]}
+     */
+    static getIndicesOfString(string, instanceStr){
+        let valIndex = string.indexOf(instanceStr);
+        let indices=[];
+        while (valIndex >= 0) {
+            indices.push(valIndex);
+
+            if (valIndex>=string.length-1) break;
+            valIndex = string.indexOf(instanceStr, valIndex+1);
+        }
+        return indices;
+    }
+
+    /**
+     * @param {String[]} stringArray 
+     * @returns {String}
+     */
+    static combineStringArrayToOne(stringArray){
+        let result="";
+        for (let i=0; i<stringArray.length; i++){
+            result+=stringArray[i];
+        }
+        return result;
+    }
+
+    /**
      * Replaces ALL occurences on a string. While it is already implemented in the string class
      * in JS, it does not work on IE, so this is an alternative to that function.
      * @param {String} target 

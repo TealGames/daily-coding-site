@@ -17,6 +17,12 @@ const newLineTag = "new";
 //adds the set amount of tabs (if t2 then 2 tabs are added)
 const tabTag = "t";
 
+//tab tags must be first index in line
+const tabTagOnlyAtStart=true;
+
+//one lined symbols will auto get the def tag
+const autoAddDefToSymbols=true;
+
 class CodeWordTags {
     #tagName;
     #keywords;
@@ -104,6 +110,46 @@ function tryAddCodeTags(code) {
         tryAddTag(i);
     }
     console.log(`transformed ${code} => ${code}`);
+}
+
+/**
+ * @param {String[]} strings 
+ * @returns {String[]}
+ */
+export function tryAddTagToSymbols(strings){
+    const symbols= HelperFunctions.specialCharacters;
+    const startTag= `<${defaultTag}>`;
+    const endTag= `</${defaultTag}>`;
+
+    let line="";
+    let symbolIndices=[];
+    let index=-1;
+    let result=[];
+
+    for (let i=0; i<strings.length; i++){
+        line= strings[i];
+        result.push(line);
+
+        for (let j=0; j<symbols.length; j++){
+            if (symbols[j]===">" || symbols[j]==="<") continue;
+            symbolIndices= HelperFunctions.getIndicesOfString(line, symbols[j]);
+
+            for (let k=0; k<symbolIndices.length; k++){
+                index= symbolIndices[k];
+
+                //If we already have a tag, we don't do anything
+                if (index>0 && result[i][index-1]===">" && index<result[i].length-1 
+                    && result[i][index+1]==="<") continue;
+
+                //If we are just an end tag symbol we also dont do anything
+                else if (symbols[j]==="/" && index>0 && result[i][index-1]==="<")continue;
+
+                result[i]= result[i].substring(0, index)+ startTag+ 
+                    result[i].substring(index, index+1) +endTag+ result[i].substring(index+1);
+            }
+        }
+    }
+    return result;
 }
 
 /**
@@ -206,11 +252,59 @@ export class CodeHtmlData {
 }
 
 /**
+ * @param {String[]} strings
+ * @returns {Boolean}
+ */
+export function codeStylesPassesTests(strings){
+
+    let instancesOfTabTag=[];
+    let line="";
+
+    const failTest= (lineIdx, reason) =>{
+        console.error(`Tried to validate the code style str ${strings} `+
+            `but line ${strings[lineIdx]} @idx ${lineIdx} failed. Reason: ${reason}`);
+    }
+
+    for (let i=0; i<strings.length; i++){
+        line= strings[i];
+        instancesOfTabTag= HelperFunctions.getIndicesOfString(line, `<${tabTag}`);
+        
+
+        if (instancesOfTabTag.length>1){
+            failTest(i, "More than one tab tag per line is not allowed");
+            return false;
+        }
+        else if (instancesOfTabTag.length==0) continue;
+
+        const index=instancesOfTabTag[0];
+        if (index!==0){
+            failTest(i, "Tab tags must start at index 0 of line");
+            return false;
+        }
+
+        //If we can't get after it, it might be a multi tab tag so we move up one more
+        let charAfterTag= line.charAt(index+tabTag.length+2);
+        if (charAfterTag===">") charAfterTag= line.charAt(index+tabTag.length+3);
+
+        if (charAfterTag!=="<"){
+            failTest(i, "Tab tags must be followed by another tag");
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
  * @param {CodeData} data 
  * @returns {CodeHtmlData}
  */
 export function getHtmlFromCodeData(data) {
-    const code = data.getCode();
+    let code = data.getCode();
+    if (autoAddDefToSymbols){
+        const codeBefore= code;
+        code= tryAddTagToSymbols(code);
+        console.log(`BEFORE def tag: ${codeBefore}       AFTER: ${code}`);
+    }
     let html = "";
     let currentTag = null;
 
@@ -261,6 +355,11 @@ export function getHtmlFromCodeData(data) {
                         else if (fullLine.charAt(j) === " ") {
                             console.error(`tried to parse a tab tag in code style with id ${data.getId()} ` +
                                 `but it has an empty space after the tag which is not allowed!`);
+                            return;
+                        }
+                        else if (fullLine.charAt(j)!=="<"){
+                            console.error(`tried to parse a tab tag in code style with id ${data.getId()} ` +
+                                `but it does not have a tag after it which is not allowed!`);
                             return;
                         }
                     }
@@ -421,4 +520,5 @@ export function getHtmlFromLanguageData(targetLanguage, guessedLanguages, includ
     console.log(`result html: ${html}`);
     return html;
 }
+
 
