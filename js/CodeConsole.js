@@ -49,7 +49,9 @@ function updateStyle() {
     // if (footer.style.height === `${hideConsoleHeight}%`) {
     //     footer.style.bottom = "0%";
     // }
+    console.log(`screen dimensions: ${window.innerWidth} x ${screen.height}`);
     if (!isConsoleShown) {
+        footer.style.removeProperty(`top`);
         footer.style.bottom = "0%";
     }
     // else (HelperFunctions.doesContentNotFitPage()) {
@@ -59,8 +61,12 @@ function updateStyle() {
     //     footer.style.top = `${100 - startShowConsoleHeight}%`;
     // }
     //footer.style.top = `${100 - startShowConsoleHeight}%`;
+    else if (window.innerWidth<=570){
+        footer.style.top = `${100 - startShowConsoleHeight}%`;
+    }
     else {
         console.log(`choosing strict height top: ${100 - footer.style.height}`);
+        footer.style.removeProperty(`top`);
         footer.style.removeProperty(`bottom`);
         //footer.style.top = `${100 - footer.style.height}%`;
     }
@@ -224,6 +230,7 @@ function checkLanguageDropdownState() {
 (function listenForConsoleEvents() {
     document.addEventListener("enablePage", checkPageForConsole);
     document.addEventListener("validGuess", updateLabelText);
+    window.addEventListener("resize", (e) => updateStyle());
 })();
 
 (function start() {

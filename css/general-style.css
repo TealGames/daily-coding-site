@@ -48,6 +48,12 @@ ul,
     gap: 20px;
 }
 
+@media (max-width:450px){
+    .flex-center{
+        gap: 10px;
+    }
+}
+
 .flex-right {
     display: flex;
     align-content: flex-end;
