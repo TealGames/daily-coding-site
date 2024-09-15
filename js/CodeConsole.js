@@ -61,7 +61,7 @@ function updateStyle() {
     //     footer.style.top = `${100 - startShowConsoleHeight}%`;
     // }
     //footer.style.top = `${100 - startShowConsoleHeight}%`;
-    else if (window.innerWidth<=570){
+    else if (window.innerWidth<=540){
         footer.style.top = `${100 - startShowConsoleHeight}%`;
     }
     else {
