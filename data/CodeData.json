@@ -8,13 +8,13 @@
         "Code": [
             "<key>class</key> <obj>Main</obj>",
             "<def>{</def>",
-            "<key>public static void</key><fnc>main</fnc><def>(</def><obj>String</obj><def>[]</def> <var>args</var><def>)</def>",
-            "<def>{<def>",
-            "<obj>Scanner<obj> sc = new Scanner(System.in);",
+            "<t><key>public static void</key><fnc>main</fnc><def>(</def><obj>String</obj><def>[]</def> <var>args</var><def>)</def>",
+            "<t><def>{<def>",
+            "<t2><obj>Scanner<obj> sc = new Scanner(System.in);",
             "",
-            "System.out.println(\"What is your username?\");",
-            "String username= sc.nextLine();",
-            "System.out.println(\"Your username is \"+ username);",
+            "<t>System.out.println(\"What is your username?\");",
+            "<t>String username= sc.nextLine();",
+            "<t>System.out.println(\"Your username is \"+ username);",
             "}",
             "}",
             "}",
@@ -26,8 +26,7 @@
         ],
         "Order": [
             [
-                2,
-                0
+                0, 1, 2, 3, 4
             ],
             [
                 3

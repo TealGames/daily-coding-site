@@ -14,6 +14,8 @@ const commentTag = "cmt";
 
 //new line is the only tag that does not need a closing pair of tag
 const newLineTag = "new";
+//adds the set amount of tabs (if t2 then 2 tabs are added)
+const tabTag= "t";
 
 class CodeWordTags {
     #tagName;
@@ -124,6 +126,10 @@ function getCSSClassFromTag(tag) {
             return "code-string";
         case commentTag:
             return "code-comment";
+        case tabTag:
+            return "code-tab-space";
+        case tabTag+"2":
+            return "code-2-tab-space";
         default:
             console.error(`Tried to retrieve CSS class from tag ${tag} but it has no corresponding class!`);
             break;
@@ -209,10 +215,39 @@ export function getHtmlFromCodeData(data) {
                 //Otherwise we are an opening tag, so we get the current tag and then we
                 //increase to next character past tag so tag + > and next space
                 else {
+
+                    //If we encounter a tab
+                    let foundTabTag="";
+                    const endTabIndex= j+tabTag.length;
+                    const singleTab= fullLine.substring(endTabIndex+1, endTabIndex+2)===">";
+                    const multiTab= fullLine.substring(endTabIndex+2, endTabIndex+3)===">";
+                    console.log(`current tag: ${fullLine.substring(j+1, endTabIndex+1)} is tab: ${fullLine.substring(j+1, endTabIndex+1)===tabTag} single: ${singleTab} multi: ${multiTab}`);
+                    if (fullLine.substring(j+1, endTabIndex+1)===tabTag && (singleTab || multiTab)){
+                        
+                        if (singleTab){
+                            foundTabTag= fullLine.substring(j+1, endTabIndex+1);
+                        }
+                        else{
+                            foundTabTag= fullLine.substring(j+1, endTabIndex+2);
+                        }
+                        j+=foundTabTag.length+2;
+                        
+                        if (j>=fullLine.length){
+                            console.error(`tried to parse a tab tag in code style with id ${data.getId()} `+
+                                `but it occured at the end of a line which is not allowed!`);
+                            return;
+                        }
+                        else if (fullLine.charAt(j)===" "){
+                            console.error(`tried to parse a tab tag in code style with id ${data.getId()} `+
+                                `but it has an empty space after the tag which is not allowed!`);
+                            return;
+                        }
+                    }
+
                     currentTag = fullLine.substring(j + 1, j + 1 + tagLength);
                     j += tagLength + 1;
 
-                    if (currentTag === newLineTag && j) {
+                    if (currentTag === newLineTag) {
                         currentLine += "<p class=\"code-new-line\"></p>";
 
                         //lines.push(currentLine);
@@ -223,7 +258,9 @@ export function getHtmlFromCodeData(data) {
                         //currentLineText="";
                     }
                     else {
-                        currentLine += `<p class=\"inline ${getCSSClassFromTag(currentTag)}\">`;
+                        let cssClasses= getCSSClassFromTag(currentTag);
+                        if (foundTabTag) cssClasses= getCSSClassFromTag(foundTabTag)+ " "+ cssClasses;
+                        currentLine += `<p class=\"inline ${cssClasses}\">`;
                     }
                 }
             }
