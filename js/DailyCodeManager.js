@@ -89,7 +89,6 @@ function nextLine() {
         const allHtmlLines = todaysCodeDisplay.getHtmlLines();
         const appearOrder = todaysCodeDisplay.getAppearOrder();
 
-
         if (appearOrderIndex > appearOrder.length - 1) {
             console.warn(`tried to procede to next line of code but has passed appear order bounds`);
             return;
@@ -111,9 +110,10 @@ function nextLine() {
                 html += allHtmlLines[i];
             }
             else {
-                const tabClass = getCSSClassIfHasTab(allHtmlLines[i]);
+                const tabClass = getCSSClassIfHasTab(todaysCodeDisplay.getTaggedCode()[i]);
+                console.log(`HTML line ${allHtmlLines[i]} has tab class: ${tabClass}`);
                 const repeated = ("*").repeat(allLines[i].length);
-                const repeatedHtml = `<p class="inline body-text code-comment ${tabClass}">${repeated}</p><p class="code-new-line"></p>`;
+                const repeatedHtml = `<p class="inline code-comment ${tabClass}">${repeated}</p><p class="code-new-line"></p>`;
                 html += repeatedHtml;
             }
         }

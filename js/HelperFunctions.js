@@ -338,9 +338,13 @@ export class HelperFunctions {
     //-------------------------------------------------------------------------------------------------
     /**
      * @param {String} c 
+     * @param {String[]} [specialCharExclude=[]] 
      * @returns {Boolean}
      */
-    static isSpecialCharacter(c) {
+    static isSpecialCharacter(c, specialCharExclude=[]) {
+        if (specialCharExclude && specialCharExclude.length>0 && 
+            HelperFunctions.arrayContains(specialCharExclude, c)) return false;
+
         return this.specialCharacters.indexOf(c) != -1;
     }
 

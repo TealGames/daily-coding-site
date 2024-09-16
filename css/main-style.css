@@ -101,6 +101,14 @@
     .medium-text {
         font-size: 0.6rem;
     }
+
+    .small-text{
+        font-size: 0.5rem;
+    }
+
+    .small-text.footer-note{
+        font-size: 0.6rem;
+    }
 }
 
 @media (max-width:470px) {
@@ -111,11 +119,11 @@
     }
 
     .medium-text {
-        font-size: 0.6rem;
+        font-size: 0.5rem;
     }
 
     .small-text {
-        font-size: 0.6rem;
+        font-size: 0.4rem;
     }
 
     .terminal-ui {

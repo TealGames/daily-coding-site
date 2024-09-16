@@ -4,14 +4,15 @@ defining global variables in css*/
 {
     --new-line-width: 5px;
     --new-line-height: 5px;
-    --tab-ident: 50px;
+    /* --tab-ident: 50px; */
+    --tab-ident: 2em;
 }
 
 @media (max-width: 660px) {
     :root{
         --new-line-width: 4px;
         --new-line-height: 4px;
-        --tab-ident: 40px;
+        /* --tab-ident: 40px; */
     }
 }
 
@@ -19,7 +20,7 @@ defining global variables in css*/
     :root{
         --new-line-width: 3px;
         --new-line-height: 3px;
-        --tab-ident: 30px;
+        /* --tab-ident: 30px; */
     }
 }
 
@@ -27,7 +28,7 @@ defining global variables in css*/
     :root{
         --new-line-width: 2px;
         --new-line-height: 2px;
-        --tab-ident: 20px;
+        /* --tab-ident: 2em; */
     }
 }
 
