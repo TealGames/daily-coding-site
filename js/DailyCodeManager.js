@@ -9,8 +9,8 @@ let inputField = null;
 const submitLanguageButtonId = "submit-language-button";
 let submitLanguageButton = null;
 
-const languageDropdownButtonId = "language-pick-toggle";
-let languagePickToggle=null;
+const languageDropdownButtonId = "language-pick-toggle-container";
+let languageDropdownToggle = null;
 
 const languageDropdownId = "language-select";
 let languageDropdown = null;
@@ -18,15 +18,18 @@ let languageDropdown = null;
 const gameReturnMenuContainerId = "game-return-main-container";
 let gameReturnMenuContainer = null;
 
-const timerElementId= "name-game-timer";
-let timerElement=null;
+const timerElementId = "name-game-timer";
+let timerElement = null;
 
 const dislayContainerId = "game-display-container";
 let displayContainer = null;
 
+const languageNamingContainerId = "name-game-language-container";
+let languageNamingContainer = null;
+
 const defaultModeButtonId = "play-default-button";
 const tableModeButtonId = "play-table-button";
-const nameModeButtonId= "play-name-button";
+const nameModeButtonId = "play-name-button";
 
 const codeIdTabId = "code-id-tab";
 const codeIdTextId = "code-id-tab-text";
@@ -48,8 +51,8 @@ let currentTotalAttempts = defaultTotalAttempts;
 let currentAttempts = 0;
 
 //For name game
-const defaultMinutesTime=1;
-let currentSecondsLeft=0;
+const defaultMinutesTime = 1;
+let currentSecondsLeft = 0;
 let timerIntervalId;
 
 let playedDailyDefault = false;
@@ -63,7 +66,7 @@ export const PlayingGameType = Object.freeze(
         "NameGame": "NameGame",
     }
 );
-let playingGame= PlayingGameType.None;
+let playingGame = PlayingGameType.None;
 let lastGameWasSuccess = false;
 
 function initGameDisplay() {
@@ -92,15 +95,15 @@ function initGameDisplay() {
     playedDailyDefault = false;
 
     //To make sure the game does not break, we use the appear order length, (should be 5, but just in case)
-    if (playingGame===PlayingGameType.CodeGame){
-        currentTotalAttempts=todaysCodeDisplay.getAppearOrder().length;
+    if (playingGame === PlayingGameType.CodeGame) {
+        currentTotalAttempts = todaysCodeDisplay.getAppearOrder().length;
     }
-    else if (playingGame===PlayingGameType.TableGame){
-        currentTotalAttempts=defaultTotalAttempts;
+    else if (playingGame === PlayingGameType.TableGame) {
+        currentTotalAttempts = defaultTotalAttempts;
     }
     HelperFunctions.disableElement(gameReturnMenuContainerId);
 
-    if (playingGame===PlayingGameType.CodeGame) HelperFunctions.enableElement(codeIdTabId);
+    if (playingGame === PlayingGameType.CodeGame) HelperFunctions.enableElement(codeIdTabId);
     else HelperFunctions.disableElement(codeIdTabId);
 
     clearUpdateTime();
@@ -109,7 +112,7 @@ function initGameDisplay() {
 }
 
 function nextLine() {
-    if (playingGame===PlayingGameType.CodeGame) {
+    if (playingGame === PlayingGameType.CodeGame) {
         appearOrderIndex++;
         const allLines = todaysCodeDisplay.getLines();
         const allHtmlLines = todaysCodeDisplay.getHtmlLines();
@@ -145,7 +148,7 @@ function nextLine() {
         }
         displayContainer.innerHTML = html;
     }
-    else if (playingGame===PlayingGameType.TableGame) {
+    else if (playingGame === PlayingGameType.TableGame) {
         const languageData = getDataFromLanguage(table.getLang());
         //To prevent errors, we need to exit if the language name does not match
         if (!languageData) {
@@ -156,18 +159,24 @@ function nextLine() {
         console.log(`get html from lang data guessed: ${guessedLanguages} html: ${html}`);
         displayContainer.innerHTML = html;
     }
-    else{
+    else {
         console.error(`Tried to go next line on game ${playingGame} which is not allowed`);
     }
 }
 
-function addNamedLanguage(e){
-    const cleanedUserText= cleanInput(inputField.value);
-    displayContainer.innerHTML+=`<span class="code-comment body-text named-language-box">${cleanedUserText}</span>`;
+function addNamedLanguage(e) {
+    const cleanedUserText = cleanInput(inputField.value);
+    const repeatGuess = isRepeatGuess(cleanedUserText);
 
-    const repeatGuess= isRepeatGuess(cleanedUserText);
+    const foundData = getDataFromLanguageString(cleanedUserText);
+    if (!repeatGuess && foundData) {
+        guessedLanguages.push(foundData);
+        languageNamingContainer.innerHTML +=
+            `<span class="code-string body-text named-language-box">"${cleanedUserText}"</span>`;
+    }
+
     document.dispatchEvent(new CustomEvent("namedLanguage", {
-        detail:{
+        detail: {
             "Game": playingGame,
             "Input": cleanedUserText,
             "RepeatGuess": repeatGuess,
@@ -176,7 +185,7 @@ function addNamedLanguage(e){
 }
 
 function showAllCodeLines() {
-    if (!playingGame===PlayingGameType.CodeGame) return;
+    if (!playingGame === PlayingGameType.CodeGame) return;
 
     const allHtmlLines = todaysCodeDisplay.getHtmlLines();
     let html = "";
@@ -191,37 +200,6 @@ function clearDisplay() {
     displayContainer.innerHTML = "";
 }
 
-(function listenForPageChange() {
-    console.log("listen for page change");
-    const defaultModeButton = document.getElementById(defaultModeButtonId);
-    defaultModeButton.addEventListener("click", (e) => {
-        playingGame=PlayingGameType.CodeGame;
-        initGameDisplay();
-        nextLine();
-        HelperFunctions.enableElement(languagePickToggle);
-        document.dispatchEvent(new CustomEvent("gameDisplayInit"));
-    });
-
-    const tableModeButton = document.getElementById(tableModeButtonId);
-    tableModeButton.addEventListener("click", (e) => {
-        playingGame=PlayingGameType.TableGame;
-        initGameDisplay();
-        nextLine();
-        HelperFunctions.enableElement(languagePickToggle);
-        document.dispatchEvent(new CustomEvent("gameDisplayInit"));
-    });
-
-    const nameModeButton = document.getElementById(nameModeButtonId);
-    nameModeButton.addEventListener("click", (e) => {
-        playingGame=PlayingGameType.NameGame;
-        initGameDisplay();
-        HelperFunctions.disableElement(languagePickToggle);
-        document.dispatchEvent(new CustomEvent("gameDisplayInit"));
-
-        startTimer();
-    });
-})();
-
 function disableInput() {
     HelperFunctions.disableElement(inputFieldId);
 }
@@ -230,7 +208,7 @@ function enableInput() {
     HelperFunctions.enableElement(inputFieldId);
 }
 
-function isRepeatGuess(text){
+function isRepeatGuess(text) {
     //Don't allow duplicate guessing
     if (!text || (previousInput && HelperFunctions.arrayContains(previousInput, text))) {
         return true;
@@ -242,20 +220,20 @@ function isRepeatGuess(text){
 function checkInput(text) {
     console.log(`input has submit to ${text}`);
 
-    if (playingGame!==PlayingGameType.CodeGame && playingGame!==PlayingGameType.TableGame){
+    if (playingGame !== PlayingGameType.CodeGame && playingGame !== PlayingGameType.TableGame) {
         console.error(`Tried to check if input ${text} was valid for game ${playingGame} which is not allowed`);
         return;
     }
-    
+
     if (isRepeatGuess(text)) return;
     currentAttempts++;
 
     let rightInput = false;
     let correctLanguage = "";
-    if (playingGame===PlayingGameType.CodeGame) {
+    if (playingGame === PlayingGameType.CodeGame) {
         correctLanguage = code.getLang().toLowerCase();
     }
-    else if (playingGame===PlayingGameType.TableGame) {
+    else if (playingGame === PlayingGameType.TableGame) {
         correctLanguage = table.getLang().toLowerCase();
     }
     rightInput = text === correctLanguage;
@@ -275,7 +253,7 @@ function checkInput(text) {
     }));
 
     //NO matter what we show the current attempt for table game
-    if (playingGame===PlayingGameType.TableGame) {
+    if (playingGame === PlayingGameType.TableGame) {
         const foundData = getDataFromLanguageString(text);
         if (foundData) {
             if (guessedLanguages.length > 0) guessedLanguages.unshift(foundData);
@@ -297,55 +275,88 @@ function cleanInput(input) {
     return cleaned;
 }
 
-function startTimer(){
+function startTimer() {
     HelperFunctions.enableElement(timerElementId);
-    currentSecondsLeft= defaultMinutesTime*60;
-    timerIntervalId= setInterval(updateTime, 1000);
+    currentSecondsLeft = defaultMinutesTime * 60;
+    timerIntervalId = setInterval(updateTime, 1000);
+
+    displayContainer.innerHTML += `<div id="${languageNamingContainerId}"></div>`;
+    languageNamingContainer = document.getElementById(languageNamingContainerId);
 }
 
-function updateTime(){
+function updateTime() {
     currentSecondsLeft--;
-    const min= Math.floor(currentSecondsLeft/60);
-    const sec= Math.floor(currentSecondsLeft%60);
-    
-    const minStr= HelperFunctions.padWithLeadingZeros(min, 2);
-    const secStr= HelperFunctions.padWithLeadingZeros(sec, 2);
-    timerElement.innerHTML=`Time Left: ${minStr}:${secStr}`;
-    
-    if (currentSecondsLeft<=0){
+    const min = Math.floor(currentSecondsLeft / 60);
+    const sec = Math.floor(currentSecondsLeft % 60);
+
+    const minStr = HelperFunctions.padWithLeadingZeros(min, 2);
+    const secStr = HelperFunctions.padWithLeadingZeros(sec, 2);
+    timerElement.innerHTML = `Time Left: ${minStr}:${secStr}`;
+
+    if (currentSecondsLeft <= 0) {
         gameEnd(true);
         document.dispatchEvent(new CustomEvent("nameGameTimeOver", {
             detail: {
                 "NamedCount": guessedLanguages.length,
-                "TotalSecondsTime": defaultMinutesTime*60
+                "TotalSecondsTime": defaultMinutesTime * 60
             }
         }));
     }
 }
 
-function clearUpdateTime(){
+function clearUpdateTime() {
     clearInterval(timerIntervalId);
     HelperFunctions.disableElement(timerElementId);
 }
 
 (function start() {
-    playingGame=PlayingGameType.None;
-    timerElement= document.getElementById(timerElementId);
+    playingGame = PlayingGameType.None;
+    timerElement = document.getElementById(timerElementId);
     clearUpdateTime();
 
     const element = document.getElementById("input-field");
-    element.addEventListener("change", (e) =>{
-        if (playingGame!==PlayingGameType.NameGame){
+    element.addEventListener("change", (e) => {
+        if (playingGame !== PlayingGameType.NameGame) {
             checkInput(cleanedUserText);
         }
         else addNamedLanguage(e);
     });
 
-    languagePickToggle= document.getElementById(languageDropdownButtonId);
+    languageDropdownToggle = document.getElementById(languageDropdownButtonId);
+    console.log(`lang pick toggle found: ${languageDropdownToggle}`)
 
     submitLanguageButton = document.getElementById(submitLanguageButtonId);
     submitLanguageButton.addEventListener("click", (e) => {
         checkInput(cleanInput(languageDropdown.value));
+    });
+
+    console.log("listen for page change");
+    const defaultModeButton = document.getElementById(defaultModeButtonId);
+    defaultModeButton.addEventListener("click", (e) => {
+        playingGame = PlayingGameType.CodeGame;
+        initGameDisplay();
+        nextLine();
+        HelperFunctions.enableElement(languageDropdownButtonId);
+        document.dispatchEvent(new CustomEvent("gameDisplayInit"));
+    });
+
+    const tableModeButton = document.getElementById(tableModeButtonId);
+    tableModeButton.addEventListener("click", (e) => {
+        playingGame = PlayingGameType.TableGame;
+        initGameDisplay();
+        nextLine();
+        HelperFunctions.enableElement(languageDropdownButtonId);
+        document.dispatchEvent(new CustomEvent("gameDisplayInit"));
+    });
+
+    const nameModeButton = document.getElementById(nameModeButtonId);
+    nameModeButton.addEventListener("click", (e) => {
+        playingGame = PlayingGameType.NameGame;
+        initGameDisplay();
+        HelperFunctions.disableElement(languageDropdownButtonId);
+        document.dispatchEvent(new CustomEvent("gameDisplayInit"));
+
+        startTimer();
     });
 }());
 
@@ -356,16 +367,16 @@ function gameEnd(isSuccess) {
     HelperFunctions.enableElement(gameReturnMenuContainerId);
 
     //We show what player did even if they won for table game
-    if (playingGame===PlayingGameType.TableGame){
+    if (playingGame === PlayingGameType.TableGame) {
         playedDailyTable = true;
         nextLine();
     }
     //We show remaining lines (if any) for coding game
-    else if (playingGame===PlayingGameType.CodeGame){
+    else if (playingGame === PlayingGameType.CodeGame) {
         playedDailyDefault = true;
         showAllCodeLines();
     }
-    playingGame=PlayingGameType.None;
+    playingGame = PlayingGameType.None;
 }
 
 export function hasPlayedTodaysDefault() {
