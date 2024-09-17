@@ -138,6 +138,7 @@ function hideConsole() {
 
 function checkPageForConsole(e) {
     console.log("enabled page " + e.detail);
+    updateStyle();
     if (e.detail.pageEnabledId !== PageId.GameDisplay) {
         hideConsole();
     }
