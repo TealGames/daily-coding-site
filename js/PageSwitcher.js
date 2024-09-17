@@ -83,6 +83,11 @@ function getAllPageIds() {
         switchPage(PageId.ModeSelect, PageId.GameDisplay);
     });
 
+    const nameModeButton = document.getElementById("play-name-button");
+    nameModeButton.addEventListener("click", () => {
+        switchPage(PageId.ModeSelect, PageId.GameDisplay);
+    });
+
     const returnMenuButtons = document.getElementsByClassName("return-main-button");
     for (let i = 0; i < returnMenuButtons.length; i++) {
         returnMenuButtons[i].addEventListener("click", () => {

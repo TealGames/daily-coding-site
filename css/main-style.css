@@ -189,6 +189,14 @@ table {
     table-layout: fixed;
 }
 
+.named-language-box{
+    background-color: #292929;
+    border: 2px solid rgb(61, 61, 61);
+    border-radius: 5px;
+    position: relative;
+    padding:1%;
+}
+
 th,
 td {
     background-color: #1E1E1E;

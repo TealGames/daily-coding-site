@@ -161,6 +161,17 @@
     }
 }
 
+#name-game-timer{
+    background-color: #292929;
+    border: 2px solid rgb(61, 61, 61);
+    border-radius: 5px;
+    position: relative;
+
+    
+    width: 100px;
+    height: 20px;
+}
+
 #credits {
     margin-right: auto;
     padding-left: 1%;

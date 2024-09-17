@@ -1,4 +1,5 @@
 import { CodingLanguage } from "./DailyCodeData.js";
+import { PlayingGameType } from "./DailyCodeManager.js";
 import { HelperFunctions } from "./HelperFunctions.js";
 import { PageId } from "./PageSwitcher.js";
 
@@ -136,7 +137,7 @@ function hideConsole() {
     HelperFunctions.disableElement(inputContainerId);
 }
 
-function checkPageForConsole(e) {
+function updateFromPage(e) {
     console.log("enabled page " + e.detail);
     updateStyle();
     if (e.detail.pageEnabledId !== PageId.GameDisplay) {
@@ -171,33 +172,57 @@ function updateLabelText(e) {
         //WARNING: potentially dangerous code because allowing input to be added to HTML
         //which could include script tags with injection attacks
         label.innerHTML = oldHtml + ` ${input}</p>`;
-        if (e) {
-            addStyleHeight();
-            if (e.detail.CorrectGuess) {
-                clearLabelText();
-                label.innerHTML += `<p class=\"code-new-line\"></p>` +
-                    `<p class=\"inline terminal-success\">correct input</p>`;
-                requestRating();
-                return;
-
-            }
-            else if (e.detail.AllAttemptsUsed) {
-                clearLabelText();
-                label.innerHTML += `<p class=\"code-new-line\"></p>` +
-                    `<p class=\"inline terminal-error\">max attempts reached: ` +
-                    `${e.detail.MaxAttempts}/${e.detail.CurrentAttempts} correct answer: ${e.detail.CorrectLanguage}</p>`;
-                requestRating();
-                return;
-            }
-            else {
-                label.innerHTML += `<p class=\"code-new-line\"></p>` +
-                    `<p class=\"inline terminal-error\"> ->  wrong input  ~~~~~~~~  attempts: ` +
-                    `${e.detail.CurrentAttempts}/${e.detail.MaxAttempts}</p>`;
-            }
+        labelTextActionsForGame(e);
+        if (e && e.detail.Game!==PlayingGameType.NameGame && (e.detail.CorrectGuess || e.detail.AllAttemptsUsed)){
+            requestRating();
+            return;
         }
     }
     addStyleHeight();
     label.innerHTML += targetTextFull;
+}
+
+function labelTextActionsForGame(e){
+    if (!e) return;
+
+    if (e.Game===PlayingGameType.NameGame){
+        clearLabelText();
+        if (e.detail.RepeatGuess){
+            label.innerHTML += `<p class=\"code-new-line\"></p>` +
+            `<p class=\"inline terminal\">repeat of previous input: ${e.detail.Input}</p>`;
+        }
+        else{
+            label.innerHTML += `<p class=\"code-new-line\"></p>` +
+            `<p class=\"inline terminal-warn\">named language: ${e.detail.Input}</p>`;
+        }
+    }
+    else{
+        addStyleHeight();
+        if (e.detail.CorrectGuess) {
+            clearLabelText();
+            label.innerHTML += `<p class=\"code-new-line\"></p>` +
+                `<p class=\"inline terminal-success\">correct input</p>`;
+        }
+        else if (e.detail.AllAttemptsUsed) {
+            clearLabelText();
+            label.innerHTML += `<p class=\"code-new-line\"></p>` +
+                `<p class=\"inline terminal-error\">max attempts reached: ` +
+                `${e.detail.MaxAttempts}/${e.detail.CurrentAttempts} correct answer: ${e.detail.CorrectLanguage}</p>`;
+        }
+        else {
+            label.innerHTML += `<p class=\"code-new-line\"></p>` +
+                `<p class=\"inline terminal-error\"> ->  wrong input  ~~~~~~~~  attempts: ` +
+                `${e.detail.CurrentAttempts}/${e.detail.MaxAttempts}</p>`;
+        }
+    }
+}
+
+function nameGameOverLabelUpdate(e){
+    if (!e) return;
+
+    clearLabelText();
+    label.innerHTML += `<p class=\"code-new-line\"></p>` +
+    `<p class=\"inline terminal-warn\">Congrats! You named ${e.detail.NamedCount} languages in ${e.detail.TotalSecondsTime} seconds</p>`;
 }
 
 function requestRating() {
@@ -253,8 +278,11 @@ function checkLanguageDropdownState() {
 }
 
 (function listenForConsoleEvents() {
-    document.addEventListener("enablePage", checkPageForConsole);
+    document.addEventListener("enablePage", updateFromPage);
     document.addEventListener("validGuess", updateLabelText);
+    document.addEventListener("namedLanguage", updateLabelText);
+    document.addEventListener("nameGameTimeOver", nameGameOverLabelUpdate);
+
     window.addEventListener("resize", (e) => updateStyle());
     document.addEventListener("gameDisplayInit", (e) => showConsole());
 })();
@@ -282,5 +310,4 @@ function checkLanguageDropdownState() {
     for (let i = 0; i < langs.length; i++) {
         languageDropdown.innerHTML += `<option value="${langs[i]}">${langs[i]}</option>`;
     }
-
 })();
