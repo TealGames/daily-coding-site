@@ -15,6 +15,12 @@ const submitLanguageButtonId = "submit-language-button";
 const dislayContainerId = "game-display-container";
 let displayContainer = null;
 
+const centerContentContainerId= "center-content";
+let centerContentContainer=null;
+
+const bodyContainerId="body";
+let bodyContainer= null;
+
 let languageDropdownButton = null;
 let languageDropdownText = null;
 let languageDropdown = null;
@@ -40,7 +46,6 @@ const gradientHeight = 5;
 
 function updateStyle() {
     //footer.style.top = `${100 - currentLineHeight}%`;
-
     console.log(`not fit: ${HelperFunctions.doesContentNotFitPage()}`);
     footer.style.width = "100%";
 
@@ -53,10 +58,12 @@ function updateStyle() {
     //     footer.style.bottom = "0%";
     // }
     console.log(`checking window width ${window.innerWidth} new display top ${gameDisplayRect.top}+height${gameDisplayRect.height}`);
-    if (!isConsoleShown) {
-        footer.style.removeProperty(`top`);
-        footer.style.bottom = "0%";
-    }
+    const centerRect= centerContentContainer.getBoundingClientRect();
+    const bodyRect= bodyContainer.getBoundingClientRect();
+    const footerRect= footer.getBoundingClientRect();
+    //console.log(`center container height: ${centerRect.height} pos ${centerRect.y+centerRect.height} footer start: ${footerRect.top}`);
+    console.log(`body container height: ${bodyRect.height} pos ${bodyRect.y+bodyRect.height} footer start: ${footerRect.top}`);
+    
     // else (HelperFunctions.doesContentNotFitPage()) {
     //     footer.style.top = `${100 - startShowConsoleHeight}%`;
     // }
@@ -64,12 +71,22 @@ function updateStyle() {
     //     footer.style.top = `${100 - startShowConsoleHeight}%`;
     // }
     //footer.style.top = `${100 - startShowConsoleHeight}%`;
-    else if (window.innerWidth<=570){
-        console.log(`top of display: ${gameDisplayRect.top+gameDisplayRect.height}`);
+    if (isConsoleShown && window.innerWidth<=570){
+        console.log(`ADJUSTING CONSOLE top of display: ${gameDisplayRect.top+gameDisplayRect.height}`);
         //footer.style.removeProperty(`height`);
         footer.style.removeProperty(`height`);
         footer.style.top = `${gameDisplayRect.top+gameDisplayRect.height+extraConsoleBuffer}px`;
         footer.style.bottom="0%";
+    }
+    else if (!isConsoleShown && bodyRect.height-footerRect.top>=30){
+        console.log(`CHECK: ${gameDisplayRect.top+gameDisplayRect.height}`);
+        footer.style.removeProperty(`height`);
+        footer.style.top = `${bodyRect.height}px`;
+        footer.style.bottom="0%";
+    }
+    else if (!isConsoleShown) {
+        footer.style.removeProperty(`top`);
+        footer.style.bottom = "0%";
     }
     else {
         console.log(`choosing strict height top: ${100 - footer.style.height}`);
@@ -242,7 +259,10 @@ function checkLanguageDropdownState() {
 })();
 
 (function start() {
+    centerContentContainer= document.getElementById(`${centerContentContainerId}`);
+    bodyContainer= document.getElementById(`${bodyContainerId}`);
     displayContainer = document.getElementById(`${dislayContainerId}`);
+
     footer = document.getElementById(footerId);
     bottomGradient = document.getElementById(bottomGradientId);
     hideConsole();
