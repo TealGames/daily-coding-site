@@ -185,15 +185,19 @@ function updateLabelText(e) {
 function labelTextActionsForGame(e) {
     if (!e) return;
 
-    if (e.Game === PlayingGameType.NameGame) {
+    if (e.detail.Game === PlayingGameType.NameGame) {
         clearLabelText();
         if (e.detail.RepeatGuess) {
             label.innerHTML += `<p class=\"code-new-line\"></p>` +
-                `<p class=\"inline terminal\">repeat of previous input: ${e.detail.Input}</p>`;
+                `<p class=\"inline terminal-warn\">[CONSOLE] repeat of previous input: ${e.detail.Input}</p>`;
+        }
+        else if (!e.detail.ValidLanguage){
+            label.innerHTML += `<p class=\"code-new-line\"></p>` +
+                `<p class=\"inline terminal-error\">[CONSOLE] invalid language: ${e.detail.Input}</p>`;
         }
         else {
             label.innerHTML += `<p class=\"code-new-line\"></p>` +
-                `<p class=\"inline terminal-warn\">named language: ${e.detail.Input}</p>`;
+                `<p class=\"inline terminal\">[CONSOLE] named language: ${e.detail.Input}</p>`;
         }
     }
     else {
@@ -222,7 +226,7 @@ function nameGameOverLabelUpdate(e) {
 
     clearLabelText();
     label.innerHTML += `<p class=\"code-new-line\"></p>` +
-        `<p class=\"inline terminal-success\">Congrats! You named ${e.detail.NamedCount} languages in ${e.detail.TotalSecondsTime} seconds</p>`;
+        `<p class=\"inline terminal-success\">Congrats! You named ${e.detail.NamedCount} language(s) in ${e.detail.TotalSecondsTime} seconds</p>`;
 }
 
 function requestRating() {

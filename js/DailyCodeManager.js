@@ -22,6 +22,10 @@ const timerElementId = "name-game-timer";
 let timerElement = null;
 
 const dislayContainerId = "game-display-container";
+const displayAreaId= "code-display-area";
+let displayArea= null;
+const visibleDisplayContainerClass="code-display-area-visible";
+const hiddenDisplayContainerClass="code-display-area-hidden";
 let displayContainer = null;
 
 const languageNamingContainerId = "name-game-language-container";
@@ -53,6 +57,9 @@ let currentAttempts = 0;
 //For name game
 const defaultMinutesTime = 1;
 let currentSecondsLeft = 0;
+const timerWarningSecondsTime=20;
+const timerWarningCssClass= "terminal-error";
+const defaultTimerCssClass="code-comment";
 let timerIntervalId;
 
 let playedDailyDefault = false;
@@ -164,8 +171,7 @@ function nextLine() {
     }
 }
 
-function addNamedLanguage(e) {
-    const cleanedUserText = cleanInput(inputField.value);
+function addNamedLanguage(cleanedUserText) {
     const repeatGuess = isRepeatGuess(cleanedUserText);
 
     const foundData = getDataFromLanguageString(cleanedUserText);
@@ -179,6 +185,7 @@ function addNamedLanguage(e) {
         detail: {
             "Game": playingGame,
             "Input": cleanedUserText,
+            "ValidLanguage": foundData!==null,
             "RepeatGuess": repeatGuess,
         }
     }));
@@ -280,8 +287,23 @@ function startTimer() {
     currentSecondsLeft = defaultMinutesTime * 60;
     timerIntervalId = setInterval(updateTime, 1000);
 
-    displayContainer.innerHTML += `<div id="${languageNamingContainerId}"></div>`;
+    
+    displayContainer.innerHTML += 
+                            `<div class="body-text">`+
+                            `<p class="code-new-line"></p>`+
+                            `<p class="inline code-object">String</p>`+
+                            `<p class="inline code-default">[]</p>`+
+                            `<p class="inline code-local-variable"> named</p>`+
+                            `<p class="inline code-default"> =</p>`+
+                            `<p class="code-new-line"></p>`+
+                            `<p class="inline code-default">{</p>`+
+                            `<div id="${languageNamingContainerId}"></div>`+
+                            `<p class="inline code-default">}</p></div>`;
+                            
     languageNamingContainer = document.getElementById(languageNamingContainerId);
+
+    HelperFunctions.tryRemoveClasses(timerElement, [defaultTimerCssClass, timerWarningCssClass]);
+    HelperFunctions.addClass(timerElement, defaultTimerCssClass);
 }
 
 function updateTime() {
@@ -293,6 +315,10 @@ function updateTime() {
     const secStr = HelperFunctions.padWithLeadingZeros(sec, 2);
     timerElement.innerHTML = `Time Left: ${minStr}:${secStr}`;
 
+    if (currentSecondsLeft<=timerWarningSecondsTime){
+        HelperFunctions.tryRemoveClasses(timerElement, [defaultTimerCssClass, timerWarningCssClass]);
+        HelperFunctions.addClass(timerElement, timerWarningCssClass);
+    }
     if (currentSecondsLeft <= 0) {
         gameEnd(true);
         document.dispatchEvent(new CustomEvent("nameGameTimeOver", {
@@ -307,19 +333,24 @@ function updateTime() {
 function clearUpdateTime() {
     clearInterval(timerIntervalId);
     HelperFunctions.disableElement(timerElementId);
+
+    HelperFunctions.tryRemoveClasses(timerElement, [defaultTimerCssClass, timerWarningCssClass]);
+    HelperFunctions.addClass(timerElement, defaultTimerCssClass);
 }
 
 (function start() {
     playingGame = PlayingGameType.None;
     timerElement = document.getElementById(timerElementId);
+    displayArea= document.getElementById(displayAreaId);
     clearUpdateTime();
 
     const element = document.getElementById("input-field");
     element.addEventListener("change", (e) => {
+        const cleanedUserText= cleanInput(inputField.value);
         if (playingGame !== PlayingGameType.NameGame) {
             checkInput(cleanedUserText);
         }
-        else addNamedLanguage(e);
+        else addNamedLanguage(cleanedUserText);
     });
 
     languageDropdownToggle = document.getElementById(languageDropdownButtonId);
@@ -336,7 +367,11 @@ function clearUpdateTime() {
         playingGame = PlayingGameType.CodeGame;
         initGameDisplay();
         nextLine();
+
         HelperFunctions.enableElement(languageDropdownButtonId);
+        HelperFunctions.tryRemoveClasses(displayArea, [visibleDisplayContainerClass, hiddenDisplayContainerClass]);
+        HelperFunctions.addClass(displayArea, visibleDisplayContainerClass);
+
         document.dispatchEvent(new CustomEvent("gameDisplayInit"));
     });
 
@@ -345,7 +380,11 @@ function clearUpdateTime() {
         playingGame = PlayingGameType.TableGame;
         initGameDisplay();
         nextLine();
+
         HelperFunctions.enableElement(languageDropdownButtonId);
+        HelperFunctions.tryRemoveClasses(displayArea, [visibleDisplayContainerClass, hiddenDisplayContainerClass]);
+        HelperFunctions.addClass(displayArea, visibleDisplayContainerClass);
+
         document.dispatchEvent(new CustomEvent("gameDisplayInit"));
     });
 
@@ -353,9 +392,12 @@ function clearUpdateTime() {
     nameModeButton.addEventListener("click", (e) => {
         playingGame = PlayingGameType.NameGame;
         initGameDisplay();
-        HelperFunctions.disableElement(languageDropdownButtonId);
-        document.dispatchEvent(new CustomEvent("gameDisplayInit"));
 
+        HelperFunctions.disableElement(languageDropdownButtonId);
+        HelperFunctions.tryRemoveClasses(displayArea, [visibleDisplayContainerClass, hiddenDisplayContainerClass]);
+        HelperFunctions.addClass(displayArea, hiddenDisplayContainerClass);
+
+        document.dispatchEvent(new CustomEvent("gameDisplayInit"));
         startTimer();
     });
 }());
