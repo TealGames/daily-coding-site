@@ -22,10 +22,10 @@ const timerElementId = "name-game-timer";
 let timerElement = null;
 
 const dislayContainerId = "game-display-container";
-const displayAreaId= "code-display-area";
-let displayArea= null;
-const visibleDisplayContainerClass="code-display-area-visible";
-const hiddenDisplayContainerClass="code-display-area-hidden";
+const displayAreaId = "code-display-area";
+let displayArea = null;
+const visibleDisplayContainerClass = "code-display-area-visible";
+const hiddenDisplayContainerClass = "code-display-area-hidden";
 let displayContainer = null;
 
 const languageNamingContainerId = "name-game-language-container";
@@ -57,11 +57,12 @@ let currentAttempts = 0;
 //For name game
 const defaultMinutesTime = 1;
 let currentSecondsLeft = 0;
-const timerWarningSecondsTime=20;
-const timerWarningCssClass= "terminal-error";
-const defaultTimerCssClass="code-comment";
+const timerWarningSecondsTime = 20;
+const timerWarningCssClass = "terminal-error";
+const defaultTimerCssClass = "code-comment";
 let timerIntervalId;
 
+const clearInputAfterGuess = true;
 let playedDailyDefault = false;
 let playedDailyTable = false;
 
@@ -177,15 +178,22 @@ function addNamedLanguage(cleanedUserText) {
     const foundData = getDataFromLanguageString(cleanedUserText);
     if (!repeatGuess && foundData) {
         guessedLanguages.push(foundData);
-        languageNamingContainer.innerHTML +=
-            `<span class="code-string body-text named-language-box">"${cleanedUserText}"</span>`;
+
+        const html = `<span class="code-string body-text named-language-box">"${cleanedUserText}"</span>`;
+        languageNamingContainer.innerHTML += html;
+
+        if (guessedLanguages.length >= 2) {
+            const elements = document.getElementsByClassName("named-language-box");
+            const secondLastElement = elements[elements.length - 2];
+            secondLastElement.innerHTML += `<span class="code-default">,</span>`;
+        }
     }
 
     document.dispatchEvent(new CustomEvent("namedLanguage", {
         detail: {
             "Game": playingGame,
             "Input": cleanedUserText,
-            "ValidLanguage": foundData!==null,
+            "ValidLanguage": foundData !== null,
             "RepeatGuess": repeatGuess,
         }
     }));
@@ -225,7 +233,7 @@ function isRepeatGuess(text) {
 }
 
 function checkInput(text) {
-    console.log(`input has submit to ${text}`);
+    console.log(`input has submit to ${text} `);
 
     if (playingGame !== PlayingGameType.CodeGame && playingGame !== PlayingGameType.TableGame) {
         console.error(`Tried to check if input ${text} was valid for game ${playingGame} which is not allowed`);
@@ -278,7 +286,7 @@ function checkInput(text) {
 }
 
 function cleanInput(input) {
-    const cleaned = HelperFunctions.replaceAllMultiple(input, [" ", "<", ">"], "").toLowerCase();
+    const cleaned = HelperFunctions.replaceAllMultiple(input, [" ", "<", ">"], "").toLowerCase().trim();
     return cleaned;
 }
 
@@ -287,19 +295,18 @@ function startTimer() {
     currentSecondsLeft = defaultMinutesTime * 60;
     timerIntervalId = setInterval(updateTime, 1000);
 
-    
-    displayContainer.innerHTML += 
-                            `<div class="body-text">`+
-                            `<p class="code-new-line"></p>`+
-                            `<p class="inline code-object">String</p>`+
-                            `<p class="inline code-default">[]</p>`+
-                            `<p class="inline code-local-variable"> named</p>`+
-                            `<p class="inline code-default"> =</p>`+
-                            `<p class="code-new-line"></p>`+
-                            `<p class="inline code-default">{</p>`+
-                            `<div id="${languageNamingContainerId}"></div>`+
-                            `<p class="inline code-default">}</p></div>`;
-                            
+    displayContainer.innerHTML +=
+        `<div class="body-text">` +
+        `<p class="code-2-new-line"</p>` +
+        `<p class="inline code-object">String</p>` +
+        `<p class="inline code-default">[]</p>` +
+        `<p class="inline code-local-variable"> named</p>` +
+        `<p class="inline code-default">=</p>` +
+        `<p class="code-new-line"></p>` +
+        `<p class="inline code-default">{</p>` +
+        `<div id = "${languageNamingContainerId}"></div >` +
+        `<p class="inline code-default">}</p></div`;
+
     languageNamingContainer = document.getElementById(languageNamingContainerId);
 
     HelperFunctions.tryRemoveClasses(timerElement, [defaultTimerCssClass, timerWarningCssClass]);
@@ -313,9 +320,9 @@ function updateTime() {
 
     const minStr = HelperFunctions.padWithLeadingZeros(min, 2);
     const secStr = HelperFunctions.padWithLeadingZeros(sec, 2);
-    timerElement.innerHTML = `Time Left: ${minStr}:${secStr}`;
+    timerElement.innerHTML = `Time Left: ${minStr}:${secStr} `;
 
-    if (currentSecondsLeft<=timerWarningSecondsTime){
+    if (currentSecondsLeft <= timerWarningSecondsTime) {
         HelperFunctions.tryRemoveClasses(timerElement, [defaultTimerCssClass, timerWarningCssClass]);
         HelperFunctions.addClass(timerElement, timerWarningCssClass);
     }
@@ -341,12 +348,17 @@ function clearUpdateTime() {
 (function start() {
     playingGame = PlayingGameType.None;
     timerElement = document.getElementById(timerElementId);
-    displayArea= document.getElementById(displayAreaId);
+    displayArea = document.getElementById(displayAreaId);
     clearUpdateTime();
 
     const element = document.getElementById("input-field");
     element.addEventListener("change", (e) => {
-        const cleanedUserText= cleanInput(inputField.value);
+        const cleanedUserText = cleanInput(inputField.value);
+        if (!cleanedUserText) {
+            return;
+        }
+
+        if (clearInputAfterGuess) HelperFunctions.clearInput(inputField);
         if (playingGame !== PlayingGameType.NameGame) {
             checkInput(cleanedUserText);
         }
@@ -354,7 +366,7 @@ function clearUpdateTime() {
     });
 
     languageDropdownToggle = document.getElementById(languageDropdownButtonId);
-    console.log(`lang pick toggle found: ${languageDropdownToggle}`)
+    console.log(`lang pick toggle found: ${languageDropdownToggle} `)
 
     submitLanguageButton = document.getElementById(submitLanguageButtonId);
     submitLanguageButton.addEventListener("click", (e) => {
@@ -369,6 +381,8 @@ function clearUpdateTime() {
         nextLine();
 
         HelperFunctions.enableElement(languageDropdownButtonId);
+        HelperFunctions.disableElement(timerElementId);
+
         HelperFunctions.tryRemoveClasses(displayArea, [visibleDisplayContainerClass, hiddenDisplayContainerClass]);
         HelperFunctions.addClass(displayArea, visibleDisplayContainerClass);
 
@@ -382,6 +396,8 @@ function clearUpdateTime() {
         nextLine();
 
         HelperFunctions.enableElement(languageDropdownButtonId);
+        HelperFunctions.disableElement(timerElementId);
+
         HelperFunctions.tryRemoveClasses(displayArea, [visibleDisplayContainerClass, hiddenDisplayContainerClass]);
         HelperFunctions.addClass(displayArea, visibleDisplayContainerClass);
 
@@ -394,8 +410,10 @@ function clearUpdateTime() {
         initGameDisplay();
 
         HelperFunctions.disableElement(languageDropdownButtonId);
+        HelperFunctions.enableElement(timerElementId);
+
         HelperFunctions.tryRemoveClasses(displayArea, [visibleDisplayContainerClass, hiddenDisplayContainerClass]);
-        HelperFunctions.addClass(displayArea, hiddenDisplayContainerClass);
+        HelperFunctions.addClass(displayArea, visibleDisplayContainerClass);
 
         document.dispatchEvent(new CustomEvent("gameDisplayInit"));
         startTimer();

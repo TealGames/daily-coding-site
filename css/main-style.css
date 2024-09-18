@@ -63,7 +63,8 @@
     font-size: 1rem;
 }
 
-@media (max-width: 850px){
+@media (max-width: 850px) {
+
     .body-text,
     .button {
         font-size: 1.2rem;
@@ -102,11 +103,11 @@
         font-size: 0.6rem;
     }
 
-    .small-text{
+    .small-text {
         font-size: 0.5rem;
     }
 
-    .small-text.footer-note{
+    .small-text.footer-note {
         font-size: 0.6rem;
     }
 }
@@ -201,13 +202,13 @@ table {
     table-layout: fixed;
 }
 
-.named-language-box{
-    background-color: #292929;
+.named-language-box {
+    /* background-color: #292929;
     border: 2px solid rgb(61, 61, 61);
-    border-radius: 5px;
+    border-radius: 5px; */
     position: relative;
     box-sizing: border-box;
-    padding:1%;
+    padding: 1%;
 }
 
 th,

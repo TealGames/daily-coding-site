@@ -478,12 +478,28 @@ async function initJsonData(path, dataArray, actionOnObject) {
  * @returns {LanguageData}
  */
 export function getDataFromLanguageString(str) {
-    str = HelperFunctions.replaceAll(str, " ", "").trim().toLowerCase();
+    const simplifyName = (str) => {
+        return HelperFunctions.replaceAll(str, " ", "").toLowerCase().trim();
+    }
+    str = simplifyName(str);
 
     for (let i = 0; i < langaugeData.length; i++) {
-        const simplified = HelperFunctions.replaceAll(langaugeData[i].getLang(), " ", "").toLowerCase().trim();
-        if (str === simplified) {
-            return langaugeData[i];
+        const langNames = langaugeData[i].getLang();
+        console.log(`checking lang ${langNames} arry: ${Array.isArray(langNames)}`);
+
+        if (Array.isArray(langNames)) {
+            for (let j = 0; j < langNames.length; j++) {
+                const simplified = simplifyName(langNames[j]);
+                if (str === simplified) {
+                    return langaugeData[i];
+                }
+            }
+        }
+        else {
+            const simplified = simplifyName(langNames);
+            if (str === simplified) {
+                return langaugeData[i];
+            }
         }
     }
 
