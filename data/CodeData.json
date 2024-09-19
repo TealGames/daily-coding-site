@@ -19,11 +19,89 @@
             "}"
         ],
         "Order": [
-            [0],
-            [7],
-            [1, 2],
-            [3, 4, 5],
-            [6, 8, 9, 10]
+            [
+                0
+            ],
+            [
+                7
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                3,
+                4,
+                5
+            ],
+            [
+                6,
+                8,
+                9,
+                10
+            ]
+        ]
+    },
+    {
+        "ID": 2,
+        "Year": 2024,
+        "Month": 8,
+        "Day": 3,
+        "Language": "Java",
+        "Code": [
+            "<key>double</key> <var>temp</var>=<key>0</key>;",
+            "<obj>System</obj>.<key>out</key>.<fnc>println</fnc>(<str>\"What is the temperature outside in Celsius? \"</str>);",
+            "<var>temp</var>= <var>sc</var>.<fnc>nextDouble</fnc>();",
+            "<key>double</key> <var>converted</var>= (<var>temp</var>*<spc>1.8</spc>) +<key>32</key>;",
+            "<obj>System</obj>.<key>out</key>.<fnc>println</fnc>(<str>\"The temperature in freedom units is: \"</str>+ <var>converted</var>);"
+        ],
+        "Order": [
+            [
+                0
+            ],
+            [
+                3
+            ],
+            [
+                2
+            ],
+            [
+                1
+            ],
+            [
+                4
+            ]
+        ]
+    },
+    {
+        "ID": 3,
+        "Year": 2024,
+        "Month": 8,
+        "Day": 4,
+        "Language": "Java",
+        "Code": [
+            "<obj>String</obj> <var>myName</var>= <str>\"William Shakespeare\"</str>;",
+            "<key>int</key> <var>age</var>= <key>408</key>;",
+            "<spec>if</spc> (<var>year</var>==<key>2025</key>) <var>age</var>++;",
+            "<obj>String</obj> <var>msg</var> = STR.<str>\"Hello my name is \\{myName}. I am \\{age} years old\"</str>;",
+            "<obj>System</obj>.<key>out</key>.<fnc>println</fnc>(<var>msg</var>);"
+        ],
+        "Order": [
+            [
+                2
+            ],
+            [
+                1
+            ],
+            [
+                0
+            ],
+            [
+                3
+            ],
+            [
+                4
+            ]
         ]
     }
 ]
