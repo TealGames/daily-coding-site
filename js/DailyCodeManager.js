@@ -1,5 +1,5 @@
 import { HelperFunctions } from "./HelperFunctions.js";
-import { CodingLanguage, getDataFromLanguage, getDataFromLanguageString, getTodaysCodeDataUTC, getTodaysTableDataUTC, maxCodeIdLength } from "./DailyCodeData.js";
+import { CodingLanguage, getDataFromLanguage, getDataFromLanguageString, getTodaysCodeDataUTC, getTodaysTableDataUTC, LanguageData, maxCodeIdLength } from "./DailyCodeData.js";
 import { getCSSClassIfHasTab, getHtmlFromCodeData, getHtmlFromLanguageData } from "./CodeHtmlConverter.js";
 import { CodeHtmlData } from "./CodeHtmlConverter.js";
 
@@ -173,13 +173,15 @@ function nextLine() {
 }
 
 function addNamedLanguage(cleanedUserText) {
-    const repeatGuess = isRepeatGuess(cleanedUserText);
-
     const foundData = getDataFromLanguageString(cleanedUserText);
-    if (!repeatGuess && foundData) {
+    //If we don't have data, we don't try to check if its a repeat guess
+    const repeatGuess = foundData? isRepeatGuess(foundData) : false;
+    console.log(`repeat guess ${cleanedUserText} ${repeatGuess} guessed: ${guessedLanguages}`);
+
+    if (foundData && !repeatGuess) {
         guessedLanguages.push(foundData);
 
-        const html = `<span class="code-string body-text named-language-box">"${cleanedUserText}"</span>`;
+        const html = `<span class="code-string body-text named-language-box">"${foundData.getLang()}"</span>`;
         languageNamingContainer.innerHTML += html;
 
         if (guessedLanguages.length >= 2) {
@@ -223,13 +225,18 @@ function enableInput() {
     HelperFunctions.enableElement(inputFieldId);
 }
 
-function isRepeatGuess(text) {
+/**
+ * @param {LanguageData} data 
+ * @returns 
+ */
+function isRepeatGuess(data) {
     //Don't allow duplicate guessing
-    if (!text || (previousInput && HelperFunctions.arrayContains(previousInput, text))) {
-        return true;
-    }
-    previousInput.push(text);
-    return false;
+    // if (!text || (previousInput && HelperFunctions.arrayContains(previousInput, text))) {
+    //     return true;
+    // }
+    // previousInput.push(text);
+    if (!data) return false;
+    return HelperFunctions.arrayContains(guessedLanguages, data);
 }
 
 function checkInput(text) {
@@ -240,6 +247,7 @@ function checkInput(text) {
         return;
     }
 
+    if (!text) return;
     if (isRepeatGuess(text)) return;
     currentAttempts++;
 
@@ -424,7 +432,9 @@ function gameEnd(isSuccess) {
     lastGameWasSuccess = isSuccess;
     clearUpdateTime();
     disableInput();
+
     HelperFunctions.enableElement(gameReturnMenuContainerId);
+    HelperFunctions.disableElement(languageDropdownButtonId);
 
     //We show what player did even if they won for table game
     if (playingGame === PlayingGameType.TableGame) {

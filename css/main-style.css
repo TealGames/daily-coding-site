@@ -186,6 +186,10 @@ input {
     height: 30px;
 }
 
+.fit-content{
+    min-width: fit-content;
+}
+
 .code-display-area-visible {
     background-color: #292929;
     border: 2px solid rgb(61, 61, 61);

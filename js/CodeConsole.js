@@ -244,7 +244,7 @@ function requestRating() {
                 <input id="rating-field" name="rating-number" type="number" max="5" min="1" placeholder="type rating..." form="rating-form"
                 required class="body-text terminal">
 
-                <button id="submit-rating-button" type="submit" class="terminal-ui code-font body-text dark-on-hover ">
+                <button id="submit-rating-button" type="submit" class="code-font body-text dark-on-hover terminal-ui fit-content">
                 Submit Rating</button>
             </form>
             <p class=\"code-2-new-line\"></p>

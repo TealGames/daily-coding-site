@@ -1,6 +1,7 @@
 [
     {
         "Language" : "JavaScript",
+        "Aliases" : [],
         "Release" : 1995,
         "Paradigm" : ["Object-Oriented", "Functional"],
         "Compilation" : "Interpreted",
@@ -10,6 +11,7 @@
     },
     {
         "Language" : "TypeScript",
+        "Aliases" : [],
         "Release" : 2012,
         "Paradigm" : ["Object-Oriented", "Functional"],
         "Compilation" : "Interpreted",
@@ -19,6 +21,7 @@
     },
     {
         "Language" : "Python",
+        "Aliases" : [],
         "Release" : 1991,
         "Paradigm" : ["Object-Oriented", "Functional", "Procedural","Structural"],
         "Compilation" : "Interpreted",
@@ -28,6 +31,7 @@
     },
     {
         "Language" : "HTML",
+        "Aliases" : [],
         "Release" : 1993,
         "Paradigm" : ["Declarative"],
         "Compilation" : "Interpreted",
@@ -37,6 +41,7 @@
     },
     {
         "Language" : "PHP",
+        "Aliases" : [],
         "Release" : 1995,
         "Paradigm" : ["Object-Oriented", "Functional"],
         "Compilation" : "Interpreted",
@@ -50,6 +55,7 @@
 
     {
         "Language" : "Java",
+        "Aliases" : [],
         "Release" : 1995,
         "Paradigm" : ["Object-Oriented", "Functional"],
         "Compilation" : "Compiled",
@@ -59,6 +65,7 @@
     },
     {
         "Language" : "C#",
+        "Aliases" : ["CSharp"],
         "Release" : 2001,
         "Paradigm" : ["Object-Oriented", "Functional", "Structural"],
         "Compilation" : "Compiled",
@@ -68,6 +75,7 @@
     },
     {
         "Language" : "C",
+        "Aliases" : [],
         "Release" : 1972,
         "Paradigm" : ["Structural", "Procedural"],
         "Compilation" : "Compiled",
@@ -77,6 +85,7 @@
     },
     {
         "Language" : "C++",
+        "Aliases" : [],
         "Release" : 1985,
         "Paradigm" : ["Functional", "Object-Oriented", "Procedural"],
         "Compilation" : "Compiled",
@@ -86,6 +95,7 @@
     },
     {
         "Language" : "Rust",
+        "Aliases" : [],
         "Release" : 2015,
         "Paradigm" : ["Functional", "Structural"],
         "Compilation" : "Compiled",
@@ -95,6 +105,7 @@
     },
     {
         "Language" : "Zig",
+        "Aliases" : [],
         "Release" : 2016,
         "Paradigm" : ["Procedural", "Functional"],
         "Compilation" : "Compiled",
@@ -104,6 +115,7 @@
     },
     {
         "Language" : "Lua",
+        "Aliases" : [],
         "Release" : 1993,
         "Paradigm" : ["Functional", "Object-Oriented", "Procedural"],
         "Compilation" : "Compiled",
@@ -113,6 +125,7 @@
     },
     {
         "Language" : "Go",
+        "Aliases" : [],
         "Release" : 2009,
         "Paradigm" : ["Functional", "Object-Oriented"],
         "Compilation" : "Compiled",
@@ -122,6 +135,7 @@
     },
     {
         "Language" : "Swift",
+        "Aliases" : [],
         "Release" : 2014,
         "Paradigm" : ["Functional", "Object-Oriented", "Structural"],
         "Compilation" : "Compiled",
@@ -131,6 +145,7 @@
     },
     {
         "Language" : "Kotlin",
+        "Aliases" : [],
         "Release" : 2011,
         "Paradigm" : ["Functional", "Object-Oriented", "Structural"],
         "Compilation" : "Compiled",
@@ -144,6 +159,7 @@
 
     {
         "Language" : "Ruby",
+        "Aliases" : [],
         "Release" : 1995,
         "Paradigm" : ["Functional", "Object-Oriented"],
         "Compilation" : "Interpreted",
@@ -153,6 +169,7 @@
     },
     {
         "Language" : "Perl",
+        "Aliases" : [],
         "Release" : 1987,
         "Paradigm" : ["Functional", "Object-Oriented", "Procedural"],
         "Compilation" : "Interpreted",
@@ -166,6 +183,7 @@
 
     {
         "Language" : "F#",
+        "Aliases" : [],
         "Release" : 2005,
         "Paradigm" : ["Functional", "Object-Oriented"],
         "Compilation" : "Interpreted",
@@ -175,6 +193,7 @@
     },
     {
         "Language" : "Caml",
+        "Aliases" : [],
         "Release" : 1985,
         "Paradigm" : ["Functional"],
         "Compilation" : "Compiled",
@@ -184,6 +203,7 @@
     },
     {
         "Language" : "OCaml",
+        "Aliases" : [],
         "Release" : 1996,
         "Paradigm" : ["Functional", "Object-Oriented"],
         "Compilation" : "Compiled",
@@ -193,6 +213,7 @@
     },
     {
         "Language" : "Haskell",
+        "Aliases" : [],
         "Release" : 1990,
         "Paradigm" : ["Functional"],
         "Compilation" : "Compiled or Interpreted",
@@ -202,6 +223,7 @@
     },
     {
         "Language" : "Erlang",
+        "Aliases" : [],
         "Release" : 1986,
         "Paradigm" : ["Functional", "Object-Oriented"],
         "Compilation" : "Compiled",
@@ -211,6 +233,7 @@
     },
     {
         "Language" : "Elixir",
+        "Aliases" : [],
         "Release" : 2012,
         "Paradigm" : ["Functional"],
         "Compilation" : "Compiled",
@@ -220,6 +243,7 @@
     },
     {
         "Language" : "Lisp",
+        "Aliases" : [],
         "Release" : 1960,
         "Paradigm" : ["Functional", "Procedural"],
         "Compilation" : "Compiled or Interpreted",
@@ -229,6 +253,7 @@
     },
     {
         "Language" : "Clojure",
+        "Aliases" : [],
         "Release" : 2007,
         "Paradigm" : ["Functional"],
         "Compilation" : "Compiled",
@@ -242,6 +267,7 @@
     
     {
         "Language" : "Fortran",
+        "Aliases" : [],
         "Release" : 1957,
         "Paradigm" : ["Structural", "Procedural"],
         "Compilation" : "Compiled",
@@ -251,6 +277,7 @@
     },
     {
         "Language" : "BASIC",
+        "Aliases" : [],
         "Release" : 1958,
         "Paradigm" : ["Procedural"],
         "Compilation" : "Compiled or Interpreted",
@@ -260,6 +287,7 @@
     },
     {
         "Language" : "COBOL",
+        "Aliases" : [],
         "Release" : 1959,
         "Paradigm" : ["Procedural"],
         "Compilation" : "Compiled",
@@ -269,6 +297,7 @@
     },
     {
         "Language" : "ALGOL",
+        "Aliases" : [],
         "Release" : 1958,
         "Paradigm" : ["Procedural", "Structural", "Object-Oriented"],
         "Compilation" : "Compiled or Interpreted",
@@ -278,6 +307,7 @@
     },
     {
         "Language" : "Ada",
+        "Aliases" : [],
         "Release" : 1980,
         "Paradigm" : ["Procedural", "Object-Oriented"],
         "Compilation" : "Compiled",
@@ -287,6 +317,7 @@
     },
     {
         "Language" : "Objective-C",
+        "Aliases" : [],
         "Release" : 1984,
         "Paradigm" : ["Object-Oriented"],
         "Compilation" : "Compiled",
@@ -296,6 +327,7 @@
     },
     {
         "Language" : "Pascal",
+        "Aliases" : [],
         "Release" : 1970,
         "Paradigm" : ["Structural", "Procedural"],
         "Compilation" : "Compiled",

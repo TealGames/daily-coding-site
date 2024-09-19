@@ -11,6 +11,8 @@ let langaugeData = [];
 let dailyTable = [];
 let dailyCode = [];
 
+const todayForcedCodeId=-1;
+
 export const maxCodeIdLength = 4;
 
 export const CodingLanguage = Object.freeze(
@@ -162,6 +164,8 @@ function getTodaysDataUTC(collection) {
 * @returns {CodeData}
 */
 export function getTodaysCodeDataUTC() {
+    if (todayForcedCodeId>=0) return getCodeDataFromId(todayForcedCodeId);
+
     return getTodaysDataUTC(dailyCode);
 }
 
@@ -248,6 +252,7 @@ export class TableData {
 
 export class LanguageData {
     #lang;
+    #aliases;
     #releaseYear;
     #paradigm;
     #compilationType;
@@ -257,6 +262,7 @@ export class LanguageData {
 
     /**
      * @param {CodingLanguage} lang - language
+     * @param {String[]} aliases - aliases
      * @param {Number} releaseYear - release year
      * @param {LanguageParadigm} paradigm - paradigm
      * @param {CompilationType} compilation - compilation
@@ -264,8 +270,9 @@ export class LanguageData {
      * @param {LanguageSyntax} syntax - syntax
      * @param {LanguageUse} languageUse - use
      */
-    constructor(lang, releaseYear, paradigm, compilation, typed, syntax, languageUse) {
+    constructor(lang, aliases, releaseYear, paradigm, compilation, typed, syntax, languageUse) {
         this.#lang = lang;
+        this.#aliases= aliases;
         this.#releaseYear = releaseYear;
         this.#paradigm = paradigm;
         this.#compilationType = compilation;
@@ -279,6 +286,13 @@ export class LanguageData {
      */
     getLang() {
         return this.#lang;
+    }
+
+    /**
+     * @returns {String[]}
+     */
+    getAliases() {
+        return this.#aliases;
     }
 
     /**
@@ -368,7 +382,7 @@ function getLanguageDataFromJSON(json) {
     const typing = HelperFunctions.getFlagEnumFromString(LanguageTyping, json.Typing);
     const use = HelperFunctions.getFlagEnumFromString(LanguageUse, json.Use);
 
-    const data = new LanguageData(json.Language, json.Release, paradigm, json.Compilation,
+    const data = new LanguageData(json.Language, json.Aliases, json.Release, paradigm, json.Compilation,
         typing, json.Syntax, use);
     //console.log(`LANGUAGE data for json ${HelperFunctions.objAsString(json)} is ${data} ${HelperFunctions.objAsString(data)}`);
     return data;
@@ -457,20 +471,6 @@ async function initJsonData(path, dataArray, actionOnObject) {
     console.log(`language data: ${langaugeData} `);
     console.log(`daily table data: ${dailyTable} `);
     console.log(`daily code data: ${dailyCode} `);
-
-    // const languageJson = await HelperFunctions.getFileText(languageDataJsonPath);
-    // const languageJsonObj = HelperFunctions.getObjFromJson(languageJson);
-    // langaugeData = [];
-    // for (let i = 0; i < languageJsonObj.length; i++) {
-    //     langaugeData.push(getLanguageDataFromJSON(languageJsonObj[i]));
-    // }
-
-    // const tableJson = await HelperFunctions.getFileText(tableDataJsonPath);
-    // const tableJsonObj = HelperFunctions.getObjFromJson(languageJson);
-    // dailyTable = [];
-    // for (let i = 0; i < languageJsonObj.length; i++) {
-    //     langaugeData.push(getLanguageDataFromJSON(languageJsonObj[i]));
-    // }
 })();
 
 /**
@@ -484,26 +484,36 @@ export function getDataFromLanguageString(str) {
     str = simplifyName(str);
 
     for (let i = 0; i < langaugeData.length; i++) {
-        const langNames = langaugeData[i].getLang();
-        console.log(`checking lang ${langNames} arry: ${Array.isArray(langNames)}`);
+        const simplified = simplifyName(langaugeData[i].getLang());
+        const aliases= langaugeData[i].getAliases();
 
-        if (Array.isArray(langNames)) {
-            for (let j = 0; j < langNames.length; j++) {
-                const simplified = simplifyName(langNames[j]);
-                if (str === simplified) {
+        if (str === simplified) {
+            return langaugeData[i];
+        }
+        else if (aliases && aliases.length>=1){
+            for (let j=0; j<aliases.length; j++){
+                if (str=== simplifyName(aliases[j])){
                     return langaugeData[i];
                 }
-            }
-        }
-        else {
-            const simplified = simplifyName(langNames);
-            if (str === simplified) {
-                return langaugeData[i];
             }
         }
     }
 
     console.warn(`Could not find the language data from argument(str) ${str} `);
+    return null;
+}
+
+/**
+ * @param {String} id 
+ * @returns {CodeData}
+ */
+export function getCodeDataFromId(id){
+    if (!id) return null;
+
+    for (let i=0; i<dailyCode.length; i++){
+        if (dailyCode[i].getId()===id) return dailyCode[i];
+    }
+
     return null;
 }
 

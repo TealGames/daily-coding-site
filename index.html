@@ -227,150 +227,158 @@
                     <p class="inline code-default">}</p>
                 </div>
             </div>
-        </div>
 
-        <div id="game-instructions" class="disabled">
-            <div>
-                <p class="inline code-special-keyword">if</p>
-                <p class="inline code-default">(</p>
-                <p class="inline code-local-variable">wantToGoBack</p>
-                <p class="inline code-default ">) {</p>
+            <div id="game-instructions" class="disabled">
+                <div>
+                    <p class="inline code-special-keyword">if</p>
+                    <p class="inline code-default">(</p>
+                    <p class="inline code-local-variable">wantToGoBack</p>
+                    <p class="inline code-default ">) {</p>
+                    <p class="code-new-line"></p>
+                    <div id="instructions-return-container">
+                        <div id="instructions-main-return-container">
+                            <button type="button" class="button return-main-button dark-on-hover">
+                                <div>
+                                    <p class="inline code-tab-space code-method">ReturnToMain</p>
+                                    <p class="inline code-default body-text-shrink">();</p>
+                                </div>
+                            </button>
+                        </div>
+                        <div id="instructions-game-return-container">
+                            <button type="button" id="return-game-button" class="button dark-on-hover">
+                                <div>
+                                    <p class="inline code-tab-space code-method">ReturnToGame</p>
+                                    <p class="inline code-default body-text-shrink">();</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="code-new-line"></p>
+                    <p class="inline code-default">}</p>
+                    <p class="code-2-new-line"></p>
+                </div>
+    
+                <div id="default-mode-instructions">
+                    <p class="inline medium-text code-comment">//Default Mode</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment">/* In default mode you have to guess the correct</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment">programming language from a snippet of code.</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment">When you guess incorrectly, another line of code</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment">will appear. Your goal: guess the language in 5 attempts!
+                        */</p>
+                </div>
+    
                 <p class="code-new-line"></p>
-                <div id="instructions-return-container">
-                    <div id="instructions-main-return-container">
+    
+                <div id="table-mode-instructions" class="medium-text">
+                    <p></p>
+                    <p class="inline medium-text code-comment">//Table Mode</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment">/* In table mode you have to guess the correct </p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment">programming language from the language</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment">categories. After you guess a language, a row of that</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment">language's values in the different categories</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment">will show up in 1 of 3 colors: red for wrong, yellow</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment"> for partially right and green for right. If you are</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment">unsure what the category means, click on the category
+                        title</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment">to get redirected to a page that explains it.</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment">You will have 5 attempts to guess the language! */</p>
+                </div>
+    
+                <p class="code-new-line"></p>
+    
+                <div id="name-mode-instructions" class="medium-text"></div>
+                    <p></p>
+                    <p class="inline medium-text code-comment">//Name Mode</p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment">/* In name mode, your goal is to guess as many </p>
+                    <p class="code-new-line"></p>
+                    <p class="inline medium-text code-comment">programming languages as you can in 60 seconds. */</p>
+                </div>
+            </div>
+
+            <div id="game-display" class="body-text disabled">
+                <div id="non-gameplay-code" class="body-text unfocused-code">
+                    <div>
+                        <p class="inline code-special-keyword">if</p>
+                        <p class="inline code-default">(</p>
+                        <p class="inline code-local-variable">unsureHowToPlay</p>
+                        <p class="inline code-default ">) {</p>
+                        <p class="code-new-line"></p>
+                        <button type="button" class="button dark-on-hover instruction-button ">
+                            <div>
+                                <p class="inline code-tab-space code-method">LearnRules</p>
+                                <p class="inline code-default body-text-shrink">();</p>
+                            </div>
+                        </button>
+                        <p class="code-new-line"></p>
+                        <p class="inline code-default">}</p>
+                    </div>
+    
+                    <div id="game-return-main-container">
+                        <p class="inline code-special-keyword">else if</p>
+                        <p class="inline code-default">(</p>
+                        <p class="inline code-local-variable">wantToGoBack</p>
+                        <p class="inline code-default ">) {</p>
+                        <p class="code-new-line"></p>
                         <button type="button" class="button return-main-button dark-on-hover">
                             <div>
                                 <p class="inline code-tab-space code-method">ReturnToMain</p>
                                 <p class="inline code-default body-text-shrink">();</p>
                             </div>
                         </button>
+                        <p class="code-new-line"></p>
+                        <p class="inline code-default">}</p>
                     </div>
-                    <div id="instructions-game-return-container">
-                        <button type="button" id="return-game-button" class="button dark-on-hover">
+    
+                    <div id="language-pick-toggle-container">
+                        <button id="language-pick-toggle" type="button" class="button dark-on-hover">
                             <div>
-                                <p class="inline code-tab-space code-method">ReturnToGame</p>
-                                <p class="inline code-default body-text-shrink">();</p>
+                                <p class="inline code-default-keyword">boolean</p>
+                                <p class="inline code-local-variable">showLanguageDropdown</p>
+                                <p class="inline code-default">=</p>
+                                <p id="language-pick-toggle-state" class="inline code-default-keyword">true</p>
+                                <p class="inline code-default">;</p>
                             </div>
                         </button>
+                        <p class="code-2-new-line"></p>
                     </div>
                 </div>
-                <p class="code-new-line"></p>
-                <p class="inline code-default">}</p>
-                <p class="code-2-new-line"></p>
-            </div>
-
-            <div id="default-mode-instructions">
-                <p class="inline medium-text code-comment">//Default Mode</p>
-                <p class="code-new-line"></p>
-                <p class="inline medium-text code-comment">/* In default mode you have to guess the correct</p>
-                <p class="code-new-line"></p>
-                <p class="inline medium-text code-comment">programming language from a snippet of code.</p>
-                <p class="code-new-line"></p>
-                <p class="inline medium-text code-comment">When you guess incorrectly, another line of code</p>
-                <p class="code-new-line"></p>
-                <p class="inline medium-text code-comment">will appear. Your goal: guess the language in 5 attempts!
-                    */</p>
-            </div>
-
-            <p class="code-1-new-line"></p>
-
-            <div id="table-mode-instructions" class="medium-text">
-                <p></p>
-                <p class="inline medium-text code-comment">//Table Mode</p>
-                <p class="code-new-line"></p>
-                <p class="inline medium-text code-comment">/* In table mode you have to guess the correct </p>
-                <p class="code-new-line"></p>
-                <p class="inline medium-text code-comment">programming language from the language</p>
-                <p class="code-new-line"></p>
-                <p class="inline medium-text code-comment">categories. After you guess a language, a row of that</p>
-                <p class="code-new-line"></p>
-                <p class="inline medium-text code-comment">language's values in the different categories</p>
-                <p class="code-new-line"></p>
-                <p class="inline medium-text code-comment">will show up in 1 of 3 colors: red for wrong, yellow</p>
-                <p class="code-new-line"></p>
-                <p class="inline medium-text code-comment"> for partially right and green for right. If you are</p>
-                <p class="code-new-line"></p>
-                <p class="inline medium-text code-comment">unsure what the category means, click on the category
-                    title</p>
-                <p class="code-new-line"></p>
-                <p class="inline medium-text code-comment">to get redirected to a page that explains it.</p>
-                <p class="code-new-line"></p>
-                <p class="inline medium-text code-comment">You will have 5 attempts to guess the language! */</p>
-            </div>
-        </div>
-
-        <div id="game-display" class="body-text disabled">
-            <div id="non-gameplay-code" class="body-text unfocused-code">
-                <div>
-                    <p class="inline code-special-keyword">if</p>
-                    <p class="inline code-default">(</p>
-                    <p class="inline code-local-variable">unsureHowToPlay</p>
-                    <p class="inline code-default ">) {</p>
-                    <p class="code-new-line"></p>
-                    <button type="button" class="button dark-on-hover instruction-button ">
-                        <div>
-                            <p class="inline code-tab-space code-method">LearnRules</p>
-                            <p class="inline code-default body-text-shrink">();</p>
+    
+                <div class="body-text">
+                    <!-- <p class="inline code-comment">//Guess from code:</p> -->
+                    <div id="code-display-area">
+    
+                        <div id="code-id-tab">
+                            <div class="flex-centered code-comment">
+                                <p class="no-margins inline small-text">ID:</p>
+                                <b>
+                                    <p id="code-id-tab-text" class="no-margins inline medium-text"></p>
+                                </b>
+                            </div>
                         </div>
-                    </button>
-                    <p class="code-new-line"></p>
-                    <p class="inline code-default">}</p>
-                </div>
-
-                <div id="game-return-main-container">
-                    <p class="inline code-special-keyword">else if</p>
-                    <p class="inline code-default">(</p>
-                    <p class="inline code-local-variable">wantToGoBack</p>
-                    <p class="inline code-default ">) {</p>
-                    <p class="code-new-line"></p>
-                    <button type="button" class="button return-main-button dark-on-hover">
-                        <div>
-                            <p class="inline code-tab-space code-method">ReturnToMain</p>
-                            <p class="inline code-default body-text-shrink">();</p>
-                        </div>
-                    </button>
-                    <p class="code-new-line"></p>
-                    <p class="inline code-default">}</p>
-                </div>
-
-                <div id="language-pick-toggle-container">
-                    <button id="language-pick-toggle" type="button" class="button dark-on-hover">
-                        <div>
-                            <p class="inline code-default-keyword">boolean</p>
-                            <p class="inline code-local-variable">showLanguageDropdown</p>
-                            <p class="inline code-default">=</p>
-                            <p id="language-pick-toggle-state" class="inline code-default-keyword">true</p>
-                            <p class="inline code-default">;</p>
-                        </div>
-                    </button>
-                    <p class="code-2-new-line"></p>
-                </div>
-            </div>
-
-            <div class="body-text">
-                <!-- <p class="inline code-comment">//Guess from code:</p> -->
-                <div id="code-display-area">
-
-                    <div id="code-id-tab">
-                        <div class="flex-centered code-comment">
-                            <p class="no-margins inline small-text">ID:</p>
-                            <b>
-                                <p id="code-id-tab-text" class="no-margins inline medium-text"></p>
-                            </b>
+    
+                        <span id="name-game-timer" class="code-comment"></span>
+    
+                        <div id="game-display-container" class="small-text">
                         </div>
                     </div>
-
-                    <span id="name-game-timer" class="code-comment"></span>
-
-                    <div id="game-display-container" class="small-text">
-                    </div>
                 </div>
-
             </div>
         </div>
     </div>
-    </div>
-
 
     <div id="footer" class="console background-2">
         <hr id="footer-line" class="no-margins">
@@ -391,7 +399,8 @@
             <select id="language-select" title="options" placeholder="language select"
                 class="body-text code-font terminal-ui"></select>
 
-            <button id="submit-language-button" type="button" class="code-font body-text dark-on-hover terminal-ui">
+            <button id="submit-language-button" type="button" 
+            class="code-font body-text dark-on-hover terminal-ui fit-content">
                 Submit Answer</button>
         </div>
 

@@ -3,7 +3,7 @@ import { LanguageParadigm, CompilationType, LanguageTyping, LanguageSyntax, Lang
 import { codeStylesPassesTests } from "./CodeHtmlConverter.js";
 
 const languageJsonProperties =
-    ["Language", "Release", "Paradigm", "Compilation", "Typing", "Syntax", "Use"];
+    ["Language", "Aliases", "Release", "Paradigm", "Compilation", "Typing", "Syntax", "Use"];
 
 const tableJsonProperties = ["Year", "Month", "Day", "Language"];
 const codeJsonProperties = ["ID", "Year", "Month", "Day", "Language", "Code", "Order"];
@@ -22,22 +22,23 @@ export function validateLanguageDataJSON(jsonObj) {
     }
 
     const hasLang = hasProperty(jsonObj, languageJsonProperties[0]);
-    const hasRelease = hasProperty(jsonObj, languageJsonProperties[1]);
-    const hasParadigm = hasProperty(jsonObj, languageJsonProperties[2]);
-    const hasCompile = hasProperty(jsonObj, languageJsonProperties[3]);
-    const hasTyping = hasProperty(jsonObj, languageJsonProperties[4]);
-    const hasSyntax = hasProperty(jsonObj, languageJsonProperties[5]);
-    const hasUse = hasProperty(jsonObj, languageJsonProperties[6]);
+    const hasAliases= hasProperty(jsonObj, languageJsonProperties[1]);
+    const hasRelease = hasProperty(jsonObj, languageJsonProperties[2]);
+    const hasParadigm = hasProperty(jsonObj, languageJsonProperties[3]);
+    const hasCompile = hasProperty(jsonObj, languageJsonProperties[4]);
+    const hasTyping = hasProperty(jsonObj, languageJsonProperties[5]);
+    const hasSyntax = hasProperty(jsonObj, languageJsonProperties[6]);
+    const hasUse = hasProperty(jsonObj, languageJsonProperties[7]);
 
-    if (!hasLang || !hasRelease || !hasParadigm || !hasCompile
+    if (!hasLang || !hasAliases || !hasRelease || !hasParadigm || !hasCompile
         || !hasTyping || !hasSyntax || !hasUse) return false;
 
     const validLanguage = propertyHasValue(jsonObj, languageJsonProperties[0], HelperFunctions.getPropertiesOfObject(CodingLanguage));
-    const validParadigm = propertyHasValue(jsonObj, languageJsonProperties[2], HelperFunctions.getPropertiesOfObject(LanguageParadigm));
-    const validComp = propertyHasValue(jsonObj, languageJsonProperties[3], HelperFunctions.getPropertiesOfObject(CompilationType));
-    const validType = propertyHasValue(jsonObj, languageJsonProperties[4], HelperFunctions.getPropertiesOfObject(LanguageTyping));
-    const validSyntax = propertyHasValue(jsonObj, languageJsonProperties[5], HelperFunctions.getPropertiesOfObject(LanguageSyntax));
-    const validUse = propertyHasValue(jsonObj, languageJsonProperties[6], HelperFunctions.getPropertiesOfObject(LanguageUse));
+    const validParadigm = propertyHasValue(jsonObj, languageJsonProperties[3], HelperFunctions.getPropertiesOfObject(LanguageParadigm));
+    const validComp = propertyHasValue(jsonObj, languageJsonProperties[4], HelperFunctions.getPropertiesOfObject(CompilationType));
+    const validType = propertyHasValue(jsonObj, languageJsonProperties[5], HelperFunctions.getPropertiesOfObject(LanguageTyping));
+    const validSyntax = propertyHasValue(jsonObj, languageJsonProperties[6], HelperFunctions.getPropertiesOfObject(LanguageSyntax));
+    const validUse = propertyHasValue(jsonObj, languageJsonProperties[7], HelperFunctions.getPropertiesOfObject(LanguageUse));
 
     if (!validLanguage || !validParadigm || !validComp || !validType || !validSyntax || !validUse) return false;
     return true;

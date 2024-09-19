@@ -365,7 +365,7 @@ export class HelperFunctions {
 
         let result = target;
         let valIndex = target.indexOf(replaceVal);
-        while (valIndex >= 0 && result.length > 0) {
+        while (valIndex >= 0 && valIndex<result.length) {
             let newStr = result.substring(0, valIndex) + newVal + result.substring(valIndex + replaceVal.length);
             result = newStr;
 
