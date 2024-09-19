@@ -103,5 +103,76 @@
                 4
             ]
         ]
+    },
+
+    {
+        "ID": 51,
+        "Year": 2024,
+        "Month": 8,
+        "Day": 5,
+        "Language": "C#",
+        "Code": [
+            "<key>class</key> <obj>Program</obj>",
+            "{",
+            "<t><key>public static void </key><fnc>Main</fnc>(<obj>string</obj>[]<var>args</var>)",
+            "<t>{",
+            "<t2><obj>Console</obj>.<fnc>WriteLine</fnc>(<str>\"What is your username?\"</str>);",
+            "<t2><obj>string</obj> <var>username</var>= <obj>Console</obj>.<fnc>ReadLine</fnc>();",
+            "<t2><obj>Console</obj>.<fnc>WriteLine</fnc>(<str>\"Your username is \"</str>+ <var>username</var>);",
+            "<t>}",
+            "}"
+        ],
+        "Order": [
+            [
+                0
+            ],
+            [
+                5
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                6,
+                8,
+                9
+            ]
+        ]
+    },
+    {
+        "ID": 52,
+        "Year": 2024,
+        "Month": 8,
+        "Day": 6,
+        "Language": "C#",
+        "Code": [
+            "<key>int</key> <var>accountBalance</var>=<key>0</key>;",
+            "<obj>string</obj> <var>statement</var>= <str>\"Enter the amount you want to withdraw: \"</str>;",
+            "<obj>Console</obj>.<fnc>WriteLine</fnc>(<var>statement</var>);",
+            "<key>int</key> <var>withdraw</var>= <obj>Convert</obj>.<fnc>ToInt32</fnc>(<obj>Console</obj>.<fnc>ReadLine</fnc>());",
+            "<var>accountBalance</var>-=<var>withdraw</var>;"
+        ],
+        "Order": [
+            [
+                4
+            ],
+            [
+                0
+            ],
+            [
+                1
+            ],
+            [
+                2
+            ],
+            [
+                3
+            ]
+        ]
     }
 ]
