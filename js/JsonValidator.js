@@ -22,7 +22,7 @@ export function validateLanguageDataJSON(jsonObj) {
     }
 
     const hasLang = hasProperty(jsonObj, languageJsonProperties[0]);
-    const hasAliases= hasProperty(jsonObj, languageJsonProperties[1]);
+    const hasAliases = hasProperty(jsonObj, languageJsonProperties[1]);
     const hasRelease = hasProperty(jsonObj, languageJsonProperties[2]);
     const hasParadigm = hasProperty(jsonObj, languageJsonProperties[3]);
     const hasCompile = hasProperty(jsonObj, languageJsonProperties[4]);
@@ -97,7 +97,7 @@ export function validateCodeDataJSON(jsonObj) {
     const validLanguage = propertyHasValue(jsonObj, codeJsonProperties[4], HelperFunctions.getPropertiesOfObject(CodingLanguage));
     if (!validLanguage) return false;
 
-    if (!codeStylesPassesTests(jsonObj[codeJsonProperties[5]])) return false;
+    if (!codeStylesPassesTests(jsonObj[codeJsonProperties[0]], jsonObj[codeJsonProperties[5]])) return false;
 
     return true;
 }
