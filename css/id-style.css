@@ -145,11 +145,17 @@
     border: 2px solid rgb(61, 61, 61);
     border-radius: 5px;
     position: relative;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    gap:5%;
+
     margin-bottom: 1%;
     padding: 1%;
     right: 0%;
     top: 0%;
 
+    min-width: fit-content;
     width: 100px;
     height: 20px;
 }

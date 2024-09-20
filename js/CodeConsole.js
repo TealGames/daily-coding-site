@@ -65,16 +65,8 @@ function updateStyle() {
     //console.log(`center container height: ${centerRect.height} pos ${centerRect.y+centerRect.height} footer start: ${footerRect.top}`);
     console.log(`body container height: ${bodyRect.height} pos ${bodyRect.y + bodyRect.height} footer start: ${footerRect.top}`);
 
-    // else (HelperFunctions.doesContentNotFitPage()) {
-    //     footer.style.top = `${100 - startShowConsoleHeight}%`;
-    // }
-    // else {
-    //     footer.style.top = `${100 - startShowConsoleHeight}%`;
-    // }
-    //footer.style.top = `${100 - startShowConsoleHeight}%`;
     if (isConsoleShown && window.innerWidth <= 570) {
         console.log(`ADJUSTING CONSOLE top of display: ${gameDisplayRect.top + gameDisplayRect.height}`);
-        //footer.style.removeProperty(`height`);
         footer.style.removeProperty(`height`);
         footer.style.top = `${gameDisplayRect.top + gameDisplayRect.height + extraConsoleBuffer}px`;
         footer.style.bottom = "0%";
@@ -93,14 +85,7 @@ function updateStyle() {
         console.log(`choosing strict height top: ${100 - footer.style.height}`);
         footer.style.removeProperty(`top`);
         footer.style.removeProperty(`bottom`);
-        //footer.style.top = `${100 - footer.style.height}%`;
     }
-    //footer.style.top = `${100 - footer.style.height}%`;
-
-    //bottomGradient.style.top = `${100 - footerHeight}%`;
-    // bottomGradient.style.bottom = `${footerHeight + gradientHeight}%`;
-    // console.log(`update gradient: ${bottomGradient} new top: ${100 - footerHeight} actual: ${bottomGradient.style.top}`);
-
 
     const gameDisplayBottomPos = gameDisplayRect.y + gameDisplayRect.height;
 }
@@ -143,9 +128,12 @@ function updateFromPage(e) {
     if (e.detail.pageEnabledId !== PageId.GameDisplay) {
         hideConsole();
     }
-    // else {
-    //     showConsole();
-    // }
+
+    //we cant just look for game display to show it since we only want to show it after init
+    else if (e.detail.pageEnabledId===PageId.GameDisplay && 
+        e.detail.pastPageId===PageId.GameInstructions){
+        showConsole();
+    }
 }
 
 function clearLabelText() {
@@ -256,11 +244,21 @@ function requestRating() {
     label.innerHTML += html;
 }
 
-function checkLanguageDropdownState() {
+function toggleLanguageDropdown(){
     const currentValue = HelperFunctions.replaceAll(languageDropdownText.innerHTML, " ", "").toLowerCase();
+    if (currentValue === "true"){
+        allowLanguageDropdowns=false;
+    }
+    else{
+        allowLanguageDropdowns=true;
+    }
 
+    checkLanguageDropdownState();
+}
+
+function checkLanguageDropdownState() {
     //Actions for false
-    if (currentValue === "true") {
+    if (!allowLanguageDropdowns) {
         languageDropdownText.innerHTML = "false";
         allowLanguageDropdowns = false;
         HelperFunctions.disableElement(languageDropdownId);
@@ -302,7 +300,7 @@ function checkLanguageDropdownState() {
 
     languageDropdownText = document.getElementById(languageDropdownTextId);
     languageDropdownButton = document.getElementById(languageDropdownButtonId);
-    languageDropdownButton.addEventListener("click", (e) => checkLanguageDropdownState());
+    languageDropdownButton.addEventListener("click", (e) => toggleLanguageDropdown());
 
     languageDropdown = document.getElementById(languageDropdownId);
     languageDropdown.addEventListener("change", async (e) => {

@@ -77,6 +77,9 @@ export const PlayingGameType = Object.freeze(
 let playingGame = PlayingGameType.None;
 let lastGameWasSuccess = false;
 
+const creditsJsonPath="./data/Credits.json";
+let credits=[];
+
 function initGameDisplay() {
     inputField = document.getElementById(inputFieldId);
     displayContainer = document.querySelector(`#${dislayContainerId}`);
@@ -91,9 +94,21 @@ function initGameDisplay() {
     console.log(`todays table: ${HelperFunctions.objAsString(table)}`);
     todaysCodeDisplay = getHtmlFromCodeData(code);
 
-    const idWith0s = HelperFunctions.padWithLeadingZeros(code.getId(), maxCodeIdLength);
+    const id= code.getId();
+    const idWith0s = HelperFunctions.padWithLeadingZeros(id, maxCodeIdLength);
     if (code) codeIdText.innerHTML = `#${idWith0s}`;
     else codeIdText.innerHTML = "null_id";
+
+    const contributorData=getContributorForId(id);
+    if (contributorData.Name){
+        let contributorMessage= "";
+
+        if (contributorData.Link){
+            contributorMessage+=`<a class="code-comment" href="${contributorData.Link}">${contributorData.Name}</a>`;
+        }
+        else contributorMessage+=contributorData.Name;
+        codeIdText.innerHTML+=`<em class="no-margins inline small-text">(${contributorMessage})</em>`;
+    }   
 
     appearOrderIndex = -1;
     appearLineIndices = [];
@@ -117,6 +132,28 @@ function initGameDisplay() {
     clearUpdateTime();
     enableInput();
     clearDisplay();
+}
+
+
+/**
+ * @param {String} id 
+ * @returns {Object}
+ */
+function getContributorForId(id){
+    let result={
+        "Name": "",
+        "Link": ""
+    }
+    if (!credits) return result;
+
+    for (let i=0; i<credits.length; i++){
+        if (credits[i].id===id){
+            result.Name=credits[i].name;
+            result.Link= credits[i].link;
+            return result;
+        }
+    }
+    return result;
 }
 
 function nextLine() {
@@ -353,7 +390,7 @@ function clearUpdateTime() {
     HelperFunctions.addClass(timerElement, defaultTimerCssClass);
 }
 
-(function start() {
+(async function start() {
     playingGame = PlayingGameType.None;
     timerElement = document.getElementById(timerElementId);
     displayArea = document.getElementById(displayAreaId);
@@ -426,6 +463,9 @@ function clearUpdateTime() {
         document.dispatchEvent(new CustomEvent("gameDisplayInit"));
         startTimer();
     });
+
+    const creditsJson= await HelperFunctions.getFileText(creditsJsonPath);
+    if (creditsJson) credits= HelperFunctions.getObjFromJson(creditsJson);
 }());
 
 function gameEnd(isSuccess) {

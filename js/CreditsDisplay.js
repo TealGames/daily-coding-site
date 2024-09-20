@@ -3,7 +3,7 @@ import { HelperFunctions } from "./HelperFunctions.js";
 const containerId="credit-names";
 let container=null;
 
-const jsonPath="../data/Credits.json";
+const jsonPath="./data/Credits.json";
 let json="";
 let data=[];
 
