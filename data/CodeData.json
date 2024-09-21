@@ -82,7 +82,7 @@
         "Code": [
             "<obj>String</obj> <var>myName</var>= <str>\"William Shakespeare\"</str>;",
             "<key>int</key> <var>age</var>= <key>408</key>;",
-            "<spec>if</spc> (<var>year</var>==<key>2025</key>) <var>age</var>++;",
+            "<spc>if</spc> (<var>year</var>==<key>2025</key>) <var>age</var>++;",
             "<obj>String</obj> <var>msg</var> = STR.<str>\"Hello my name is \\{myName}. I am \\{age} years old\"</str>;",
             "<obj>System</obj>.<key>out</key>.<fnc>println</fnc>(<var>msg</var>);"
         ],

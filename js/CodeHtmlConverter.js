@@ -11,13 +11,14 @@ const objectTag = "obj";
 const enumTag = "enm";
 const stringTag = "str";
 const commentTag = "cmt";
-const allTags = [defaultTag, defaultKeywordTag, specialKeywordTag, variableTag,
-    functionTag, objectTag, enumTag, stringTag, commentTag];
 
 //new line is the only tag that does not need a closing pair of tag
 const newLineTag = "new";
 //adds the set amount of tabs (if t2 then 2 tabs are added)
 const tabTag = "t";
+
+const allTags = [defaultTag, defaultKeywordTag, specialKeywordTag, variableTag,
+    functionTag, objectTag, enumTag, stringTag, commentTag, newLineTag];
 
 //tab tags must be first index in line
 const tabTagOnlyAtStart = true;
@@ -315,29 +316,6 @@ export function codeStylesPassesTests(id, strings) {
 
     for (let i = 0; i < strings.length; i++) {
         line = strings[i];
-        instancesOfTabTag = HelperFunctions.getIndicesOfString(line, `<${tabTag}`);
-
-        if (instancesOfTabTag.length > 1) {
-            failTest(i, "More than one tab tag per line is not allowed");
-            return false;
-        }
-        else if (instancesOfTabTag.length == 0) continue;
-
-        const index = instancesOfTabTag[0];
-        if (index !== 0) {
-            failTest(i, "Tab tags must start at index 0 of line");
-            return false;
-        }
-
-        //If we can't get after it, it might be a multi tab tag so we move up one more
-        let charAfterTag = line.charAt(index + tabTag.length + 2);
-        if (charAfterTag === ">") charAfterTag = line.charAt(index + tabTag.length + 3);
-
-        if (charAfterTag !== "<" && !(defaultKeywordTag ||
-            (HelperFunctions.isSpecialCharacter(charAfterTag) && autoAddDefToSymbols))) {
-            failTest(i, "Tab tags must be followed by another tag");
-            return false;
-        }
 
         //CORRECT TAG SYNTAX TEST
         tagIndices = HelperFunctions.getIndicesOfString(line, `<`);
@@ -366,13 +344,41 @@ export function codeStylesPassesTests(id, strings) {
             }
         }
 
+        //CHECK FOR START AND CLOSING TAGS
         let allTagIndices = [];
         for (let j = 0; j < allTags.length; j++) {
+
+            //New line tag does not need closing tag
+            if (allTags[j]==newLineTag) continue;
+
             allTagIndices = HelperFunctions.getIndicesOfString(line, `${allTags[j]}>`);
             if (allTagIndices && allTagIndices.length !== 0 && allTagIndices.length % 2 !== 0) {
                 failTest(i, `Found tag that either has no closing or start tag: ${allTags[j]}`);
                 return false;
             }
+        }
+
+        instancesOfTabTag = HelperFunctions.getIndicesOfString(line, `<${tabTag}`);
+        if (instancesOfTabTag.length > 1) {
+            failTest(i, "More than one tab tag per line is not allowed");
+            return false;
+        }
+        else if (instancesOfTabTag.length == 0) continue;
+
+        const index = instancesOfTabTag[0];
+        if (index !== 0) {
+            failTest(i, "Tab tags must start at index 0 of line");
+            return false;
+        }
+
+        //If we can't get after it, it might be a multi tab tag so we move up one more
+        let charAfterTag = line.charAt(index + tabTag.length + 2);
+        if (charAfterTag === ">") charAfterTag = line.charAt(index + tabTag.length + 3);
+
+        if (charAfterTag !== "<" && !(defaultKeywordTag ||
+            (HelperFunctions.isSpecialCharacter(charAfterTag) && autoAddDefToSymbols))) {
+            failTest(i, "Tab tags must be followed by another tag");
+            return false;
         }
     }
     return true;
