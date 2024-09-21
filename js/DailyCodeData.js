@@ -3,7 +3,7 @@ import { validateCodeDataJSON, validateLanguageDataJSON, validateTableDataJSON }
 
 const getCodeRandomly = true;
 const useJson = true;
-const codingLanguagesJson= "./data/Languages.json";
+const codingLanguagesJson = "./data/Languages.json";
 const languageDataJsonPath = "./data/LanguageData.json";
 const tableDataJsonPath = "./data/TableData.json";
 const codeDataJsonPath = "./data/CodeData.json";
@@ -12,7 +12,7 @@ let langaugeData = [];
 let dailyTable = [];
 let dailyCode = [];
 
-const todayForcedCodeId=-1;
+const todayForcedCodeId = 53;
 
 export const maxCodeIdLength = 4;
 
@@ -68,7 +68,7 @@ export const CodingLanguage = {}
 //         "PHP": "PHP",
 //     }
 // );
-export const codingLanguages=[];
+export const codingLanguages = [];
 
 export class CodeData {
     #id;
@@ -167,7 +167,7 @@ function getTodaysDataUTC(collection) {
 * @returns {CodeData}
 */
 export function getTodaysCodeDataUTC() {
-    if (todayForcedCodeId>=0) return getCodeDataFromId(todayForcedCodeId);
+    if (todayForcedCodeId >= 0) return getCodeDataFromId(todayForcedCodeId);
 
     return getTodaysDataUTC(dailyCode);
 }
@@ -275,7 +275,7 @@ export class LanguageData {
      */
     constructor(lang, aliases, releaseYear, paradigm, compilation, typed, syntax, languageUse) {
         this.#lang = lang;
-        this.#aliases= aliases;
+        this.#aliases = aliases;
         this.#releaseYear = releaseYear;
         this.#paradigm = paradigm;
         this.#compilationType = compilation;
@@ -435,9 +435,9 @@ export function getDataFromLanguage(language) {
 /**
  * @returns {string[]}
  */
-function getAllLanguagesWithData(){
-    let langs=[];
-    for (let i=0; i<langaugeData.length; i++){
+function getAllLanguagesWithData() {
+    let langs = [];
+    for (let i = 0; i < langaugeData.length; i++) {
         langs.push(langaugeData[i].getLang());
     }
     return langs;
@@ -478,11 +478,11 @@ async function initJsonData(path, dataArray, actionOnObject) {
         return getTableDataFromJSON(object);
     });
 
-    if (dailyTable.length!=0 && dailyTable.length!=codingLanguages.length){
-        const tableLangs=getAllLanguagesWithData();
-        const codeLangs= getAllCodingLanguages();
-        const diff= HelperFunctions.getDifferenceFromArray(codeLangs, tableLangs);
-        if (diff && diff.length>0) console.error(`from all table code data, the following languages `+
+    if (dailyTable.length != 0 && dailyTable.length != codingLanguages.length) {
+        const tableLangs = getAllLanguagesWithData();
+        const codeLangs = getAllCodingLanguages();
+        const diff = HelperFunctions.getDifferenceFromArray(codeLangs, tableLangs);
+        if (diff && diff.length > 0) console.error(`from all table code data, the following languages ` +
             `have no corresponding data (but can be guessed): ${diff}`);
     }
 
@@ -496,19 +496,19 @@ async function initJsonData(path, dataArray, actionOnObject) {
 
 })();
 
-async function initCodingLanguages(){
+async function initCodingLanguages() {
     const json = await HelperFunctions.getFileText(codingLanguagesJson);
     const jsonObj = HelperFunctions.getObjFromJson(json);
 
     //If we have all the languages from json, we don't need to readd it
-    if (codingLanguages && codingLanguages.length>0){
-        if (jsonObj.length<=codingLanguages.length) return;
-        else codingLanguages.length=0;
+    if (codingLanguages && codingLanguages.length > 0) {
+        if (jsonObj.length <= codingLanguages.length) return;
+        else codingLanguages.length = 0;
     }
 
-    let codeLangName="";
-    for (let i=0; i<jsonObj.length; i++){
-        codeLangName=jsonObj[i];
+    let codeLangName = "";
+    for (let i = 0; i < jsonObj.length; i++) {
+        codeLangName = jsonObj[i];
         codingLanguages.push(codeLangName);
         //console.log(`after adding lang ${codeLangName} val: ${CodingLanguage[codeLangName]}`)
     }
@@ -518,25 +518,25 @@ async function initCodingLanguages(){
 /**
  * @returns {String[]}
  */
-export async function getAllCodingLanguagesSafeInit(){
-    const firstInit= !codingLanguages || codingLanguages.length<=0;
-    if (firstInit){
+export async function getAllCodingLanguagesSafeInit() {
+    const firstInit = !codingLanguages || codingLanguages.length <= 0;
+    if (firstInit) {
         await initCodingLanguages();
     }
-    
+
     return getAllCodingLanguages();
 }
 
 /**
  * @returns {String[]}
  */
-export function getAllCodingLanguages(){
-    let copy=[];
-    for (let i=0; i<codingLanguages.length; i++){
+export function getAllCodingLanguages() {
+    let copy = [];
+    for (let i = 0; i < codingLanguages.length; i++) {
         copy.push(codingLanguages[i]);
     }
-    if (!copy || copy.length==0){
-        console.error(`tried to get all coding languages but found 0. This could be due to the fact `+
+    if (!copy || copy.length == 0) {
+        console.error(`tried to get all coding languages but found 0. This could be due to the fact ` +
             `that the language data is not init yet. Try retrieving using safe initialization and async await version`);
     }
     return copy;
@@ -554,14 +554,14 @@ export function getDataFromLanguageString(str) {
 
     for (let i = 0; i < langaugeData.length; i++) {
         const simplified = simplifyName(langaugeData[i].getLang());
-        const aliases= langaugeData[i].getAliases();
+        const aliases = langaugeData[i].getAliases();
 
         if (str === simplified) {
             return langaugeData[i];
         }
-        else if (aliases && aliases.length>=1){
-            for (let j=0; j<aliases.length; j++){
-                if (str=== simplifyName(aliases[j])){
+        else if (aliases && aliases.length >= 1) {
+            for (let j = 0; j < aliases.length; j++) {
+                if (str === simplifyName(aliases[j])) {
                     return langaugeData[i];
                 }
             }
@@ -576,11 +576,11 @@ export function getDataFromLanguageString(str) {
  * @param {String} id 
  * @returns {CodeData}
  */
-export function getCodeDataFromId(id){
+export function getCodeDataFromId(id) {
     if (!id) return null;
 
-    for (let i=0; i<dailyCode.length; i++){
-        if (dailyCode[i].getId()===id) return dailyCode[i];
+    for (let i = 0; i < dailyCode.length; i++) {
+        if (dailyCode[i].getId() === id) return dailyCode[i];
     }
 
     return null;
