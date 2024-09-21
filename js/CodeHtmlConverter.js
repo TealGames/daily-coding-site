@@ -11,6 +11,8 @@ const objectTag = "obj";
 const enumTag = "enm";
 const stringTag = "str";
 const commentTag = "cmt";
+const allTags = [defaultTag, defaultKeywordTag, specialKeywordTag, variableTag,
+    functionTag, objectTag, enumTag, stringTag, commentTag];
 
 //new line is the only tag that does not need a closing pair of tag
 const newLineTag = "new";
@@ -18,11 +20,11 @@ const newLineTag = "new";
 const tabTag = "t";
 
 //tab tags must be first index in line
-const tabTagOnlyAtStart=true;
+const tabTagOnlyAtStart = true;
 //one lined symbols will auto get the def tag
-const autoAddDefToSymbols=false;
+const autoAddDefToSymbols = false;
 
-const noTagFoundTag= defaultTag;
+const noTagFoundTag = defaultTag;
 
 class CodeWordTags {
     #tagName;
@@ -112,61 +114,60 @@ function tryAddCodeTags(code) {
  * @param {String[]} strings 
  * @returns {String[]}
  */
-export function tryAddTagToSymbols(strings){
-    const symbols= HelperFunctions.specialCharacters;
-    const startTag= `<${defaultTag}>`;
-    const endTag= `</${defaultTag}>`;
+export function tryAddTagToSymbols(strings) {
+    const symbols = HelperFunctions.specialCharacters;
+    const startTag = `<${defaultTag}>`;
+    const endTag = `</${defaultTag}>`;
 
-    let line="";
-    let symbolIndices=[];
-    let index=-1;
-    let result=[];
+    let line = "";
+    let symbolIndices = [];
+    let index = -1;
+    let result = [];
 
-    for (let i=0; i<strings.length; i++){
-        line= strings[i];
+    for (let i = 0; i < strings.length; i++) {
+        line = strings[i];
         result.push(line);
 
-        for (let j=0; j<symbols.length; j++){
-            if (symbols[j]===">" || symbols[j]==="<" || symbols[j]=="\"") continue;
+        for (let j = 0; j < symbols.length; j++) {
+            if (symbols[j] === ">" || symbols[j] === "<" || symbols[j] == "\"") continue;
             //symbolIndices= HelperFunctions.getIndicesOfString(line, symbols[j]);
 
-            index= result[i].indexOf(symbols[j]);
-            while (index>=0){
+            index = result[i].indexOf(symbols[j]);
+            while (index >= 0) {
                 //If we already have a tag whether before or after, we don't do anything
                 // if ((index>0 && result[i][index-1]===">") || (index<result[i].length-1 
                 //     && result[i][index+1]==="<")){}
 
                 //If we have enclosing tags around this symbol (and we are sure it is for this symbol)
                 //then we can not do anything for it to not override it
-                if (index>0 && result[i][index-1]===">" && index<result[i].length-2 && 
-                    result[i].substring(index+1, index+3)==="</") {}
+                if (index > 0 && result[i][index - 1] === ">" && index < result[i].length - 2 &&
+                    result[i].substring(index + 1, index + 3) === "</") { }
 
                 //If we have a tag on the left that is not closing (meaning it is for this symbol)
                 //and the next is another symbol it means we can not do anything since
                 //the tag might encompass more than 1 symbol
-                else if (index>=index-tagLength-2 && result[i][index-1]===">" && result[i][index-tagLength-2]!=="/" 
-                    && index<result[i].length-1 && HelperFunctions.isSpecialCharacter(result[i][index+1], ["<", ">"])) 
-                    {}
-                
+                else if (index >= index - tagLength - 2 && result[i][index - 1] === ">" && result[i][index - tagLength - 2] !== "/"
+                    && index < result[i].length - 1 && HelperFunctions.isSpecialCharacter(result[i][index + 1], ["<", ">"])) { }
+
                 //Same condition as the one above, just considering the symbl on the left and end tag on right
-                else if (index>0 && HelperFunctions.isSpecialCharacter(result[i][index-1], ["<", ">"]) && 
-            index<result[i].length-2 && result[i].substring(index+1, index+3)==="</") {}
+                else if (index > 0 && HelperFunctions.isSpecialCharacter(result[i][index - 1], ["<", ">"]) &&
+                    index < result[i].length - 2 && result[i].substring(index + 1, index + 3) === "</") { }
 
                 //If we are just an end tag symbol we also dont do anything
-                else if (symbols[j]==="/" && index>0 && result[i][index-1]==="<"){}
-                else{
-                    result[i]= result[i].substring(0, index)+ startTag+ 
-                    result[i].substring(index, index+1) +endTag+ result[i].substring(index+1);
+                else if (symbols[j] === "/" && index > 0 && result[i][index - 1] === "<") { }
+                else {
+                    result[i] = result[i].substring(0, index) + startTag +
+                        result[i].substring(index, index + 1) + endTag + result[i].substring(index + 1);
                 }
-                
+
                 //If we are at last index in the current line, we don't look anymore
-                if (index>=result[i].length-1) break;
+                if (index >= result[i].length - 1) break;
 
                 //Otherwise we find the next index, which we have to also add
                 //the additional amount of indices to compensate for adding the tag
                 //and then obviously +1 to not include the symbol we just found
-                index= result[i].indexOf(symbols[j], index+startTag.length+1);
-            }   
+                index = result[i].indexOf(symbols[j], index + startTag.length + 1);
+            }
 
             // for (let k=0; k<symbolIndices.length; k++){
             //     index= symbolIndices[k];
@@ -192,7 +193,7 @@ export function tryAddTagToSymbols(strings){
  * @returns {Number}
  */
 export function getCSSClassIfHasTab(string) {
-    
+
     const index = string.indexOf(`<${tabTag}`);
     if (index >= 0) {
         const nextChar = string.charAt(index + tabTag.length + 1);
@@ -239,7 +240,7 @@ function getCSSClassFromTag(tag) {
 }
 
 export class CodeHtmlData {
-    #taggedCode=[];
+    #taggedCode = [];
     #linesText;
     #htmlLines;
     #html = "";
@@ -253,7 +254,7 @@ export class CodeHtmlData {
      * @param {Number[][]} appearOrder - the line(s) that should appear
      */
     constructor(taggedCode, linesText, html, htmlLines, appearOrder) {
-        this.#taggedCode= taggedCode;
+        this.#taggedCode = taggedCode;
         this.#linesText = linesText;
         this.#html = html;
         this.#htmlLines = htmlLines;
@@ -263,7 +264,7 @@ export class CodeHtmlData {
     /**
      * @returns {string[]}
      */
-    getTaggedCode(){
+    getTaggedCode() {
         return this.#taggedCode;
     }
 
@@ -297,44 +298,81 @@ export class CodeHtmlData {
 }
 
 /**
+ * @param {String} id 
  * @param {String[]} strings
  * @returns {Boolean}
  */
-export function codeStylesPassesTests(strings){
+export function codeStylesPassesTests(id, strings) {
 
-    let instancesOfTabTag=[];
-    let line="";
+    let instancesOfTabTag = [];
+    let tagIndices = [];
+    let line = "";
 
-    const failTest= (lineIdx, reason) =>{
-        console.error(`Tried to validate the code style str ${strings} `+
+    const failTest = (lineIdx, reason) => {
+        console.error(`Tried to validate the code style str with id ${id} ` +
             `but line ${strings[lineIdx]} @idx ${lineIdx} failed. Reason: ${reason}`);
     }
 
-    for (let i=0; i<strings.length; i++){
-        line= strings[i];
-        instancesOfTabTag= HelperFunctions.getIndicesOfString(line, `<${tabTag}`);
-        
+    for (let i = 0; i < strings.length; i++) {
+        line = strings[i];
+        instancesOfTabTag = HelperFunctions.getIndicesOfString(line, `<${tabTag}`);
 
-        if (instancesOfTabTag.length>1){
+        if (instancesOfTabTag.length > 1) {
             failTest(i, "More than one tab tag per line is not allowed");
             return false;
         }
-        else if (instancesOfTabTag.length==0) continue;
+        else if (instancesOfTabTag.length == 0) continue;
 
-        const index=instancesOfTabTag[0];
-        if (index!==0){
+        const index = instancesOfTabTag[0];
+        if (index !== 0) {
             failTest(i, "Tab tags must start at index 0 of line");
             return false;
         }
 
         //If we can't get after it, it might be a multi tab tag so we move up one more
-        let charAfterTag= line.charAt(index+tabTag.length+2);
-        if (charAfterTag===">") charAfterTag= line.charAt(index+tabTag.length+3);
+        let charAfterTag = line.charAt(index + tabTag.length + 2);
+        if (charAfterTag === ">") charAfterTag = line.charAt(index + tabTag.length + 3);
 
-        if (charAfterTag!=="<" && !(defaultKeywordTag || 
-            (HelperFunctions.isSpecialCharacter(charAfterTag) && autoAddDefToSymbols))){
+        if (charAfterTag !== "<" && !(defaultKeywordTag ||
+            (HelperFunctions.isSpecialCharacter(charAfterTag) && autoAddDefToSymbols))) {
             failTest(i, "Tab tags must be followed by another tag");
             return false;
+        }
+
+        //CORRECT TAG SYNTAX TEST
+        tagIndices = HelperFunctions.getIndicesOfString(line, `<`);
+        let tagIndex = -1;
+        let tagSubstring = "";
+        let isEndTag = false;
+        for (let j = 0; j < tagIndices.length; j++) {
+            tagIndex = tagIndices[j];
+            if (tagIndex + 1 < line.length && line[tagIndex + 1] === "/") {
+                isEndTag = true;
+            }
+
+            tagIndex += tagLength + 1;
+            if (isEndTag) tagIndex++;
+
+            if (tagIndex < line.length && line[tagIndex] === ">") {
+                if (isEndTag) tagIndex = tagIndices[j] + 2;
+                else tagIndex = tagIndices[j] + 1;
+
+                tagSubstring = line.substring(tagIndex, tagIndex + tagLength);
+                console.log(`checking tag substring: ${tagSubstring}`);
+                if (!HelperFunctions.arrayContains(allTags, tagSubstring)) {
+                    failTest(i, `Found tag that does not exist: ${tagSubstring}`);
+                    return false;
+                }
+            }
+        }
+
+        let allTagIndices = [];
+        for (let j = 0; j < allTags.length; j++) {
+            allTagIndices = HelperFunctions.getIndicesOfString(line, `${allTags[j]}>`);
+            if (allTagIndices && allTagIndices.length !== 0 && allTagIndices.length % 2 !== 0) {
+                failTest(i, `Found tag that either has no closing or start tag: ${allTags[j]}`);
+                return false;
+            }
         }
     }
     return true;
@@ -349,6 +387,7 @@ export function getHtmlFromCodeData(data) {
     if (autoAddDefToSymbols){
         const codeBefore= code;
         code= tryAddTagToSymbols(code);
+        //console.log(`BEFORE def tag: ${codeBefore}       AFTER: ${code}`);
     }
     let html = "";
     let currentTag = null;
@@ -359,8 +398,8 @@ export function getHtmlFromCodeData(data) {
     let currentLine = "";
     let currentLineText = "";
 
-    let emptyTagHtml="";
-    let foundTabTag="";
+    let emptyTagHtml = "";
+    let foundTabTag = "";
 
     for (let i = 0; i < code.length; i++) {
         const fullLine = code[i];
@@ -374,7 +413,7 @@ export function getHtmlFromCodeData(data) {
                     currentTag = "";
                     currentLine += "</p>";
 
-                    emptyTagHtml="";
+                    emptyTagHtml = "";
                 }
 
                 //Otherwise we are an opening tag, so we get the current tag and then we
@@ -406,24 +445,24 @@ export function getHtmlFromCodeData(data) {
                                 `but it has an empty space after the tag which is not allowed!`);
                             return;
                         }
-                        else if (fullLine.charAt(j)!=="<" && !defaultKeywordTag){
+                        else if (fullLine.charAt(j) !== "<" && !defaultKeywordTag) {
                             console.error(`tried to parse a tab tag in code style with id ${data.getId()} ` +
                                 `but it does not have a tag after it which is not allowed!`);
                             return;
                         }
                     }
-                    
+
                     //If after tab tag we encounter another tag can we check for it
-                    if (fullLine.charAt(j)==="<"){
+                    if (fullLine.charAt(j) === "<") {
                         currentTag = fullLine.substring(j + 1, j + 1 + tagLength);
                         j += tagLength + 1;
                     }
 
                     //To prevent issues, we don't want to use no tag for the 
                     //remaining operations so we continue
-                    else{
+                    else {
                         j--;
-                        currentTag="";
+                        currentTag = "";
                         continue;
                     }
 
@@ -431,8 +470,8 @@ export function getHtmlFromCodeData(data) {
                         currentLine += "<p class=\"code-new-line\"></p>";
                         html += currentLine;
                     }
-                    else if (!currentTag){
-                        console.error(`At index ${j} of line ${i} for code data with id `+
+                    else if (!currentTag) {
+                        console.error(`At index ${j} of line ${i} for code data with id ` +
                             `${data.getId()} there is empty current tag! Current line: ${currentLine}`);
                         return;
                     }
@@ -440,16 +479,16 @@ export function getHtmlFromCodeData(data) {
                         let cssClasses = getCSSClassFromTag(currentTag);
                         if (foundTabTag) cssClasses = getCSSClassFromTag(foundTabTag) + " " + cssClasses;
                         currentLine += `<p class=\"inline ${cssClasses}\">`;
-                        foundTabTag="";
+                        foundTabTag = "";
                     }
                 }
             }
             else {
-                if (noTagFoundTag && !currentTag){
-                    let classes= getCSSClassFromTag(noTagFoundTag);
+                if (noTagFoundTag && !currentTag) {
+                    let classes = getCSSClassFromTag(noTagFoundTag);
                     if (foundTabTag) classes = getCSSClassFromTag(foundTabTag) + " " + classes;
-                    currentLine+=`<p class=\"inline ${classes}\">`;
-                    foundTabTag="";
+                    currentLine += `<p class=\"inline ${classes}\">`;
+                    foundTabTag = "";
                 }
 
                 currentLine += c;
