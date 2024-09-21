@@ -1,5 +1,5 @@
 import { HelperFunctions } from "./HelperFunctions.js";
-import { CodingLanguage, getDataFromLanguage, getDataFromLanguageString, getTodaysCodeDataUTC, getTodaysTableDataUTC, LanguageData, maxCodeIdLength } from "./DailyCodeData.js";
+import { getDataFromLanguage, getDataFromLanguageString, getTodaysCodeDataUTC, getTodaysTableDataUTC, LanguageData, maxCodeIdLength } from "./DailyCodeData.js";
 import { getCSSClassIfHasTab, getHtmlFromCodeData, getHtmlFromLanguageData } from "./CodeHtmlConverter.js";
 import { CodeHtmlData } from "./CodeHtmlConverter.js";
 
@@ -80,7 +80,7 @@ let lastGameWasSuccess = false;
 const creditsJsonPath="./data/Credits.json";
 let credits=[];
 
-function initGameDisplay() {
+async function initGameDisplay() {
     inputField = document.getElementById(inputFieldId);
     displayContainer = document.querySelector(`#${dislayContainerId}`);
     gameReturnMenuContainer = document.getElementById(gameReturnMenuContainerId);
@@ -90,8 +90,8 @@ function initGameDisplay() {
     code = getTodaysCodeDataUTC();
     table = getTodaysTableDataUTC();
 
-    console.log(`todays code: ${HelperFunctions.objAsString(code)}`);
-    console.log(`todays table: ${HelperFunctions.objAsString(table)}`);
+    // console.log(`todays code: ${HelperFunctions.objAsString(code)}`);
+    // console.log(`todays table: ${HelperFunctions.objAsString(table)}`);
     todaysCodeDisplay = getHtmlFromCodeData(code);
 
     const id= code.getId();
@@ -172,20 +172,17 @@ function nextLine() {
         for (let i = 0; i < appearOrder[appearOrderIndex].length; i++) {
             appearLineIndices.push(appearOrder[appearOrderIndex][i]);
         }
-        console.log(`html: ${allHtmlLines.length} appear order: ${appearOrder} current: ${appearLineIndices}`);
 
         let html = "";
 
         //Iterate over every html line, if it is in the appear array, it means it can be shown, 
         //otherwise we set as hidden
         for (let i = 0; i < allHtmlLines.length; i++) {
-            console.log("print line" + allHtmlLines[i]);
             if (HelperFunctions.arrayContains(appearLineIndices, i)) {
                 html += allHtmlLines[i];
             }
             else {
                 const tabClass = getCSSClassIfHasTab(todaysCodeDisplay.getTaggedCode()[i]);
-                console.log(`HTML line ${allHtmlLines[i]} has tab class: ${tabClass}`);
                 const repeated = ("*").repeat(allLines[i].length);
                 const repeatedHtml = `<p class="inline code-comment ${tabClass}">${repeated}</p><p class="code-new-line"></p>`;
                 html += repeatedHtml;
@@ -201,7 +198,6 @@ function nextLine() {
         }
 
         let html = getHtmlFromLanguageData(languageData, guessedLanguages, true);
-        console.log(`get html from lang data guessed: ${guessedLanguages} html: ${html}`);
         displayContainer.innerHTML = html;
     }
     else {
@@ -213,7 +209,6 @@ function addNamedLanguage(cleanedUserText) {
     const foundData = getDataFromLanguageString(cleanedUserText);
     //If we don't have data, we don't try to check if its a repeat guess
     const repeatGuess = foundData? isRepeatGuess(foundData) : false;
-    console.log(`repeat guess ${cleanedUserText} ${repeatGuess} guessed: ${guessedLanguages}`);
 
     if (foundData && !repeatGuess) {
         guessedLanguages.push(foundData);
@@ -277,8 +272,6 @@ function isRepeatGuess(data) {
 }
 
 function checkInput(text) {
-    console.log(`input has submit to ${text} `);
-
     if (playingGame !== PlayingGameType.CodeGame && playingGame !== PlayingGameType.TableGame) {
         console.error(`Tried to check if input ${text} was valid for game ${playingGame} which is not allowed`);
         return;
@@ -411,18 +404,16 @@ function clearUpdateTime() {
     });
 
     languageDropdownToggle = document.getElementById(languageDropdownButtonId);
-    console.log(`lang pick toggle found: ${languageDropdownToggle} `)
 
     submitLanguageButton = document.getElementById(submitLanguageButtonId);
     submitLanguageButton.addEventListener("click", (e) => {
         checkInput(cleanInput(languageDropdown.value));
     });
 
-    console.log("listen for page change");
     const defaultModeButton = document.getElementById(defaultModeButtonId);
-    defaultModeButton.addEventListener("click", (e) => {
+    defaultModeButton.addEventListener("click", async (e) => {
         playingGame = PlayingGameType.CodeGame;
-        initGameDisplay();
+        await initGameDisplay();
         nextLine();
 
         HelperFunctions.enableElement(languageDropdownButtonId);
@@ -435,9 +426,9 @@ function clearUpdateTime() {
     });
 
     const tableModeButton = document.getElementById(tableModeButtonId);
-    tableModeButton.addEventListener("click", (e) => {
+    tableModeButton.addEventListener("click", async (e) => {
         playingGame = PlayingGameType.TableGame;
-        initGameDisplay();
+        await initGameDisplay();
         nextLine();
 
         HelperFunctions.enableElement(languageDropdownButtonId);
@@ -450,9 +441,9 @@ function clearUpdateTime() {
     });
 
     const nameModeButton = document.getElementById(nameModeButtonId);
-    nameModeButton.addEventListener("click", (e) => {
+    nameModeButton.addEventListener("click", async (e) => {
         playingGame = PlayingGameType.NameGame;
-        initGameDisplay();
+        await initGameDisplay();
 
         HelperFunctions.disableElement(languageDropdownButtonId);
         HelperFunctions.enableElement(timerElementId);

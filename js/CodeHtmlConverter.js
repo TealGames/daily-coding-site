@@ -69,7 +69,6 @@ function tryAddCodeTags(code) {
 
         for (let i = 0; i < codeWordTags.length; i++) {
             codeTagData = codeWordTags[i];
-            console.log(`keyword: ${codeTagData.getKeywords()}`);
 
             for (let j = 0; j < codeTagData.getKeywords().length; j++) {
 
@@ -81,7 +80,6 @@ function tryAddCodeTags(code) {
 
                 const codeStr = code.substring(index, keywordEndIndex + 1);
                 keyword = keyword.toLowerCase();
-                console.log(`testing str ${codeStr} with ${keyword}`);
 
                 //If the next character is not a special one or a space
                 //it means it must be a normal character, so we don't transform
@@ -90,7 +88,6 @@ function tryAddCodeTags(code) {
                     const nextCode = code.substring(keywordEndIndex + 1, keywordEndIndex + 2);
 
                     if (nextCode !== " " && !HelperFunctions.isSpecialCharacter(nextCode)) {
-                        console.log(`continue code for ${codeStr} since next is ${nextCode}`);
                         continue;
                     }
                 }
@@ -100,7 +97,6 @@ function tryAddCodeTags(code) {
                     const tag = codeTagData.getTagName();
                     code = code.substring(0, index) + `<${tag}>` + codeStr + `</${tag}>`
                         + code.substring(keywordEndIndex);
-                    console.log(`code is now ${code}`);
                     return;
                 }
             }
@@ -110,7 +106,6 @@ function tryAddCodeTags(code) {
     for (let i = 0; i < code.length; i++) {
         tryAddTag(i);
     }
-    console.log(`transformed ${code} => ${code}`);
 }
 
 /**
@@ -199,7 +194,6 @@ export function tryAddTagToSymbols(strings){
 export function getCSSClassIfHasTab(string) {
     
     const index = string.indexOf(`<${tabTag}`);
-    console.log(`idnex of tab from strings ${string} is ${index}`);
     if (index >= 0) {
         const nextChar = string.charAt(index + tabTag.length + 1);
         let tabString = "";
@@ -355,7 +349,6 @@ export function getHtmlFromCodeData(data) {
     if (autoAddDefToSymbols){
         const codeBefore= code;
         code= tryAddTagToSymbols(code);
-        console.log(`BEFORE def tag: ${codeBefore}       AFTER: ${code}`);
     }
     let html = "";
     let currentTag = null;
@@ -393,7 +386,6 @@ export function getHtmlFromCodeData(data) {
                     const endTabIndex = j + tabTag.length;
                     const singleTab = fullLine.substring(endTabIndex + 1, endTabIndex + 2) === ">";
                     const multiTab = fullLine.substring(endTabIndex + 2, endTabIndex + 3) === ">";
-                    console.log(`current tag: ${fullLine.substring(j + 1, endTabIndex + 1)} is tab: ${fullLine.substring(j + 1, endTabIndex + 1) === tabTag} single: ${singleTab}(${fullLine.substring(endTabIndex + 1, endTabIndex + 2)}) multi: ${multiTab}`);
                     if (fullLine.substring(j + 1, endTabIndex + 1) === tabTag && (singleTab || multiTab)) {
 
                         if (singleTab) {
@@ -402,7 +394,6 @@ export function getHtmlFromCodeData(data) {
                         else {
                             foundTabTag = fullLine.substring(j + 1, endTabIndex + 2);
                         }
-                        console.log(`Encountered tab ta: ${foundTabTag}`);
                         j += foundTabTag.length + 2;
 
                         if (j >= fullLine.length) {
@@ -515,7 +506,6 @@ export function getHtmlFromLanguageData(targetLanguage, guessedLanguages, includ
         return html;
     }
 
-    console.log(`html conversion for ${guessedLanguages.length}`);
     const correctClass = "table-correct";
     const halfCorrectClass = "table-half-correct";
     const wrongClass = "table-wrong";
@@ -538,7 +528,6 @@ export function getHtmlFromLanguageData(targetLanguage, guessedLanguages, includ
 
         //PARADIGM
         let paradigmClass = "";
-        console.log(`guessing lang with target paradigm:${targetLanguage.getParadigm()} and guessed ${guessedLanguage.getParadigm()} `);
         if (targetLanguage.getParadigm() === guessedLanguage.getParadigm()) {
             paradigmClass = correctClass;
         }
@@ -589,11 +578,9 @@ export function getHtmlFromLanguageData(targetLanguage, guessedLanguages, includ
         mainRowHtml += `</tr>`;
 
         html += mainRowHtml;
-        console.log(`main row html: ${mainRowHtml} total: ${html}`);
     }
 
     if (includeTableTag) html += `</table`;
-    console.log(`result html: ${html}`);
     return html;
 }
 

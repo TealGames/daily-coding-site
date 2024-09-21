@@ -1,5 +1,5 @@
 import { HelperFunctions } from "./HelperFunctions.js";
-import { LanguageParadigm, CompilationType, LanguageTyping, LanguageSyntax, LanguageUse, CodingLanguage } from "./DailyCodeData.js";
+import { LanguageParadigm, CompilationType, LanguageTyping, LanguageSyntax, LanguageUse, getAllCodingLanguages } from "./DailyCodeData.js";
 import { codeStylesPassesTests } from "./CodeHtmlConverter.js";
 
 const languageJsonProperties =
@@ -33,7 +33,8 @@ export function validateLanguageDataJSON(jsonObj) {
     if (!hasLang || !hasAliases || !hasRelease || !hasParadigm || !hasCompile
         || !hasTyping || !hasSyntax || !hasUse) return false;
 
-    const validLanguage = propertyHasValue(jsonObj, languageJsonProperties[0], HelperFunctions.getPropertiesOfObject(CodingLanguage));
+    //const validLanguage = propertyHasValue(jsonObj, languageJsonProperties[0], HelperFunctions.getPropertiesOfObject(CodingLanguage));
+    const validLanguage= HelperFunctions.arrayContains(getAllCodingLanguages(), jsonObj[languageJsonProperties[0]]);
     const validParadigm = propertyHasValue(jsonObj, languageJsonProperties[3], HelperFunctions.getPropertiesOfObject(LanguageParadigm));
     const validComp = propertyHasValue(jsonObj, languageJsonProperties[4], HelperFunctions.getPropertiesOfObject(CompilationType));
     const validType = propertyHasValue(jsonObj, languageJsonProperties[5], HelperFunctions.getPropertiesOfObject(LanguageTyping));
@@ -64,7 +65,8 @@ export function validateTableDataJSON(jsonObj) {
 
     if (!hasYear || !hasMonth || !hasDay || !hasLanguage) return false;
 
-    const validLanguage = propertyHasValue(jsonObj, tableJsonProperties[3], HelperFunctions.getPropertiesOfObject(CodingLanguage));
+    //const validLanguage = propertyHasValue(jsonObj, tableJsonProperties[3], HelperFunctions.getPropertiesOfObject(CodingLanguage));
+    const validLanguage= HelperFunctions.arrayContains(getAllCodingLanguages(), jsonObj[tableJsonProperties[3]]);
     if (!validLanguage) return false;
 
     return true;
@@ -94,7 +96,9 @@ export function validateCodeDataJSON(jsonObj) {
     if (!hasId || !hasYear || !hasMonth || !hasDay || !hasLanguage
         || !hasCode || !hasOrder) return false;
 
-    const validLanguage = propertyHasValue(jsonObj, codeJsonProperties[4], HelperFunctions.getPropertiesOfObject(CodingLanguage));
+    
+    const validLanguage= HelperFunctions.arrayContains(getAllCodingLanguages(), jsonObj[codeJsonProperties[4]]);
+    //const validLanguage = propertyHasValue(jsonObj, codeJsonProperties[4], HelperFunctions.getPropertiesOfObject(CodingLanguage));
     if (!validLanguage) return false;
 
     if (!codeStylesPassesTests(jsonObj[codeJsonProperties[5]])) return false;

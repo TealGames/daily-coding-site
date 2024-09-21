@@ -156,7 +156,6 @@ export class HelperFunctions {
     }
 
     static doesContentNotFitPage() {
-        console.log(`document: ${document.body.offsetHeight} window: ${window.innerHeight}`);
         const b = document.body;
         return b.scrollHeight > b.offsetHeight || b.scrollWidth > b.offsetWidth
     }
@@ -792,6 +791,18 @@ export class HelperFunctions {
             return el === value;
         });
         return contains;
+    }
+
+    /**
+     * Will check and return all the values that array1 does not have from array2
+     * All duplicates from array 2 are removed
+     * @param {any[]} arr1 
+     * @param {any[]} arr2 
+     * @returns {any[]}
+     */
+    static getDifferenceFromArray(arr1, arr2) {
+        const set2 = new Set(arr2);
+        return arr1.filter(item => !set2.has(item));
     }
 
     /**

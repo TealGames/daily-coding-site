@@ -3,6 +3,7 @@ import { validateCodeDataJSON, validateLanguageDataJSON, validateTableDataJSON }
 
 const getCodeRandomly = true;
 const useJson = true;
+const codingLanguagesJson= "./data/Languages.json";
 const languageDataJsonPath = "./data/LanguageData.json";
 const tableDataJsonPath = "./data/TableData.json";
 const codeDataJsonPath = "./data/CodeData.json";
@@ -15,57 +16,59 @@ const todayForcedCodeId=-1;
 
 export const maxCodeIdLength = 4;
 
-export const CodingLanguage = Object.freeze(
-    {
-        //OOP
-        "C": "C",
-        "C++": "C++",
-        "C#": "C#",
-        "Java": "Java",
+export const CodingLanguage = {}
+// Object.freeze(
+//     {
+//         //OOP
+//         "C": "C",
+//         "C++": "C++",
+//         "C#": "C#",
+//         "Java": "Java",
 
-        //System
-        "Rust": "Rust",
-        "Zig": "Zig",
-        "Lua": "Lua",
+//         //System
+//         "Rust": "Rust",
+//         "Zig": "Zig",
+//         "Lua": "Lua",
 
-        //Weak type
-        "JavaScript": "JavaScript",
-        "TypeScript": "TypeScript",
-        "Python": "Python",
+//         //Weak type
+//         "JavaScript": "JavaScript",
+//         "TypeScript": "TypeScript",
+//         "Python": "Python",
 
-        //Device apps
-        "Go": "Go",
-        "Swift": "Swift",
-        "Kotlin": "Kotlin",
+//         //Device apps
+//         "Go": "Go",
+//         "Swift": "Swift",
+//         "Kotlin": "Kotlin",
 
-        //Functional
-        "F#": "F#",
-        "Caml": "Caml",
-        "OCaml": "OCaml",
-        "Haskell": "Haskell",
-        "Erlang": "Erlang",
-        "Elixir": "Elixir",
-        "Lisp": "Lisp",
-        "Clojure": "Clojure",
+//         //Functional
+//         "F#": "F#",
+//         "Caml": "Caml",
+//         "OCaml": "OCaml",
+//         "Haskell": "Haskell",
+//         "Erlang": "Erlang",
+//         "Elixir": "Elixir",
+//         "Lisp": "Lisp",
+//         "Clojure": "Clojure",
 
-        //Ancient
-        "Fortran": "Fortran",
-        "BASIC": "BASIC",
-        "COBOL": "COBOL",
-        "ALGOL": "ALGOL",
-        "Ada": "Ada",
-        "Objective-C": "Objective-C",
-        "Pascal": "Pascal",
+//         //Ancient
+//         "Fortran": "Fortran",
+//         "BASIC": "BASIC",
+//         "COBOL": "COBOL",
+//         "ALGOL": "ALGOL",
+//         "Ada": "Ada",
+//         "Objective-C": "Objective-C",
+//         "Pascal": "Pascal",
 
-        //Other
-        "Ruby": "Ruby",
-        "Perl": "Perl",
-        "HTML": "HTML",
+//         //Other
+//         "Ruby": "Ruby",
+//         "Perl": "Perl",
+//         "HTML": "HTML",
 
-        //GOAT
-        "PHP": "PHP",
-    }
-);
+//         //GOAT
+//         "PHP": "PHP",
+//     }
+// );
+export const codingLanguages=[];
 
 export class CodeData {
     #id;
@@ -78,7 +81,7 @@ export class CodeData {
      * @param {String} id
      * @param {Date} day - day's code
      * @param {string[]} codeLines - the code for the day
-     * @param {CodingLanguage} lang - language
+     * @param {String} lang - language
      * @param {Number[][]} lineAppearOrder - order lines appear (as indices)
      */
     constructor(id, day, lang, codeLines, lineAppearOrder) {
@@ -106,7 +109,7 @@ export class CodeData {
     }
 
     /**
-     * @returns {CodingLanguage}
+     * @returns {String}
      */
     getLang() {
         return this.#lang;
@@ -226,7 +229,7 @@ export class TableData {
 
     /**
      * @param {Date} day - day's code
-     * @param {CodingLanguage} lang - language
+     * @param {String} lang - language
      */
     constructor(day, lang) {
         this.#day = day;
@@ -243,7 +246,7 @@ export class TableData {
     }
 
     /**
-     * @returns {CodingLanguage}
+     * @returns {String}
      */
     getLang() {
         return this.#lang;
@@ -261,7 +264,7 @@ export class LanguageData {
     #use;
 
     /**
-     * @param {CodingLanguage} lang - language
+     * @param {String} lang - language
      * @param {String[]} aliases - aliases
      * @param {Number} releaseYear - release year
      * @param {LanguageParadigm} paradigm - paradigm
@@ -282,7 +285,7 @@ export class LanguageData {
     }
 
     /**
-     * @returns {CodingLanguage}
+     * @returns {String}
      */
     getLang() {
         return this.#lang;
@@ -415,7 +418,7 @@ function getCodeDataFromJSON(json) {
 }
 
 /**
- * @param {CodingLanguage} language 
+ * @param {String} language 
  * @returns {LanguageData}
  */
 export function getDataFromLanguage(language) {
@@ -427,6 +430,17 @@ export function getDataFromLanguage(language) {
 
     console.warn(`Could not find the language data from argument ${language}`);
     return null;
+}
+
+/**
+ * @returns {string[]}
+ */
+function getAllLanguagesWithData(){
+    let langs=[];
+    for (let i=0; i<langaugeData.length; i++){
+        langs.push(langaugeData[i].getLang());
+    }
+    return langs;
 }
 
 /**
@@ -450,11 +464,11 @@ async function initJsonData(path, dataArray, actionOnObject) {
 
     for (let i = 0; i < jsonObj.length; i++) {
         dataArray.push(actionOnObject(jsonObj[i]));
-        console.log(`added to data array obj: ${dataArray[dataArray.length - 1]}`);
     }
 }
 
 (async function initAllJsonData() {
+    await initCodingLanguages();
 
     await initJsonData(languageDataJsonPath, langaugeData, (object) => {
         return getLanguageDataFromJSON(object);
@@ -464,14 +478,69 @@ async function initJsonData(path, dataArray, actionOnObject) {
         return getTableDataFromJSON(object);
     });
 
+    if (dailyTable.length!=0 && dailyTable.length!=codingLanguages.length){
+        const tableLangs=getAllLanguagesWithData();
+        const codeLangs= getAllCodingLanguages();
+        const diff= HelperFunctions.getDifferenceFromArray(codeLangs, tableLangs);
+        if (diff && diff.length>0) console.error(`from all table code data, the following languages `+
+            `have no corresponding data (but can be guessed): ${diff}`);
+    }
+
     await initJsonData(codeDataJsonPath, dailyCode, (object) => {
         return getCodeDataFromJSON(object);
     });
 
-    console.log(`language data: ${langaugeData} `);
-    console.log(`daily table data: ${dailyTable} `);
-    console.log(`daily code data: ${dailyCode} `);
+    // console.log(`language data: ${langaugeData} `);
+    // console.log(`daily table data: ${dailyTable} `);
+    // console.log(`daily code data: ${dailyCode} `);
+
 })();
+
+async function initCodingLanguages(){
+    const json = await HelperFunctions.getFileText(codingLanguagesJson);
+    const jsonObj = HelperFunctions.getObjFromJson(json);
+
+    //If we have all the languages from json, we don't need to readd it
+    if (codingLanguages && codingLanguages.length>0){
+        if (jsonObj.length<=codingLanguages.length) return;
+        else codingLanguages.length=0;
+    }
+
+    let codeLangName="";
+    for (let i=0; i<jsonObj.length; i++){
+        codeLangName=jsonObj[i];
+        codingLanguages.push(codeLangName);
+        //console.log(`after adding lang ${codeLangName} val: ${CodingLanguage[codeLangName]}`)
+    }
+    //console.log(`Coding language json: ${json} obj: ${jsonObj} len: ${jsonObj.length}`);
+}
+
+/**
+ * @returns {String[]}
+ */
+export async function getAllCodingLanguagesSafeInit(){
+    const firstInit= !codingLanguages || codingLanguages.length<=0;
+    if (firstInit){
+        await initCodingLanguages();
+    }
+    
+    return getAllCodingLanguages();
+}
+
+/**
+ * @returns {String[]}
+ */
+export function getAllCodingLanguages(){
+    let copy=[];
+    for (let i=0; i<codingLanguages.length; i++){
+        copy.push(codingLanguages[i]);
+    }
+    if (!copy || copy.length==0){
+        console.error(`tried to get all coding languages but found 0. This could be due to the fact `+
+            `that the language data is not init yet. Try retrieving using safe initialization and async await version`);
+    }
+    return copy;
+}
 
 /**
  * @param {String} str 
@@ -518,6 +587,7 @@ export function getCodeDataFromId(id){
 }
 
 /**
+ * Needs to wait for all coding languages
 * @returns {TableData}
 */
 export function getTodaysTableDataUTC() {
@@ -526,7 +596,7 @@ export function getTodaysTableDataUTC() {
     //and we don't need to care about a specific day's data
     //time should also not matter since it is never used and only used for specific day data retrieval
     if (getCodeRandomly) {
-        const allLangs = HelperFunctions.getPropertiesOfObject(CodingLanguage);
+        const allLangs = getAllCodingLanguagesSafeInit();
         const randomIndex = Math.floor(Math.random() * allLangs.length);
         const data = new TableData(new Date(), allLangs[randomIndex]);
         return data;

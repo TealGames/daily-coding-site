@@ -1,0 +1,40 @@
+[
+    "C",
+    "C++",
+    "C#",
+    "Java",
+
+    "Rust",
+    "Zig",
+    "Lua",
+
+    "JavaScript",
+    "TypeScript",
+    "Python",
+
+    "Go",
+    "Swift",
+    "Kotlin",
+
+    "F#",
+    "Caml",
+    "OCaml",
+    "Haskell",
+    "Erlang",
+    "Elixir",
+    "Lisp",
+    "Clojure",
+
+    "Fortran",
+    "BASIC",
+    "COBOL",
+    "ALGOL",
+    "Ada",
+    "Objective-C",
+    "Pascal",
+
+    "Ruby",
+    "Perl",
+    "HTML",
+    "PHP"
+]

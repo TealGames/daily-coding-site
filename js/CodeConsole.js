@@ -1,4 +1,4 @@
-import { CodingLanguage } from "./DailyCodeData.js";
+import { getAllCodingLanguagesSafeInit } from "./DailyCodeData.js";
 import { PlayingGameType } from "./DailyCodeManager.js";
 import { HelperFunctions } from "./HelperFunctions.js";
 import { PageId } from "./PageSwitcher.js";
@@ -43,11 +43,11 @@ const newLineHeightChange = 3;
 let currentLineHeight = 0;
 
 const extraConsoleBuffer = 100;
+const updateConsoleFromWidthThreshold= 570;
+const bodyConsoleDiffUpdateThreshold= 20;
 const gradientHeight = 5;
 
 function updateStyle() {
-    //footer.style.top = `${100 - currentLineHeight}%`;
-    console.log(`not fit: ${HelperFunctions.doesContentNotFitPage()}`);
     footer.style.width = "100%";
 
     const footerHeight = currentLineHeight;
@@ -55,32 +55,31 @@ function updateStyle() {
 
     const gameDisplayRect = displayContainer.getBoundingClientRect();
 
-    // if (footer.style.height === `${hideConsoleHeight}%`) {
-    //     footer.style.bottom = "0%";
-    // }
     console.log(`checking window width ${window.innerWidth} new display top ${gameDisplayRect.top}+height${gameDisplayRect.height}`);
     const centerRect = centerContentContainer.getBoundingClientRect();
     const bodyRect = bodyContainer.getBoundingClientRect();
     const footerRect = footer.getBoundingClientRect();
     //console.log(`center container height: ${centerRect.height} pos ${centerRect.y+centerRect.height} footer start: ${footerRect.top}`);
     console.log(`body container height: ${bodyRect.height} pos ${bodyRect.y + bodyRect.height} footer start: ${footerRect.top}`);
+    console.log(`DIFF: body ${bodyRect.height}- footer ${footerRect.top} = ${bodyRect.height - footerRect.top} shown: ${isConsoleShown} threshold: ${bodyConsoleDiffUpdateThreshold}`);
 
-    if (isConsoleShown && window.innerWidth <= 570) {
-        console.log(`ADJUSTING CONSOLE top of display: ${gameDisplayRect.top + gameDisplayRect.height}`);
+    //to move the console up when the width shrinks
+    if (isConsoleShown && window.innerWidth <= updateConsoleFromWidthThreshold) {
+        console.log(`OVERLAP FOR CONSOLE FOUND WHILE displayed: TRUE :${gameDisplayRect.top + gameDisplayRect.height}`);
         footer.style.removeProperty(`height`);
         footer.style.top = `${gameDisplayRect.top + gameDisplayRect.height + extraConsoleBuffer}px`;
         footer.style.bottom = "0%";
     }
-    else if (!isConsoleShown && bodyRect.height - footerRect.top >= 30) {
-        console.log(`CHECK: ${gameDisplayRect.top + gameDisplayRect.height}`);
+    else if (!isConsoleShown && bodyRect.height - footerRect.top >= bodyConsoleDiffUpdateThreshold) {
+        console.log(`OVERLAP FOR CONSOLE FOUND WHILE displayed FALSE: ${gameDisplayRect.top + gameDisplayRect.height}`);
         footer.style.removeProperty(`height`);
         footer.style.top = `${bodyRect.height}px`;
         footer.style.bottom = "0%";
     }
-    else if (!isConsoleShown) {
-        footer.style.removeProperty(`top`);
-        footer.style.bottom = "0%";
-    }
+    // else if (!isConsoleShown) {
+    //     footer.style.removeProperty(`top`);
+    //     footer.style.bottom = "0%";
+    // }
     else {
         console.log(`choosing strict height top: ${100 - footer.style.height}`);
         footer.style.removeProperty(`top`);
@@ -289,7 +288,7 @@ function checkLanguageDropdownState() {
     document.addEventListener("gameDisplayInit", (e) => showConsole());
 })();
 
-(function start() {
+(async function start() {
     centerContentContainer = document.getElementById(`${centerContentContainerId}`);
     bodyContainer = document.getElementById(`${bodyContainerId}`);
     displayContainer = document.getElementById(`${dislayContainerId}`);
@@ -308,7 +307,8 @@ function checkLanguageDropdownState() {
         inputField.focus();
     });
 
-    const langs = HelperFunctions.getPropertyValuesOfObject(CodingLanguage).sort();
+    let langs = await getAllCodingLanguagesSafeInit();
+    langs=langs.sort();
     for (let i = 0; i < langs.length; i++) {
         languageDropdown.innerHTML += `<option value="${langs[i]}">${langs[i]}</option>`;
     }
