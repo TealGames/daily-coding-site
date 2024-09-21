@@ -186,7 +186,7 @@ input {
     height: 30px;
 }
 
-.fit-content{
+.fit-content {
     min-width: fit-content;
 }
 
@@ -213,6 +213,10 @@ table {
     position: relative;
     box-sizing: border-box;
     padding: 1%;
+}
+
+.line-number {
+    min-width: fit-content;
 }
 
 th,
