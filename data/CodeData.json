@@ -347,5 +347,58 @@
                 2
             ]
         ]
+    },
+    {
+        "ID": 201,
+        "Year": 2024,
+        "Month": 8,
+        "Day": 10,
+        "Language": "Python",
+        "Code": [
+            "<spc>import</spc> <var>turtle</var>",
+            "<var>t</var>= <obj>turtle</obj>.<fnc>Turtle</fnc>()",
+            "<new>",
+            "<var>t</var>.<fnc>speed</fnc>(<num>0</num>)",
+            "<var>t</var>.<fnc>penup</fnc>()",
+            "<var>t</var>.<fnc>goto</fnc.(<num>-140</num>,<num>140</num>)",
+            "<spc>for </spc><var>x </var><spc>in </var> <fnc>range</fnc>(<num>15</num>):",
+            "<t><var>t</var>.<fnc>write</fnc>(<var>x</var>, <var>align</var>= <str>\"center\")</str>",
+            "<t><var>t</var>.<fnc>right</fnc>(<num>90</num>)",
+            "<t><var>t</var>.<fnc>forward</fnc>(<num>10</num>)",
+            "<t><var>t</var>.<fnc>pendown</fnc>()",
+            "<t><var>t</var>.<fnc>forward</fnc>(<num>150</num>)",
+            "<t><var>t</var>.<fnc>penup</fnc>()",
+            "<t><var>t</var>.<fnc>backward</fnc>(<num>160</num>)",
+            "<t><var>t</var>.<fnc>left</fnc>(<num>90</num>)",
+            "<t><var>t</var>.<fnc>forward</fnc>(<num>20</num>)"
+        ],
+        "Order": [
+            [
+                1
+            ],
+            [
+                2,
+                3,
+                4,
+                5
+            ],
+            [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+            ],
+            [
+                0
+            ],
+            [
+                6
+            ]
+        ]
     }
 ]
