@@ -1,7 +1,6 @@
 /*Root access style for root element (html tag for html) and is useful for 
 defining global variables in css*/
-:root
-{
+:root {
     --new-line-width: 5px;
     --new-line-height: 5px;
     /* --tab-ident: 50px; */
@@ -9,7 +8,7 @@ defining global variables in css*/
 }
 
 @media (max-width: 660px) {
-    :root{
+    :root {
         --new-line-width: 4px;
         --new-line-height: 4px;
         /* --tab-ident: 40px; */
@@ -17,7 +16,7 @@ defining global variables in css*/
 }
 
 @media (max-width: 480px) {
-    :root{
+    :root {
         --new-line-width: 3px;
         --new-line-height: 3px;
         /* --tab-ident: 30px; */
@@ -25,7 +24,7 @@ defining global variables in css*/
 }
 
 @media (max-width: 410px) {
-    :root{
+    :root {
         --new-line-width: 2px;
         --new-line-height: 2px;
         /* --tab-ident: 2em; */
@@ -47,6 +46,7 @@ input,
 .code-enum,
 .code-method,
 .code-string,
+.code-number,
 .code-comment {
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
@@ -75,39 +75,35 @@ input,
     margin-bottom: 0%;
 }
 
-.code-tab-space
-{
-    margin-left:var(--tab-ident);
+.code-tab-space {
+    margin-left: var(--tab-ident);
 }
 
-.code-2-tab-space
-{
-    margin-left:calc(2*var(--tab-ident));
+.code-2-tab-space {
+    margin-left: calc(2*var(--tab-ident));
 }
 
-.unfocused-code
-{
-    opacity:0.7;
+.unfocused-code {
+    opacity: 0.7;
 }
 
-.terminal
-{
+.terminal {
     color: #abadaf;
 }
 
-.terminal-error, .table-wrong
-{
+.terminal-error,
+.table-wrong {
     color: rgb(134, 32, 32);
 }
 
-.terminal-warn, .table-half-correct
-{
-    color:rgb(163, 142, 24);
+.terminal-warn,
+.table-half-correct {
+    color: rgb(163, 142, 24);
 }
 
-.terminal-success, .table-correct
-{
-    color:rgb(27, 133, 27);
+.terminal-success,
+.table-correct {
+    color: rgb(27, 133, 27);
 }
 
 .code-default {
@@ -142,26 +138,26 @@ input,
     color: #946446;
 }
 
+.code-number {
+    color: #B5CE9B
+}
+
 .code-comment {
     color: #646363;
 }
 
-.dark-on-hover::before
-{
+.dark-on-hover::before {
     opacity: 1;
     transition: 250ms ease-in-out;
 }
 
 .selected-color,
-.dark-on-hover:hover
-{
+.dark-on-hover:hover {
     background-color: rgb(74, 75, 77);
 }
 
 .dark-on-hover:disabled,
-button[disabled]
-{
+button[disabled] {
     background-color: #1E1E1E;
     opacity: 0.5;
 }
-

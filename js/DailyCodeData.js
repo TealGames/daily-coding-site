@@ -12,7 +12,7 @@ let langaugeData = [];
 let dailyTable = [];
 let dailyCode = [];
 
-const todayForcedCodeId = 53;
+const todayForcedCodeId = 103;
 
 export const maxCodeIdLength = 4;
 
@@ -596,7 +596,7 @@ export function getTodaysTableDataUTC() {
     //and we don't need to care about a specific day's data
     //time should also not matter since it is never used and only used for specific day data retrieval
     if (getCodeRandomly) {
-        const allLangs = getAllCodingLanguagesSafeInit();
+        const allLangs = getAllCodingLanguages();
         const randomIndex = Math.floor(Math.random() * allLangs.length);
         const data = new TableData(new Date(), allLangs[randomIndex]);
         return data;

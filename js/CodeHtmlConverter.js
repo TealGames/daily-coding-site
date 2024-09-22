@@ -10,6 +10,7 @@ const functionTag = "fnc";
 const objectTag = "obj";
 const enumTag = "enm";
 const stringTag = "str";
+const numberTag = "num";
 const commentTag = "cmt";
 
 //new line is the only tag that does not need a closing pair of tag
@@ -17,8 +18,10 @@ const newLineTag = "new";
 //adds the set amount of tabs (if t2 then 2 tabs are added)
 const tabTag = "t";
 
+const lessThanEscape = " ";
+
 const allTags = [defaultTag, defaultKeywordTag, specialKeywordTag, variableTag,
-    functionTag, objectTag, enumTag, stringTag, commentTag, newLineTag];
+    functionTag, objectTag, enumTag, stringTag, numberTag, commentTag, newLineTag];
 
 //tab tags must be first index in line
 const tabTagOnlyAtStart = true;
@@ -228,6 +231,8 @@ function getCSSClassFromTag(tag) {
             return "code-enum";
         case stringTag:
             return "code-string";
+        case numberTag:
+            return "code-number";
         case commentTag:
             return "code-comment";
         case tabTag:
@@ -349,7 +354,7 @@ export function codeStylesPassesTests(id, strings) {
         for (let j = 0; j < allTags.length; j++) {
 
             //New line tag does not need closing tag
-            if (allTags[j]==newLineTag) continue;
+            if (allTags[j] == newLineTag) continue;
 
             allTagIndices = HelperFunctions.getIndicesOfString(line, `${allTags[j]}>`);
             if (allTagIndices && allTagIndices.length !== 0 && allTagIndices.length % 2 !== 0) {
@@ -390,10 +395,11 @@ export function codeStylesPassesTests(id, strings) {
  */
 export function getHtmlFromCodeData(data) {
     let code = data.getCode();
-    if (autoAddDefToSymbols){
-        const codeBefore= code;
-        code= tryAddTagToSymbols(code);
-        //console.log(`BEFORE def tag: ${codeBefore}       AFTER: ${code}`);
+    if (autoAddDefToSymbols) {
+        const codeBefore = code;
+        code = tryAddTagToSymbols(code);
+
+        //console.log(`DEF TAG BEFORE: ${codeBefore} AFTER ${code}`);
     }
     let html = "";
     let currentTag = null;
@@ -411,7 +417,7 @@ export function getHtmlFromCodeData(data) {
         const fullLine = code[i];
         for (let j = 0; j < fullLine.length; j++) {
             const c = fullLine.charAt(j);
-            if (c === "<" && j + 1 < fullLine.length) {
+            if (c === "<" && j + 1 < fullLine.length && fullLine.charAt(j + 1) !== lessThanEscape) {
                 //If we are at closing tag, we can skip to the next text (since we know it has to be
                 //of the form </TAG>) so we have to do / + tag length + > and next space
                 if (fullLine[j + 1] === "/") {
@@ -425,6 +431,13 @@ export function getHtmlFromCodeData(data) {
                 //Otherwise we are an opening tag, so we get the current tag and then we
                 //increase to next character past tag so tag + > and next space
                 else {
+
+                    //If we have no tag and we are not at 0 it means we have found a new open tag
+                    //when the old did not have any, so we can assume it was filled with no tag option, so we close it
+                    if (j != 0 && !currentTag && emptyTagHtml) {
+                        currentLine += "</p>";
+                        emptyTagHtml = "";
+                    }
 
                     //If we encounter a tab
                     foundTabTag = "";
@@ -458,9 +471,19 @@ export function getHtmlFromCodeData(data) {
                         }
                     }
 
-                    //If after tab tag we encounter another tag can we check for it
+                    //If after tab checking we encounter another tag can we check for it 
+                    //ONLY IF IT IS NOT A GREATER THAN SYMBOL BY ITSELF
+
+                    //j < fullLine.length - 1 && fullLine.charAt(j + 1) !== " "
                     if (fullLine.charAt(j) === "<") {
+                        if (j < fullLine.length - 1 && fullLine.charAt(j + 1) === " ") {
+                            currentTag = "";
+                            continue;
+                        }
+
                         currentTag = fullLine.substring(j + 1, j + 1 + tagLength);
+                        if (j < fullLine.length - 1) console.log(`At line ${i} index ${j} after tag ${currentTag}: ${fullLine[j + 1]} space: ${fullLine.charAt(j + 1) === " "}`);
+                        //console.log(`CURRENT TAG found tag: ${currentTag} on line ${i} index: ${j}`);
                         j += tagLength + 1;
                     }
 
@@ -490,13 +513,18 @@ export function getHtmlFromCodeData(data) {
                 }
             }
             else {
-                if (noTagFoundTag && !currentTag) {
+                //If we don't have a tag and we either are at 0 or have empty tag, it means we are starting 
+                //a new empty tag html line so we start a html tag and add the character
+                if (noTagFoundTag && !currentTag && (!emptyTagHtml || j == 0)) {
                     let classes = getCSSClassFromTag(noTagFoundTag);
                     if (foundTabTag) classes = getCSSClassFromTag(foundTabTag) + " " + classes;
-                    currentLine += `<p class=\"inline ${classes}\">`;
+                    emptyTagHtml += `<p class=\"inline ${classes}\">`;
+                    currentLine += emptyTagHtml;
                     foundTabTag = "";
                 }
 
+                //We want the empty tag character to be added to the empty tag html, so we 
+                //can't just use this for both and only if it does have a tag
                 currentLine += c;
                 currentLineText += c;
             }
@@ -507,15 +535,23 @@ export function getHtmlFromCodeData(data) {
         //if (currentLine) lines.push(currentLine);
         //if (currentLineText) linesText.push(currentLineText);
 
+        //If we end and still have empty tag html it means we have ended on empty tag
+        //so we must finish the empty tag html statement and also reset html
+        if (emptyTagHtml) currentLine += "</p>";
+        emptyTagHtml = "";
+
         //We add a new line at the end no matter what
         currentLine += "<p class=\"code-new-line\"></p>";
 
         lines.push(currentLine);
+        html += currentLine;
         currentLine = "";
+
         linesText.push(currentLineText);
         currentLineText = "";
     }
 
+    console.log(`HTML: ${html}    CODE STYLED: ${code}     BEFORE: ${data.getCode()}`);
     return new CodeHtmlData(code, linesText, html, lines, data.getLineOrder());
 }
 

@@ -77,10 +77,10 @@ export const PlayingGameType = Object.freeze(
 let playingGame = PlayingGameType.None;
 let lastGameWasSuccess = false;
 
-const creditsJsonPath="./data/Credits.json";
-let credits=[];
+const creditsJsonPath = "./data/Credits.json";
+let credits = [];
 
-async function initGameDisplay() {
+function initGameDisplay() {
     inputField = document.getElementById(inputFieldId);
     displayContainer = document.querySelector(`#${dislayContainerId}`);
     gameReturnMenuContainer = document.getElementById(gameReturnMenuContainerId);
@@ -94,21 +94,21 @@ async function initGameDisplay() {
     // console.log(`todays table: ${HelperFunctions.objAsString(table)}`);
     todaysCodeDisplay = getHtmlFromCodeData(code);
 
-    const id= code.getId();
+    const id = code.getId();
     const idWith0s = HelperFunctions.padWithLeadingZeros(id, maxCodeIdLength);
     if (code) codeIdText.innerHTML = `#${idWith0s}`;
     else codeIdText.innerHTML = "null_id";
 
-    const contributorData=getContributorForId(id);
-    if (contributorData.Name){
-        let contributorMessage= "";
+    const contributorData = getContributorForId(id);
+    if (contributorData.Name) {
+        let contributorMessage = "";
 
-        if (contributorData.Link){
-            contributorMessage+=`<a class="code-comment" href="${contributorData.Link}">${contributorData.Name}</a>`;
+        if (contributorData.Link) {
+            contributorMessage += `<a class="code-comment" href="${contributorData.Link}">${contributorData.Name}</a>`;
         }
-        else contributorMessage+=contributorData.Name;
-        codeIdText.innerHTML+=`<em class="no-margins inline small-text">(${contributorMessage})</em>`;
-    }   
+        else contributorMessage += contributorData.Name;
+        codeIdText.innerHTML += `<em class="no-margins inline small-text">(${contributorMessage})</em>`;
+    }
 
     appearOrderIndex = -1;
     appearLineIndices = [];
@@ -117,7 +117,7 @@ async function initGameDisplay() {
     currentAttempts = 0;
     playedDailyDefault = false;
 
-    //To make sure the game does not break, we use the appear order length, (should be 5, but just in case)
+    //To make sure the game does not break, we use the appear order length
     if (playingGame === PlayingGameType.CodeGame) {
         currentTotalAttempts = todaysCodeDisplay.getAppearOrder().length;
     }
@@ -139,17 +139,17 @@ async function initGameDisplay() {
  * @param {String} id 
  * @returns {Object}
  */
-function getContributorForId(id){
-    let result={
+function getContributorForId(id) {
+    let result = {
         "Name": "",
         "Link": ""
     }
     if (!credits) return result;
 
-    for (let i=0; i<credits.length; i++){
-        if (credits[i].id===id){
-            result.Name=credits[i].name;
-            result.Link= credits[i].link;
+    for (let i = 0; i < credits.length; i++) {
+        if (credits[i].id === id) {
+            result.Name = credits[i].name;
+            result.Link = credits[i].link;
             return result;
         }
     }
@@ -208,7 +208,7 @@ function nextLine() {
 function addNamedLanguage(cleanedUserText) {
     const foundData = getDataFromLanguageString(cleanedUserText);
     //If we don't have data, we don't try to check if its a repeat guess
-    const repeatGuess = foundData? isRepeatGuess(foundData) : false;
+    const repeatGuess = foundData ? isRepeatGuess(foundData) : false;
 
     if (foundData && !repeatGuess) {
         guessedLanguages.push(foundData);
@@ -411,9 +411,9 @@ function clearUpdateTime() {
     });
 
     const defaultModeButton = document.getElementById(defaultModeButtonId);
-    defaultModeButton.addEventListener("click", async (e) => {
+    defaultModeButton.addEventListener("click", (e) => {
         playingGame = PlayingGameType.CodeGame;
-        await initGameDisplay();
+        initGameDisplay();
         nextLine();
 
         HelperFunctions.enableElement(languageDropdownButtonId);
@@ -426,9 +426,9 @@ function clearUpdateTime() {
     });
 
     const tableModeButton = document.getElementById(tableModeButtonId);
-    tableModeButton.addEventListener("click", async (e) => {
+    tableModeButton.addEventListener("click", (e) => {
         playingGame = PlayingGameType.TableGame;
-        await initGameDisplay();
+        initGameDisplay();
         nextLine();
 
         HelperFunctions.enableElement(languageDropdownButtonId);
@@ -441,9 +441,9 @@ function clearUpdateTime() {
     });
 
     const nameModeButton = document.getElementById(nameModeButtonId);
-    nameModeButton.addEventListener("click", async (e) => {
+    nameModeButton.addEventListener("click", (e) => {
         playingGame = PlayingGameType.NameGame;
-        await initGameDisplay();
+        initGameDisplay();
 
         HelperFunctions.disableElement(languageDropdownButtonId);
         HelperFunctions.enableElement(timerElementId);
@@ -455,8 +455,8 @@ function clearUpdateTime() {
         startTimer();
     });
 
-    const creditsJson= await HelperFunctions.getFileText(creditsJsonPath);
-    if (creditsJson) credits= HelperFunctions.getObjFromJson(creditsJson);
+    const creditsJson = await HelperFunctions.getFileText(creditsJsonPath);
+    if (creditsJson) credits = HelperFunctions.getObjFromJson(creditsJson);
 }());
 
 function gameEnd(isSuccess) {
