@@ -173,5 +173,56 @@
                 3
             ]
         ]
+    },
+    {
+        "ID": 53,
+        "Year": 2024,
+        "Month": 8,
+        "Day": 7,
+        "Language": "C#",
+        "Code": [
+            "<key>private void</key> <fnc>Awake</fnc>()",
+            "{",
+            "<t><spc>if</spc> (<var>Instance</var> == <key>null</key>)",
+            "<t>{",
+            "<t2><obj>Debug</obj>.<fnc>LogError</fnc>(<str>$\"The object of type </str>{<key>typeof</key>(<var>GameManager</var>)}<str> does not exist!\"</str>);",
+            "<t>}",
+            "<t><spc>else if</spc> (<var>Instance</var> != <key>this</key>)",
+            "<t>{",
+            "<t2><fnc>Destroy</fnc>(gameObject);",
+            "<t2><spc>return</spc>;",
+            "<t>}",
+            "<t><fnc>DontDestroyOnLoad</fnc>(<var>gameObject</var>);",
+            "<new>",
+            "<t><var>CurrentState</var> = <obj>GameState</obj>.<enm>MainMenu</enm>;",
+            "}"
+        ],
+        "Order": [
+            [
+                9
+            ],
+            [
+                2
+            ],
+            [
+                6,
+                7,
+                8,
+                10
+            ],
+            [
+                0,
+                1,
+                3,
+                4,
+                5
+            ],
+            [
+                11,
+                12,
+                13,
+                14
+            ]
+        ]
     }
 ]

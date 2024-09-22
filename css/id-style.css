@@ -48,13 +48,23 @@
     height: 80vh;
     position: relative;
     display: flex;
+    /* flex-direction: column; */
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    padding-right: 2%;
+    padding-left: 1%;
+    padding-top: 0.5vh;
+}
+
+#left-panel-numbers {
+    display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     gap: 0.6vh;
-    padding-right: 2%;
-    padding-left: 1%;
-    padding-top: 0.5vh;
+    padding-right: 100%;
 }
 
 #right-panel {
@@ -129,6 +139,8 @@
 
 #vertical-line-border {
     border-left: 2px solid rgb(61, 61, 61);
+    height: 90vh;
+    width: 5%;
     margin-top: -2vh;
 }
 
@@ -145,10 +157,10 @@
     border: 2px solid rgb(61, 61, 61);
     border-radius: 5px;
     position: relative;
-    display:flex;
+    display: flex;
     justify-content: center;
     align-items: center;
-    gap:5%;
+    gap: 5%;
 
     margin-bottom: 1%;
     padding: 1%;
