@@ -84,7 +84,7 @@
     }
 
     .small-text {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 
     .input {
@@ -107,9 +107,9 @@
         font-size: 0.5rem;
     }
 
-    .small-text.footer-note {
+    /* .small-text.footer-note {
         font-size: 0.6rem;
-    }
+    } */
 }
 
 @media (max-width:470px) {

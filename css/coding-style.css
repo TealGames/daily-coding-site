@@ -83,6 +83,10 @@ input,
     margin-left: calc(2*var(--tab-ident));
 }
 
+.code-3-tab-space {
+    margin-left: calc(3*var(--tab-ident));
+}
+
 .unfocused-code {
     opacity: 0.7;
 }

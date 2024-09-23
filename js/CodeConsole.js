@@ -238,6 +238,11 @@ function requestRating() {
             <p class=\"inline terminal\">If you want to leave specific code feedback, you can do so</p>
             <p class="inline body-text code-comment">
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSfls32E6ZBS75Upn12TMfx2DXJwOMGud9Vyxbxn82YrEY_-0Q/viewform" target="_blank" class="code-comment">here</a>
+            </p>
+            <p class=\"code-new-line\"></p>
+            <p class=\"inline terminal\">You can download all of the code guidelines/rules</p>
+            <p class="inline body-text code-comment">
+                <a href="./media/CodedleGuidelines.pdf" target="_blank" download class="code-comment">here</a>
             </p>`;
 
     label.innerHTML += html;

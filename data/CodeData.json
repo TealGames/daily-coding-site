@@ -360,9 +360,9 @@
             "<new>",
             "<var>t</var>.<fnc>speed</fnc>(<num>0</num>)",
             "<var>t</var>.<fnc>penup</fnc>()",
-            "<var>t</var>.<fnc>goto</fnc.(<num>-140</num>,<num>140</num>)",
-            "<spc>for </spc><var>x </var><spc>in </var> <fnc>range</fnc>(<num>15</num>):",
-            "<t><var>t</var>.<fnc>write</fnc>(<var>x</var>, <var>align</var>= <str>\"center\")</str>",
+            "<var>t</var>.<fnc>goto</fnc>(<num>-140</num>,<num>140</num>)",
+            "<spc>for </spc><var>x </var><spc>in </spc> <fnc>range</fnc>(<num>15</num>):",
+            "<t><var>t</var>.<fnc>write</fnc>(<var>x</var>, <var>align</var>= <str>\"center\"</str>)",
             "<t><var>t</var>.<fnc>right</fnc>(<num>90</num>)",
             "<t><var>t</var>.<fnc>forward</fnc>(<num>10</num>)",
             "<t><var>t</var>.<fnc>pendown</fnc>()",
@@ -398,6 +398,75 @@
             ],
             [
                 6
+            ]
+        ]
+    },
+    {
+        "ID": 202,
+        "Year": 2024,
+        "Month": 8,
+        "Day": 11,
+        "Language": "Python",
+        "Code": [
+            "<key>def </key><fnc>checkIfNameExists</fnc>(<var>checkName</var>, <var>accountList</var>):",
+            "<t><var>nameExists</var>= <key>False</key>",
+            "<t><spc>for</spc> <var>index</var> <spc>in</spc> <fnc>range</fnc>(<num>0</num>, <fnc>len</fnc>(<var>accountList</var>)):",
+            "<t2><spc>if</spc>(<key></key>(<var>accountList</var>[<var>index</var>][<num>0</num>]).<fnc>lower</fnc>()== <var>checkName</var>):",
+            "<t3><var>nameExists</var>=<key>True</key>",
+            "<t3><spc>break</spc>",
+            "<t><spc>return</spc> <var>nameExists</var>"
+
+        ],
+        "Order": [
+            [
+                5
+            ],
+            [
+                1
+            ],
+            [
+               3, 4
+            ],
+            [
+                2
+            ],
+            [
+                0, 6
+            ]
+        ]
+    },
+    {
+        "ID": 203,
+        "Year": 2024,
+        "Month": 8,
+        "Day": 12,
+        "Language": "Python",
+        "Code": [
+            "<key>def</key> <fnc>createList</fnc>():",
+            "<t><fnc>print</fnc>(<str>\"Enter at least 4 items to each list.\"</str>)",
+            "<t><var>newList</var>=[]",
+            "<t><var>answer</var>= <fnc>input</fnc>(<str>\"Do you want to enter an item? \"</str>)",
+            "<t><spc>while</spc> (<var>answer</var>== <str>\"yes\"</str>):",
+            "<t2><var>item</var>= <fnc>input</fnc>(<str>\"Enter an item. \"</str>)",
+            "<t2><var>newList</var>.<fnc>append</fnc>(<var>item</var>)",
+            "<t2><var>answer</var>= <fnc>input</fnc>(<str>\"Do you want to enter an item? \"</str>)",
+            "<t><spc>return</spc> <var>newList</var>"
+        ],
+        "Order": [
+            [
+                1
+            ],
+            [
+                3, 5, 7
+            ],
+            [
+                2,6
+            ],
+            [
+                4
+            ],
+            [
+                0, 8
             ]
         ]
     }

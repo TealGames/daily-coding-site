@@ -239,6 +239,8 @@ function getCSSClassFromTag(tag) {
             return "code-tab-space";
         case tabTag + "2":
             return "code-2-tab-space";
+        case tabTag + "3":
+            return "code-3-tab-space";
         default:
             console.error(`Tried to retrieve CSS class from tag ${tag} but it has no corresponding class!`);
             break;

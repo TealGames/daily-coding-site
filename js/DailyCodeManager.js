@@ -18,6 +18,9 @@ let languageDropdown = null;
 const gameReturnMenuContainerId = "game-return-main-container";
 let gameReturnMenuContainer = null;
 
+const learnGameRulesContainerId="learn-games-rules-container";
+let learnGameRulesContainer=null;
+
 const timerElementId = "name-game-timer";
 let timerElement = null;
 
@@ -125,6 +128,7 @@ function initGameDisplay() {
         currentTotalAttempts = defaultTotalAttempts;
     }
     HelperFunctions.disableElement(gameReturnMenuContainerId);
+    HelperFunctions.enableElement(learnGameRulesContainerId);
 
     if (playingGame === PlayingGameType.CodeGame) HelperFunctions.enableElement(codeIdTabId);
     else HelperFunctions.disableElement(codeIdTabId);
@@ -278,7 +282,19 @@ function checkInput(text) {
     }
 
     if (!text) return;
-    if (isRepeatGuess(text)) return;
+
+    const foundData = getDataFromLanguageString(text);
+    console.log(`checking repeat guess: ${guessedLanguages}`);
+    if (isRepeatGuess(foundData)) return;
+
+    //NO matter what we show the current attempt for table game
+    if (playingGame === PlayingGameType.TableGame || playingGame === PlayingGameType.CodeGame) {
+        if (foundData) {
+            if (guessedLanguages.length > 0) guessedLanguages.unshift(foundData);
+            else guessedLanguages.push(foundData);
+        }
+    }
+    
     currentAttempts++;
 
     let rightInput = false;
@@ -304,15 +320,6 @@ function checkInput(text) {
             "AllAttemptsUsed": maxAttemptsReached,
         }
     }));
-
-    //NO matter what we show the current attempt for table game
-    if (playingGame === PlayingGameType.TableGame) {
-        const foundData = getDataFromLanguageString(text);
-        if (foundData) {
-            if (guessedLanguages.length > 0) guessedLanguages.unshift(foundData);
-            else guessedLanguages.push(foundData);
-        }
-    }
 
     if (maxAttemptsReached) gameEnd(false);
     else if (!rightInput) {
@@ -387,6 +394,8 @@ function clearUpdateTime() {
     playingGame = PlayingGameType.None;
     timerElement = document.getElementById(timerElementId);
     displayArea = document.getElementById(displayAreaId);
+    learnGameRulesContainer= document.getElementById(learnGameRulesContainerId);
+
     clearUpdateTime();
 
     const element = document.getElementById("input-field");
@@ -466,6 +475,7 @@ function gameEnd(isSuccess) {
 
     HelperFunctions.enableElement(gameReturnMenuContainerId);
     HelperFunctions.disableElement(languageDropdownButtonId);
+    HelperFunctions.disableElement(learnGameRulesContainerId);
 
     //We show what player did even if they won for table game
     if (playingGame === PlayingGameType.TableGame) {
