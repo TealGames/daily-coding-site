@@ -349,7 +349,7 @@
         ]
     },
     {
-        "ID": 201,
+        "ID": 151,
         "Year": 2024,
         "Month": 8,
         "Day": 10,
@@ -402,7 +402,7 @@
         ]
     },
     {
-        "ID": 202,
+        "ID": 152,
         "Year": 2024,
         "Month": 8,
         "Day": 11,
@@ -436,7 +436,7 @@
         ]
     },
     {
-        "ID": 203,
+        "ID": 153,
         "Year": 2024,
         "Month": 8,
         "Day": 12,
@@ -468,6 +468,72 @@
             [
                 0, 8
             ]
+        ]
+    },
+
+    {
+        "ID": 201,
+        "Year": 2024,
+        "Month": 8,
+        "Day": 13,
+        "Language": "C++",
+        "Code": [
+            "<obj>string </obj><var>str</var>;",
+            "<var>str</var>= <fnc>to_string</fnc>(<var>node</var>-><var>val</var>);",
+            "<spc>if</spc> (<var>node</var> == <var>root</var>) <var>result</var>-><fnc>append</fnc>(<var>str</var>);",
+            "<spc>else</spc> <var>result</var>-><fnc>append</fnc>(<str>\"(\"</str> + <var>str</var>);",
+            "<new>",
+            "<spc>if</spc> (<var>node</var>-><var>left</var> == <key>nullptr</key> && <var>node</var>-><var>right</var> == <key>nullptr</key>) {",
+            "<t><spc>if</spc> (<var>node</var> != <var>root</var>) <var>result</var>-><fnc>append</fnc>(<str>\")\"</str>)",
+            "<t><spc>return</spc>;",
+            "}",
+            "<new>",
+            "<spc>if</spc> (<var>node</var>-><var>left</var> == <key>nullptr</key> && <var>node</var>-><var>right</var> != <key>nullptr</key>) {",
+            "<t><var>result</var>-><fnc>append</fnc>(<str>\"()\"</str>);",
+            "}",
+            "<new>",
+            "<fnc>stringify</fnc>(<var>root</var>, <var>node</var>-><var>left</var>, <var>result</var>);",
+            "<fnc>stringify</fnc>(<var>root</var>, <var>node</var>-><var>right</var>, <var>result</var>);",
+            "<spc>if</spc> (<var>node</var> != <var>root</var>) <var>result</var>-><fnc>append</fnc>(<str>\")\"</str>);"
+        ],
+        "Order": [
+            [0],
+            [14, 15],
+            [1],
+            [2, 3, 6, 11, 12,13,16],
+            [4, 5, 7,8,9, 10]
+        ]
+    },
+    {
+        "ID": 202,
+        "Year": 2024,
+        "Month": 8,
+        "Day": 14,
+        "Language": "C++",
+        "Code": [
+            "<key>int</key> <fnc>traverse</fnc>(<obj>TreeNode</obj> *<var>node</var>, <key>int </key> <var>sum</var>){",
+            "<t><spc>if</spc> (<var>node</var>==<key>nullptr</key>) <spc>return</spc> <var>sum</var>;",
+            "<t><var>sum</var>=<var>sum</var>*<num>10</num>+ (<var>node</var>-><var>val</var>);",
+            "<new>",
+            "<t><spc>if</spc> (<var>node</var>-><var>left</var>==<key>nullptr</key> && <var>node</var>-><var>right</var>==<key>nullptr</key>) <spc>return</spc> <var>sum</var>;",
+            "<new>",
+            "<t><key>int</key> <var>result</var>=<num>0</num>;",
+            "<t><spc>if</spc> (<var>node</var>-><var>left</var>!=<key>nullptr</key>) <var>result</var>+= <fnc>traverse</fnc>(<var>node</var>-><var>left</var>, <var>sum</var>);",
+            "<t><spc>if</spc> (<var>node</var>-><var>right</var>!=<key>nullptr</key>) <var>result</var>+= <fnc>traverse</fnc>(<var>node</var>-><var>right</var>, <var>sum</var>);",
+            "<t><spc>return</spc> <var>result</var>;",
+            "}",
+            "",
+            "<key>int</key> <fnc>sumNumbers</fnc>(<obj>TreeNode</obj> *<var>root</var>) {",
+            "<t><spc>if</spc> (<var>root</var>==<key>nullptr</key>) <key>return</key> <num>0</num>;",
+            "<t><spc>return</spc> <fnc>traverse</fnc>(<var>root</var>, <num>0</num>);",
+            "}"
+        ],
+        "Order": [
+            [6,9,14],
+            [2],
+            [0, 10, 11, 12, 15],
+            [3, 4, 5],
+            [1, 7,8, 13]
         ]
     }
 ]
