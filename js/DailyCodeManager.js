@@ -466,6 +466,7 @@ function clearUpdateTime() {
     });
 
     const creditsJson = await HelperFunctions.getFileText(creditsJsonPath);
+    console.log(`credits json ${creditsJson}`);
     if (creditsJson) credits = HelperFunctions.getObjFromJson(creditsJson);
 }());
 
