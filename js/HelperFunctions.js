@@ -430,7 +430,14 @@ export class HelperFunctions {
      * @returns {Object}
      */
     static getObjFromJson(json) {
-        return JSON.parse(json);
+        const obj=null;
+        try{
+            obj= JSON.parse(json);
+        }
+        catch (e){
+            console.error(`tried to parse the json ${json} but encountered error: ${e}`);
+        }
+        return obj;
     }
 
     /**
