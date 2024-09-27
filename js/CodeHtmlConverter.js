@@ -509,7 +509,7 @@ export function getHtmlFromCodeData(data) {
                     else {
                         let cssClasses = getCSSClassFromTag(currentTag);
                         if (foundTabTag) cssClasses = getCSSClassFromTag(foundTabTag) + " " + cssClasses;
-                        currentLine += `<p class=\"inline ${cssClasses} code-display-font\">`;
+                        currentLine += `<p class=\"inline ${cssClasses}\">`;
                         foundTabTag = "";
                     }
                 }
@@ -520,7 +520,7 @@ export function getHtmlFromCodeData(data) {
                 if (noTagFoundTag && !currentTag && (!emptyTagHtml || j == 0)) {
                     let classes = getCSSClassFromTag(noTagFoundTag);
                     if (foundTabTag) classes = getCSSClassFromTag(foundTabTag) + " " + classes;
-                    emptyTagHtml += `<p class=\"inline ${classes} code-display-font\">`;
+                    emptyTagHtml += `<p class=\"inline ${classes}\">`;
                     currentLine += emptyTagHtml;
                     foundTabTag = "";
                 }

@@ -48,14 +48,20 @@ input,
 .code-string,
 .code-number,
 .code-comment {
-    font-family: 'Courier New', Courier, monospace;
     /* font-family: 'Monaco', 'Consolas', monospace; */
     font-weight: bold;
     margin-left: 0%;
     margin-right: 0%;
 }
 
-.code-display-font{
+button,
+select,
+input,
+.default-font {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.code-display-font {
     font-family: 'Monaco', 'Consolas', monospace;
 }
 
