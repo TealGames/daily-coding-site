@@ -1,6 +1,6 @@
 import { HelperFunctions } from "./HelperFunctions.js";
 import { getDataFromLanguage, getDataFromLanguageString, getTodaysCodeDataUTC, getTodaysTableDataUTC, LanguageData, maxCodeIdLength } from "./DailyCodeData.js";
-import { getCSSClassIfHasTab, getHtmlFromCodeData, getHtmlFromLanguageData } from "./CodeHtmlConverter.js";
+import { codeTokenTag, getCSSClassIfHasTab, getHtmlFromCodeData, getHtmlFromLanguageData } from "./CodeHtmlConverter.js";
 import { CodeHtmlData } from "./CodeHtmlConverter.js";
 
 const inputFieldId = "input-field";
@@ -188,7 +188,8 @@ function nextLine() {
             else {
                 const tabClass = getCSSClassIfHasTab(todaysCodeDisplay.getTaggedCode()[i]);
                 const repeated = ("*").repeat(allLines[i].length);
-                const repeatedHtml = `<p class="inline code-comment ${tabClass}">${repeated}</p><p class="code-new-line"></p>`;
+                const repeatedHtml = `<${codeTokenTag} class="inline code-comment ${tabClass}">${repeated}</${codeTokenTag}>`+
+                `<${codeTokenTag} class="code-new-line"></${codeTokenTag}>`;
                 html += repeatedHtml;
             }
         }

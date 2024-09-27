@@ -1,0 +1,16 @@
+[
+    {
+        "Language":"JavaScript",
+        "Tags":{
+            "DefaultTag":[
+            "function", "var", "let", "const", "class", "extends", 
+            "import", "export", "default", "new", "typeof", "instanceof", 
+            "void", "delete"
+            ],
+            "SpecialTag":[
+                "if", "else", "switch", "case", "for", "while", "do", 
+                "break", "continue", "return", "try", "catch", "finally", "throw"
+            ]
+        }
+    }
+]

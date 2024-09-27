@@ -1,4 +1,4 @@
-import { CodeData, LanguageData, LanguageParadigm, LanguageTyping, LanguageUse } from "./DailyCodeData.js";
+import { CodeData, isValidLanguage, LanguageData, LanguageParadigm, LanguageTyping, LanguageUse } from "./DailyCodeData.js";
 import { HelperFunctions } from "./HelperFunctions.js";
 
 const tagLength = 3;
@@ -19,6 +19,7 @@ const newLineTag = "new";
 const tabTag = "t";
 
 const lessThanEscape = " ";
+export const codeTokenTag= "p";
 
 const allTags = [defaultTag, defaultKeywordTag, specialKeywordTag, variableTag,
     functionTag, objectTag, enumTag, stringTag, numberTag, commentTag, newLineTag];
@@ -30,36 +31,69 @@ const autoAddDefToSymbols = false;
 
 const noTagFoundTag = defaultTag;
 
-class CodeWordTags {
-    #tagName;
-    #keywords;
+let taggedLangData=[];
+const taggedLangDataJson= "./data/LanguageTags.json";
+
+/**
+ * @param {String} tag 
+ * @returns {Boolean}
+ */
+function isValidTag(tag){
+    return HelperFunctions.arrayContains(allTags, tag);
+}
+
+class LanguageTagData{
+    #language;
+    #tagData;
 
     /**
-     * @param {String} tagName 
-     * @param {String[]} keywords 
+     * @param {String} language 
+     * @param {String[]} tagData 
      */
-    constructor(tagName, keywords) {
-        this.#tagName = tagName;
-        this.#keywords = keywords;
+    constructor(language, tagData) {
+        this.#language = language;
+        this.#tagData = tagData;
     }
 
     /**
      * @returns {String}
      */
-    getTagName() {
-        return this.#tagName;
+    getLanguage() {
+        return this.#language;
     }
 
     /**
      * @returns {String[]}
      */
-    getKeywords() {
-        return this.#keywords;
+    getAllTagData() {
+        return this.#tagData;
+    }
+
+    /**
+     * @param {String} tag 
+     * @returns {String[]}
+     */
+    getTagData(tag) {
+        
     }
 }
 
-const codeWordTags =
-    [new CodeWordTags(specialKeywordTag, ["if"])];
+/**
+ * @param {String} language 
+ */
+function getTagDataFromLanguage(language){
+    const isValid= isValidLanguage(language);
+    if (!isValid){
+        console.error(`tried to get the tag data from language ${language} but it is not a valid language!`);
+        return;
+    }
+
+    for (let i=0; i<taggedLangData.length; i++){
+        if (taggedLangData[i].Language===language) return taggedLangData[i];
+    }
+
+    return null;
+}
 
 /**
  * @param {String} code 
@@ -344,7 +378,8 @@ export function codeStylesPassesTests(id, strings) {
 
                 tagSubstring = line.substring(tagIndex, tagIndex + tagLength);
                 console.log(`checking tag substring: ${tagSubstring}`);
-                if (!HelperFunctions.arrayContains(allTags, tagSubstring)) {
+                
+                if (!isValidTag(tagSubstring)) {
                     failTest(i, `Found tag that does not exist: ${tagSubstring}`);
                     return false;
                 }
@@ -425,7 +460,7 @@ export function getHtmlFromCodeData(data) {
                 if (fullLine[j + 1] === "/") {
                     j += currentTag.length + 2;
                     currentTag = "";
-                    currentLine += "</p>";
+                    currentLine += `</${codeTokenTag}}>`;
 
                     emptyTagHtml = "";
                 }
@@ -437,7 +472,7 @@ export function getHtmlFromCodeData(data) {
                     //If we have no tag and we are not at 0 it means we have found a new open tag
                     //when the old did not have any, so we can assume it was filled with no tag option, so we close it
                     if (j != 0 && !currentTag && emptyTagHtml) {
-                        currentLine += "</p>";
+                        currentLine += `</${codeTokenTag}}>`;
                         emptyTagHtml = "";
                     }
 
@@ -484,7 +519,7 @@ export function getHtmlFromCodeData(data) {
                         }
 
                         currentTag = fullLine.substring(j + 1, j + 1 + tagLength);
-                        if (j < fullLine.length - 1) console.log(`At line ${i} index ${j} after tag ${currentTag}: ${fullLine[j + 1]} space: ${fullLine.charAt(j + 1) === " "}`);
+                        //if (j < fullLine.length - 1) console.log(`At line ${i} index ${j} after tag ${currentTag}: ${fullLine[j + 1]} space: ${fullLine.charAt(j + 1) === " "}`);
                         //console.log(`CURRENT TAG found tag: ${currentTag} on line ${i} index: ${j}`);
                         j += tagLength + 1;
                     }
@@ -498,7 +533,7 @@ export function getHtmlFromCodeData(data) {
                     }
 
                     if (currentTag === newLineTag) {
-                        currentLine += "<p class=\"code-new-line\"></p>";
+                        currentLine += `<${codeTokenTag} class=\"code-new-line\"></${codeTokenTag}>`;
                         html += currentLine;
                     }
                     else if (!currentTag) {
@@ -509,7 +544,7 @@ export function getHtmlFromCodeData(data) {
                     else {
                         let cssClasses = getCSSClassFromTag(currentTag);
                         if (foundTabTag) cssClasses = getCSSClassFromTag(foundTabTag) + " " + cssClasses;
-                        currentLine += `<p class=\"inline ${cssClasses} code-display-font\">`;
+                        currentLine += `<${codeTokenTag} class=\"inline ${cssClasses} code-display-font\">`;
                         foundTabTag = "";
                     }
                 }
@@ -520,7 +555,7 @@ export function getHtmlFromCodeData(data) {
                 if (noTagFoundTag && !currentTag && (!emptyTagHtml || j == 0)) {
                     let classes = getCSSClassFromTag(noTagFoundTag);
                     if (foundTabTag) classes = getCSSClassFromTag(foundTabTag) + " " + classes;
-                    emptyTagHtml += `<p class=\"inline ${classes} code-display-font\">`;
+                    emptyTagHtml += `<${codeTokenTag} class=\"inline ${classes} code-display-font\">`;
                     currentLine += emptyTagHtml;
                     foundTabTag = "";
                 }
@@ -539,11 +574,11 @@ export function getHtmlFromCodeData(data) {
 
         //If we end and still have empty tag html it means we have ended on empty tag
         //so we must finish the empty tag html statement and also reset html
-        if (emptyTagHtml) currentLine += "</p>";
+        if (emptyTagHtml) currentLine += `</${codeTokenTag}>`;
         emptyTagHtml = "";
 
         //We add a new line at the end no matter what
-        currentLine += "<p class=\"code-new-line\"></p>";
+        currentLine += `<${codeTokenTag} class=\"code-new-line\"></${codeTokenTag}>`;
 
         lines.push(currentLine);
         html += currentLine;

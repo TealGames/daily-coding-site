@@ -12,62 +12,11 @@ let langaugeData = [];
 let dailyTable = [];
 let dailyCode = [];
 
-const todayForcedCodeId = 202;
+const todayForcedCodeId = -1;
 
 export const maxCodeIdLength = 4;
 
 export const CodingLanguage = {}
-// Object.freeze(
-//     {
-//         //OOP
-//         "C": "C",
-//         "C++": "C++",
-//         "C#": "C#",
-//         "Java": "Java",
-
-//         //System
-//         "Rust": "Rust",
-//         "Zig": "Zig",
-//         "Lua": "Lua",
-
-//         //Weak type
-//         "JavaScript": "JavaScript",
-//         "TypeScript": "TypeScript",
-//         "Python": "Python",
-
-//         //Device apps
-//         "Go": "Go",
-//         "Swift": "Swift",
-//         "Kotlin": "Kotlin",
-
-//         //Functional
-//         "F#": "F#",
-//         "Caml": "Caml",
-//         "OCaml": "OCaml",
-//         "Haskell": "Haskell",
-//         "Erlang": "Erlang",
-//         "Elixir": "Elixir",
-//         "Lisp": "Lisp",
-//         "Clojure": "Clojure",
-
-//         //Ancient
-//         "Fortran": "Fortran",
-//         "BASIC": "BASIC",
-//         "COBOL": "COBOL",
-//         "ALGOL": "ALGOL",
-//         "Ada": "Ada",
-//         "Objective-C": "Objective-C",
-//         "Pascal": "Pascal",
-
-//         //Other
-//         "Ruby": "Ruby",
-//         "Perl": "Perl",
-//         "HTML": "HTML",
-
-//         //GOAT
-//         "PHP": "PHP",
-//     }
-// );
 export const codingLanguages = [];
 
 export class CodeData {
@@ -421,15 +370,23 @@ function getCodeDataFromJSON(json) {
  * @param {String} language 
  * @returns {LanguageData}
  */
-export function getDataFromLanguage(language) {
+export function getDataFromLanguage(language, warn=true) {
     for (let i = 0; i < langaugeData.length; i++) {
         if (language === langaugeData[i].getLang()) {
             return langaugeData[i];
         }
     }
 
-    console.warn(`Could not find the language data from argument ${language}`);
+    if (warn) console.warn(`Could not find the language data from argument ${language}`);
     return null;
+}
+
+/**
+ * @param {String} language 
+ * @returns {Boolean}
+ */
+export function isValidLanguage(language){
+    return getLanguageDataFromJSON(langaug, warn=false)!=null;
 }
 
 /**
