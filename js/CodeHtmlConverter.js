@@ -1,4 +1,4 @@
-import { CodeData, isValidLanguage, LanguageData, LanguageParadigm, LanguageTyping, LanguageUse } from "./DailyCodeData.js";
+import { CodeData, getDataFromLanguage, isValidLanguage, LanguageData, LanguageParadigm, LanguageTyping, LanguageUse } from "./DailyCodeData.js";
 import { HelperFunctions } from "./HelperFunctions.js";
 
 const tagLength = 3;
@@ -28,11 +28,13 @@ const allTags = [defaultTag, defaultKeywordTag, specialKeywordTag, variableTag,
 const tabTagOnlyAtStart = true;
 //one lined symbols will auto get the def tag
 const autoAddDefToSymbols = false;
+//If lang has tag data, will use it to auto add tags
+const autoAddLangTagData=true;
 
 const noTagFoundTag = defaultTag;
 
 let taggedLangData=[];
-const taggedLangDataJson= "./data/LanguageTags.json";
+const taggedLangDataJson= "./data/LanguageData.json";
 
 /**
  * @param {String} tag 
@@ -44,15 +46,17 @@ function isValidTag(tag){
 
 class LanguageTagData{
     #language;
-    #tagData;
+    tagData;
+
+    static TAG_PROPERTIES=[[defaultKeywordTag, "DefaultTag"], [specialKeywordTag, "SpecialTag"]];
 
     /**
      * @param {String} language 
-     * @param {String[]} tagData 
+     * @param {Object} tagData 
      */
     constructor(language, tagData) {
         this.#language = language;
-        this.#tagData = tagData;
+        this.tagData = tagData;
     }
 
     /**
@@ -63,10 +67,22 @@ class LanguageTagData{
     }
 
     /**
-     * @returns {String[]}
+     * @returns {Object[]} {Tag, Data}
      */
     getAllTagData() {
-        return this.#tagData;
+        let result=[];
+
+        for (let i=0; i<LanguageTagData.TAG_PROPERTIES.length; i++){
+            const data= LanguageTagData.TAG_PROPERTIES[i];
+            if (this.tagData[data[1]]){
+                result.push({
+                    "Tag": data[0],
+                    "Data": this.tagData[data[1]],
+                });
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -74,78 +90,158 @@ class LanguageTagData{
      * @returns {String[]}
      */
     getTagData(tag) {
-        
+        if (!isValidTag(tag)){
+            console.error(`tried to get language tag data for tag ${tag} but it is not a valid tag!`);
+            return [];
+        }
+
+        for (let i=0; i<LanguageTagData.TAG_PROPERTIES.length; i++){
+            const data= LanguageTagData.TAG_PROPERTIES[i];
+            if (data[0]===tag){
+                if (!this.tagData[data[1]]){
+                    console.error(`tried to get the langauge tag data fro tag ${tag} but the tag data obj `+
+                        `${this.tagData} does not contain a property for this tag`);
+                    return [];
+                }
+
+                return this.tagData[data[1]];
+            }
+        }
+        return [];
     }
 }
 
+(async function initLanguageTagData(){
+    const text= await HelperFunctions.getFileText(taggedLangDataJson);
+    if (!text){
+        console.log(`tried to init language tag data, but failed to retrieve the `+
+            `text from json ${taggedLangDataJson} that contains it`);
+        return;
+    }
+
+    const jsonObj= HelperFunctions.getObjFromJson(text);
+    if (jsonObj){
+        taggedLangData.length=0;
+    }
+    
+    for (let i=0; i<jsonObj.length; i++){
+        const obj= jsonObj[i];
+        // if (!isValidLanguage(obj.Language)){
+        //     console.error(`tried to init language tag data but language ${obj.Language} is not valid`);
+        //     return;
+        // }
+
+        if (obj.Tags) taggedLangData.push(new LanguageTagData(obj.Language, obj.Tags));
+    }
+})();
+
 /**
  * @param {String} language 
+ * @returns {Object[]}
  */
 function getTagDataFromLanguage(language){
-    const isValid= isValidLanguage(language);
+    const isValid= isValidLanguage(language, true);
     if (!isValid){
         console.error(`tried to get the tag data from language ${language} but it is not a valid language!`);
         return;
     }
 
+    console.log(`total tag lang data: ${taggedLangData.length}`);
     for (let i=0; i<taggedLangData.length; i++){
-        if (taggedLangData[i].Language===language) return taggedLangData[i];
+        console.log(`checking tag data ${HelperFunctions.objAsString(taggedLangData[i])}`);
+        if (taggedLangData[i].getLanguage()===language){
+            return taggedLangData[i].getAllTagData();
+        }
     }
 
     return null;
 }
 
 /**
- * @param {String} code 
+ * @param {String} language 
+ * @param {String[]} codeLines
  * @returns {String}
  */
-function tryAddCodeTags(code) {
-    let taggedCode = "";
+function tryAddCodeTags(language, codeLines){
+    const dataArr= getTagDataFromLanguage(language);
+    if (!dataArr || dataArr.length==0){
+        console.error(`tried to add code tags to the langauge ${language} for lines `+
+            `${codeLines} but the lang has no tag data!`);
+        return;
+    }
 
-    const tryAddTag = (index) => {
-        let keyword = "";
-        let keywordEndIndex;
-        let codeTagData = null;
+    let line="";
+    let currentTag= "";
+    let currentTagData=null;
+    let currentData=[];
+    let checkString="";
 
-        for (let i = 0; i < codeWordTags.length; i++) {
-            codeTagData = codeWordTags[i];
+    let result=[];
+    let index=0;
 
-            for (let j = 0; j < codeTagData.getKeywords().length; j++) {
+    for (let i = 0; i < codeLines.length; i++){
+        line=codeLines[i];
+        result.push(line);
+        
+        for (let j=0; j<dataArr.length; j++){
+            currentTagData= dataArr[j];
+            currentTag= currentTagData.Tag;
+            currentData= currentTagData.Data;
 
-                keyword = codeTagData.getKeywords()[j];
-                keywordEndIndex = index + keyword.length - 1;
+            for (let k=0; k<currentData.length; k++){
+                checkString=currentData[k];
+                console.log(`checking string ${checkString} of tag ${currentTag} for line ${line}`);
 
-                //if we go past the length, we can't do anything
-                if (keywordEndIndex >= code.length) continue;
+                index = result[i].indexOf(checkString);
+                while (index >= 0){
+                    let endIndex= -1;
 
-                const codeStr = code.substring(index, keywordEndIndex + 1);
-                keyword = keyword.toLowerCase();
+                    //By default we have index+1 so that we don't check the current index again
+                    //but we don't want to advance too much since we might not take any actions
+                    let nextSearchStart=index+1;
 
-                //If the next character is not a special one or a space
-                //it means it must be a normal character, so we don't transform
-                //it since it could be part of a variable name for example
-                if (keywordEndIndex + 1 < code.length) {
-                    const nextCode = code.substring(keywordEndIndex + 1, keywordEndIndex + 2);
+                    //If we cannot fit the current check string, we break
+                    if (index<= result[i].length-checkString.length) endIndex= result[i]+checkString.length-1;
+                    else break;
 
-                    if (nextCode !== " " && !HelperFunctions.isSpecialCharacter(nextCode)) {
-                        continue;
+                    //if we have a tag before this and is NOT a closing tag, it means if must be for this segment, so we don't add any tags
+                    if (index - tagLength - 2>=0 && result[i].charAt(index - 1) === ">" && result[i].charAt(index - tagLength - 2) !== "/"){}
+                    else{
+                        //If we are at the start or the one prior is a space
+                        const spaceBefore= index>0 && result[i].substring(index-1, index)===" ";
+                        const startFree= index===0 || spaceBefore;
+
+                        //If we are at the end or the next character is either a space or special character
+                        const spaceAfter= endIndex<result[i].length-1 && result[i].charAt(endIndex+1)===" ";
+                        const endFree= endIndex===result[i].length-1 || (spaceAfter || (endIndex<result[i].length-1 &&
+                                                    HelperFunctions.isSpecialCharacter(result[i].charAt(endIndex+1))));
+                        
+                        nextSearchStart= endIndex+1;
+                        if (startFree && endFree && result[i].substring(index, endIndex+1)===checkString){
+                            let insertionStr= `<${currentTag}>`;
+                            if(spaceBefore) insertionStr+=" ";
+                            insertionStr+=checkString;
+                            if(spaceAfter) insertionStr+=" ";
+                            insertionStr+=`</${currentTag}>`;
+
+                            result[i]=result[i].substring(0, index) + insertionStr + result[i].substring(endIndex+1);
+
+                            //We add to the not found tag index the amount of special chars added (5)
+                            //and the 2 extra tags added
+                            nextSearchStart+=(5+ 2*currentTag.length);
+                        }
                     }
-                }
+                    
+                    //if we were at the last index, we exit
+                    if (nextSearchStart>=result[i].length) break;
 
-                if (codeStr.toLowerCase() === keyword) {
-
-                    const tag = codeTagData.getTagName();
-                    code = code.substring(0, index) + `<${tag}>` + codeStr + `</${tag}>`
-                        + code.substring(keywordEndIndex);
-                    return;
+                    //index= result[i].indexOf(checkString, nextSearchStart);
+                    index=-1;
                 }
             }
         }
     }
-
-    for (let i = 0; i < code.length; i++) {
-        tryAddTag(i);
-    }
+    return result;
 }
 
 /**
@@ -184,7 +280,7 @@ export function tryAddTagToSymbols(strings) {
                 //If we have a tag on the left that is not closing (meaning it is for this symbol)
                 //and the next is another symbol it means we can not do anything since
                 //the tag might encompass more than 1 symbol
-                else if (index >= index - tagLength - 2 && result[i][index - 1] === ">" && result[i][index - tagLength - 2] !== "/"
+                else if (index - tagLength - 2>=0 && result[i][index - 1] === ">" && result[i][index - tagLength - 2] !== "/"
                     && index < result[i].length - 1 && HelperFunctions.isSpecialCharacter(result[i][index + 1], ["<", ">"])) { }
 
                 //Same condition as the one above, just considering the symbl on the left and end tag on right
@@ -377,7 +473,7 @@ export function codeStylesPassesTests(id, strings) {
                 else tagIndex = tagIndices[j] + 1;
 
                 tagSubstring = line.substring(tagIndex, tagIndex + tagLength);
-                console.log(`checking tag substring: ${tagSubstring}`);
+                //console.log(`checking tag substring: ${tagSubstring}`);
                 
                 if (!isValidTag(tagSubstring)) {
                     failTest(i, `Found tag that does not exist: ${tagSubstring}`);
@@ -432,12 +528,18 @@ export function codeStylesPassesTests(id, strings) {
  */
 export function getHtmlFromCodeData(data) {
     let code = data.getCode();
-    if (autoAddDefToSymbols) {
-        const codeBefore = code;
-        code = tryAddTagToSymbols(code);
+    const codeLanguage= data.getLang();
+    const codeBefore = code;
 
+    if (autoAddDefToSymbols) {
+        code = tryAddTagToSymbols(code);
         //console.log(`DEF TAG BEFORE: ${codeBefore} AFTER ${code}`);
     }
+    if (autoAddLangTagData){
+        code= tryAddCodeTags(codeLanguage, code);
+        console.log(`LANG TAG BEFORE: ${codeBefore} AFTER ${code}`);
+    }
+
     let html = "";
     let currentTag = null;
 
@@ -567,11 +669,6 @@ export function getHtmlFromCodeData(data) {
             }
         }
 
-        //If we still have a line at the end not cleared (meaning we did not end on END tag)
-        //we then add it here
-        //if (currentLine) lines.push(currentLine);
-        //if (currentLineText) linesText.push(currentLineText);
-
         //If we end and still have empty tag html it means we have ended on empty tag
         //so we must finish the empty tag html statement and also reset html
         if (emptyTagHtml) currentLine += `</${codeTokenTag}>`;
@@ -588,7 +685,7 @@ export function getHtmlFromCodeData(data) {
         currentLineText = "";
     }
 
-    console.log(`HTML: ${html}    CODE STYLED: ${code}     BEFORE: ${data.getCode()}`);
+    //console.log(`HTML: ${html}    CODE STYLED: ${code}     BEFORE: ${data.getCode()}`);
     return new CodeHtmlData(code, linesText, html, lines, data.getLineOrder());
 }
 

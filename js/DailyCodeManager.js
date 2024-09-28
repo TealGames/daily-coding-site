@@ -96,6 +96,7 @@ function initGameDisplay() {
     // console.log(`todays code: ${HelperFunctions.objAsString(code)}`);
     // console.log(`todays table: ${HelperFunctions.objAsString(table)}`);
     todaysCodeDisplay = getHtmlFromCodeData(code);
+    guessedLanguages.length=0;
 
     const id = code.getId();
     const idWith0s = HelperFunctions.padWithLeadingZeros(id, maxCodeIdLength);

@@ -18,8 +18,11 @@
         <div id="header" class="background-2">
             <div id="title-container" class="centered">
                 <div class="title-text">
-                    <p class="inline code-method">Codedle</p>
-                    <p class="inline code-default">();</p>
+                    <button id="title-button" class="title-text">
+                        <span class="inline code-method">Codedle</span>
+                        <span class="inline code-default">();</span>
+                    </button>
+                    <audio id="title-button-audio" src="./media/CodedlePronounce.mp3"></audio>
                 </div>
                 <div id="title-subtitle" class="small-text code-comment">//A daily code game</div>
             </div>
@@ -331,7 +334,7 @@
                 </div>
 
                 <div id="game-return-main-container">
-                    <p class="inline code-special-keyword">else if</p>
+                    <p class="inline code-special-keyword">if</p>
                     <p class="inline code-default">(</p>
                     <p class="inline code-local-variable">wantToGoBack</p>
                     <p class="inline code-default ">) {</p>
@@ -427,14 +430,14 @@
     <!-- jquery -->
     <script src="js/jquery-3.7.1.js"></script>
     <script type="module" src="js/DailyCodeData.js"></script>
-    <script type="module" src="js/CommentDisplay.js"></script>
     <script type="module" src="js/PageSwitcher.js"></script>
     <script type="module" src="js/DynamicLineNumbers.js"></script>
     <script type="module" src="js/CodeConsole.js"></script>
     <script type="module" src="js/DailyCodeManager.js"></script>
     <script type="module" src="js/PlayGameChecker.js"></script>
     <script type="module" src="js/InstructionPanel.js"></script>
-
+    <script type="module" src="js/TitleSound.js"></script>
+    <script type="module" src="js/CommentDisplay.js"></script>
 </body>
 
 </html>

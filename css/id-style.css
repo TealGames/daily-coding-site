@@ -11,6 +11,11 @@
     /* margin-bottom: 1%; */
 }
 
+#title-button{
+    background-color: transparent;
+    border: none;
+}
+
 @media (max-width: 600px) {
     #title-container {
         flex-direction: column;

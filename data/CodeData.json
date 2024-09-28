@@ -230,7 +230,7 @@
         "Year": 2024,
         "Month": 8,
         "Day": 8,
-        "Language": "Javascript",
+        "Language": "JavaScript",
         "Code": [
             "<key>static</key> <fnc>replaceAllMultiple</fnc>(<var>target</var>, <var>replaceVals</var>, <var>newVal</var>) {",
             "<t><spc>if</spc> (!<var>target</var> || !<var>replaceVals</var>) {",
@@ -275,7 +275,7 @@
         "Year": 2024,
         "Month": 8,
         "Day": 9,
-        "Language": "Javascript",
+        "Language": "JavaScript",
         "Code": [
             "<key>static</key> <fnc>getPropertyValuesOfObject</fnc>(<var>obj</var>) {",
             "<t><key>let</key> <var>vals</var> = [];",
@@ -312,10 +312,10 @@
         "Year": 2024,
         "Month": 8,
         "Day": 10,
-        "Language": "Javascript",
+        "Language": "JavaScript",
         "Code": [
             "<key>function</key> <fnc>enablePage</fnc>(<var>enablePageId</var>) {",
-            "<t><obj>Extensions</obj>.<fnc>enableElement</fnc>(<var>enablePageId</fnc>);",
+            "<t><obj>Extensions</obj>.<fnc>enableElement</fnc>(<var>enablePageId</var>);",
             "<t><obj>document</obj>.<fnc>dispatchEvent</fnc>(<key>new</key> <obj>CustomEvent</obj>(<str>\"enablePage\"</str>, {",
             "<t2><var>detail</var>: {",
             "<t2><var>pageEnabledId</var>: <var>enablePageId</var>,",
@@ -348,6 +348,50 @@
             ]
         ]
     },
+
+
+
+
+    {
+        "ID": 104,
+        "Year": 2024,
+        "Month": 8,
+        "Day": 9,
+        "Language": "JavaScript",
+        "Code": [
+            "static <fnc>getPropertyValuesOfObject</fnc>(<var>obj</var>) {",
+            "<t>let <var>vals</var> = [];",
+            "<t>for(let <var>key</var> in <var>obj</var>) {",
+            "<t2><var>vals</var>.<fnc>push</fnc>(<var>obj</var>[<var>key</var>]);",
+            "<t>}",
+            "<new>",
+            "<t>return <var>vals</var>;",
+            "}"
+        ],
+        "Order": [
+            [
+                2
+            ],
+            [
+                3
+            ],
+            [
+                1
+            ],
+            [
+                0
+            ],
+            [
+                4,
+                5,
+                6,
+                7
+            ]
+        ]
+    },
+
+
+
     {
         "ID": 151,
         "Year": 2024,

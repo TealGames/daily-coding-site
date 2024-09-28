@@ -36,6 +36,10 @@
     height: 30%;
 }
 
+button{
+    cursor: pointer;
+}
+
 .button {
     background-color: transparent;
     border: none;

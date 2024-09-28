@@ -430,7 +430,7 @@ export class HelperFunctions {
      * @returns {Object}
      */
     static getObjFromJson(json) {
-        const obj=null;
+        let obj=null;
         try{
             obj= JSON.parse(json);
         }
