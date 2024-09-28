@@ -12,7 +12,7 @@ let langaugeData = [];
 let dailyTable = [];
 let dailyCode = [];
 
-const todayForcedCodeId = 104;
+const todayForcedCodeId = -1;
 
 export const maxCodeIdLength = 4;
 
@@ -370,7 +370,7 @@ function getCodeDataFromJSON(json) {
  * @param {String} language 
  * @returns {LanguageData}
  */
-export function getDataFromLanguage(language, warn=true) {
+export function getDataFromLanguage(language, warn = true) {
     for (let i = 0; i < langaugeData.length; i++) {
         console.log(`checking lang ${langaugeData[i].getLang()} with ${language}`);
         if (language === langaugeData[i].getLang()) {
@@ -386,8 +386,8 @@ export function getDataFromLanguage(language, warn=true) {
  * @param {String} language 
  * @returns {Boolean}
  */
-export function isValidLanguage(language, warn=false){
-    return getDataFromLanguage(language, warn)!==null;
+export function isValidLanguage(language, warn = false) {
+    return getDataFromLanguage(language, warn) !== null;
 }
 
 /**
