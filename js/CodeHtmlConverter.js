@@ -31,6 +31,10 @@ const autoAddDefToSymbols = false;
 //If lang has tag data, will use it to auto add tags
 const autoAddLangTagData = true;
 
+const autoAddFuncTag=true;
+const autoAddNumTag=true;
+const autoAddStrTag=true;
+
 const noTagFoundTag = defaultTag;
 
 let taggedLangData = [];
@@ -48,7 +52,10 @@ class LanguageTagData {
     #language;
     tagData;
 
-    static TAG_PROPERTIES = [[defaultKeywordTag, "DefaultTag"], [specialKeywordTag, "SpecialTag"]];
+    static TAG_SECTION_PROPERTY="SyntaxData";
+    static TAG_PROPERTIES = [[defaultKeywordTag, "DefaultKeywords"], [specialKeywordTag, "SpecialKeywords"]];
+    static TAG_FUNCTION_PROPERTY= "FunctionSyntax";
+    static TAG_FUNCTION_PROPERTY= "FunctionSyntax";
 
     /**
      * @param {String} language 
@@ -126,12 +133,9 @@ class LanguageTagData {
 
     for (let i = 0; i < jsonObj.length; i++) {
         const obj = jsonObj[i];
-        // if (!isValidLanguage(obj.Language)){
-        //     console.error(`tried to init language tag data but language ${obj.Language} is not valid`);
-        //     return;
-        // }
-
-        if (obj.Tags) taggedLangData.push(new LanguageTagData(obj.Language, obj.Tags));
+        if (obj[LanguageTagData.TAG_SECTION_PROPERTY]){
+            taggedLangData.push(new LanguageTagData(obj.Language, obj[LanguageTagData.TAG_SECTION_PROPERTY]));
+        }
     }
 })();
 
@@ -255,6 +259,10 @@ function tryAddCodeTags(language, codeLines) {
         }
     }
     return result;
+}
+
+function tryAddInferredTags(language, codeLines){
+    if(!autoAddFuncTag || !autoAddNumTag || !autoAddStrTag) return;
 }
 
 /**

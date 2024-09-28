@@ -19,14 +19,14 @@
             "Web",
             "Server"
         ],
-        "Tags": {
-            "DefaultTag": [
+        "SyntaxData": {
+            "DefaultKeywords": [
                 "function","var","let","const","null","class","interface","abstract",
                 "extends","super","arguments","eval","final","new","this","typeof",
                 "instanceof","native","volatile","synchronized","transient",
                 "debugger","with","async","void","delete","true","false"
             ],
-            "SpecialTag": [
+            "SpecialKeywords": [
                 "if","else","switch","default","case","for","in","while","do",
                 "goto","break","continue","return","try","catch","finally",
                 "throw","import","export","await","yield"
@@ -75,12 +75,12 @@
             "Science",
             "Web"
         ],
-        "Tags":{
-            "DefaultTag":[
+        "SyntaxData":{
+            "DefaultKeywords":[
                 "and", "as", "assert", "class", "def", "del", "False", "global",
                 "in", "is", "lambda", "None", "nonlocal", "not", "or", "True"
             ],
-            "SpecialTag":[
+            "SpecialKeywords":[
                 "break","continue", "elif", "else", "except", "finally", "for",
                 "from", "if", "import", "pass", "raise","try", "while", "with", "yield"
             ]
@@ -140,8 +140,8 @@
             "Web",
             "Applications"
         ],
-        "Tags": {
-            "DefaultTag": [
+        "SyntaxData": {
+            "DefaultKeywords": [
                 "abstract","assert","boolean","byte","char","const","class",
                 "double","enum","extends","false","final","float","implements",
                 "import","instaceof","int","interface","long","native","new","null",
@@ -149,7 +149,7 @@
                 "static","strictfp","super","synchronized","this","true","transient",
                 "void","volatile"
             ],
-            "SpecialTag": [
+            "SpecialKeywords": [
                 "break","case","catch","continue","default","do","else","finally",
                 "goto","for","if","return","switch","throw","throws","try","while"
             ]
@@ -176,8 +176,8 @@
             "Game Development",
             "Applications"
         ],
-        "Tags": {
-            "DefaultTag": [
+        "SyntaxData": {
+            "DefaultKeywords": [
                 "abstract","as","async","base","bool","byte","char",
                 "checked","class","const","decimal","delegate",
                 "double","dynamic","enum","event","explicit","extern",
@@ -191,7 +191,7 @@
                 "unsafe","ushort","using","var","value","virtual",
                 "void","volatile","when","where"
             ],
-            "SpecialTag": [
+            "SpecialKeywords": [
                 "await","break","case","catch","continue","default",
                 "do","else","finally","for","foreach","goto","if","in",
                 "return","switch","throw","try","while","yield"
@@ -215,7 +215,19 @@
         "Use": [
             "Applications",
             "Systems"
-        ]
+        ],
+        "SyntaxData":{
+            "DefaultKeywords":[
+                "auto", "char", "const", "double", "enum", "extern", "float",
+                "int", "long", "register", "short", "signed", "sizeof",
+                "static", "struct", "typedef", "union", "unsigned", "void",
+                "volatile"
+            ],
+            "SpecialKeywords":[
+                "break", "case","continue","default", "do", "else", "for",
+                "goto", "if", "return","switch", "while"
+            ]
+        }
     },
     {
         "Language": "C++",
@@ -236,7 +248,25 @@
             "Applications",
             "Systems",
             "Game Development"
-        ]
+        ],
+        "SyntaxData":{
+            "DefaultKeywords":[
+                "alignas", "alignof", "and", "and_eq", "asm", "atomic_cancel", "atomic_commit",
+                "atomic_noexcept", "auto", "bitand", "bitor", "bool", "char", "char8_t", "char16_t",
+                "char32_t", "class", "compl", "concept", "const", "consteval", "constexpr", "constinit",
+                "const_cast", "decltype", "delete", "double", "dynamic_cast", "enum", "explicit", 
+                "export", "extern", "false", "float", "friend", "inline", "int", "long", "mutable",
+                "namespace", "new", "noexcept", "not", "not_eq", "nullptr", "operator", "or", "or_eq",
+                "private", "protected", "public", "reflexpr", "register", "reinterpret_cast", "requires",
+                "short", "signed", "sizeof", "static", "static_assert","static_cast", "struct", "synchronized",
+                "template", "this", "thread_local", "true", "typedef", "typeid", "typename", "union",
+                "unsigned", "using", "virtual", "void", "volatile", "wchar_t", "xor", "xor_eq"
+            ],
+            "SpecialKeywords":[
+                "break","case", "catch", "continue", "co_await", "co_return", "co_yield", "default",
+                "do", "else", "for", "goto", "if", "return", "switch", "throw", "try", "while"
+            ]
+        }
     },
     {
         "Language": "Rust",
