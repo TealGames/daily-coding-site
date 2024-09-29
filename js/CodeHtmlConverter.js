@@ -18,7 +18,13 @@ const newLineTag = "new";
 //adds the set amount of tabs (if t2 then 2 tabs are added)
 const tabTag = "t";
 
+//We need to determine if a < sign is a tag or just the symbol so this is the escape
 const lessThanEscape = " ";
+
+//when parsing strings for inferred tags we need to know if it is a "
+//in a string or just a " for starting/ending strings
+const stringInStringEscape = "/";
+
 export const codeTokenTag = "p";
 
 const allTags = [defaultTag, defaultKeywordTag, specialKeywordTag, variableTag,
@@ -31,9 +37,14 @@ const autoAddDefToSymbols = false;
 //If lang has tag data, will use it to auto add tags
 const autoAddLangTagData = true;
 
-const autoAddFuncTag=true;
-const autoAddNumTag=true;
-const autoAddStrTag=true;
+const autoAddFuncTag = true;
+const autoAddNumTag = true;
+const autoAddStrTag = true;
+const stringSymbols = ["\"", "'", "`"];
+
+const inferStringProperty = "InferString";
+const inferNumberProperty = "InferNumber";
+const inferFunctionProperty = "InferFunction";
 
 const noTagFoundTag = defaultTag;
 
@@ -52,10 +63,10 @@ class LanguageTagData {
     #language;
     tagData;
 
-    static TAG_SECTION_PROPERTY="SyntaxData";
+    static TAG_SECTION_PROPERTY = "SyntaxData";
     static TAG_PROPERTIES = [[defaultKeywordTag, "DefaultKeywords"], [specialKeywordTag, "SpecialKeywords"]];
-    static TAG_FUNCTION_PROPERTY= "FunctionSyntax";
-    static TAG_FUNCTION_PROPERTY= "FunctionSyntax";
+    static TAG_FUNCTION_PROPERTY = "FunctionSyntax";
+    static TAG_STRING_PROPERTY = "StringSyntax";
 
     /**
      * @param {String} language 
@@ -81,6 +92,7 @@ class LanguageTagData {
 
         for (let i = 0; i < LanguageTagData.TAG_PROPERTIES.length; i++) {
             const data = LanguageTagData.TAG_PROPERTIES[i];
+
             if (this.tagData[data[1]]) {
                 result.push({
                     "Tag": data[0],
@@ -90,6 +102,33 @@ class LanguageTagData {
         }
 
         return result;
+    }
+
+    /**
+     * @returns {Boolean}
+     */
+    getInferString() {
+        if (this.tagData[TAG_STRING_PROPERTY]) {
+            return this.tagData[TAG_STRING_PROPERTY];
+        }
+        return false;
+    }
+
+    /**
+     * @returns {Boolean}
+     */
+    getInferFunction() {
+        if (this.tagData[TAG_FUNCTION_PROPERTY]) {
+            return this.tagData[TAG_FUNCTION_PROPERTY];
+        }
+        return false;
+    }
+
+    /**
+     * @returns {Boolean}
+     */
+    getInferNumber() {
+        return true;
     }
 
     /**
@@ -133,7 +172,7 @@ class LanguageTagData {
 
     for (let i = 0; i < jsonObj.length; i++) {
         const obj = jsonObj[i];
-        if (obj[LanguageTagData.TAG_SECTION_PROPERTY]){
+        if (obj[LanguageTagData.TAG_SECTION_PROPERTY]) {
             taggedLangData.push(new LanguageTagData(obj.Language, obj[LanguageTagData.TAG_SECTION_PROPERTY]));
         }
     }
@@ -150,14 +189,39 @@ function getTagDataFromLanguage(language) {
         return;
     }
 
-    console.log(`total tag lang data: ${taggedLangData.length}`);
+    //console.log(`total tag lang data: ${taggedLangData.length}`);
     for (let i = 0; i < taggedLangData.length; i++) {
-        console.log(`checking tag data ${HelperFunctions.objAsString(taggedLangData[i])}`);
+        //console.log(`checking tag data ${HelperFunctions.objAsString(taggedLangData[i])}`);
         if (taggedLangData[i].getLanguage() === language) {
             return taggedLangData[i].getAllTagData();
         }
     }
 
+    return null;
+}
+
+/**
+ * @param {String} language 
+ * @returns {Object}
+ */
+function getInferredTagsForLanguage(language) {
+    const isValid = isValidLanguage(language, true);
+    if (!isValid) {
+        console.error(`tried to get inferred tag data from language ${language} but it is not a valid language!`);
+        return;
+    }
+
+    for (let i = 0; i < taggedLangData.length; i++) {
+        //console.log(`checking tag data ${HelperFunctions.objAsString(taggedLangData[i])}`);
+        if (taggedLangData[i].getLanguage() === language) {
+            let obj = null;
+            obj[inferStringProperty] = taggedLangData[i].getInferString();
+            obj[inferFunctionProperty] = taggedLangData[i].getInferFunction();
+            obj[inferNumberProperty] = taggedLangData[i].getInferNumber();
+
+            return obj;
+        }
+    }
     return null;
 }
 
@@ -261,8 +325,141 @@ function tryAddCodeTags(language, codeLines) {
     return result;
 }
 
-function tryAddInferredTags(language, codeLines){
-    if(!autoAddFuncTag || !autoAddNumTag || !autoAddStrTag) return;
+function tryAddInferredTags(language, codeLines) {
+    if (!autoAddFuncTag && !autoAddNumTag && !autoAddStrTag) return;
+
+    const langData = getInferredTagsForLanguage(language);
+    if (!langData) {
+        console.error(`tried to get inferred tag data from lang ${language} but it was not found`);
+        return;
+    }
+
+    let line = "";
+    let result = [];
+
+    let index = -1;
+    let searchStartPos = 0;
+
+    //Used for function tag
+    let previousSpaceIndex = -1;
+
+    //used for string tag
+    let nextStringSymbolIndex = -1;
+
+    //Checks if the indices before have > and it is not a closing tag, it must be for this tag
+    const isStartTagBefore = (currentLine) => {
+        if (index - tagLength - 2 >= 0 && currentLine.charAt(index - 1) === ">" &&
+            currentLine.charAt(index - tagLength - 2) !== "/") return true;
+        else return false;
+    }
+
+    const getNextIndex = (property, currentLine, startPosIndex) => {
+        const searchIndexStart = startPosIndex >= 0 ? searchIndexStart : 0;
+        if (autoAddStrTag && property === inferStringProperty && langData[inferStringProperty]) {
+            index = HelperFunctions.getIndexOfAny(currentLine, stringSymbols, searchIndexStart);
+        }
+        else if (autoAddFuncTag && property === inferFunctionProperty && langData[inferFunctionProperty]) {
+            index = currentLine.indexOf("(", searchIndexStart);
+        }
+        else if (autoAddNumTag && property === inferNumberProperty && langData[inferNumberProperty]) {
+            index = HelperFunctions.getIndexOfAny(currentLine, HelperFunctions.digitCharacters, searchIndexStart);
+        }
+    }
+
+    for (let i = 0; i < codeLines.length; i++) {
+        line = codeLines[i];
+        result.push(line);
+
+        for (let property in langData) {
+            if (!langData[property]) continue;
+
+            index = getNextIndex(property, result[i], searchStartPos);
+            while (index >= 0) {
+                searchStartPos = index + 1;
+
+                if (isStartTagBefore(result[i])) { }
+
+                //When we find string symbol we try to find another one since strings are all
+                //found in pairs and then we sorround that segment with tags and set the next index to past second string
+                //we have to also consider strings in strings, so we have to find escape
+                else if (autoAddStrTag && property === inferStringProperty) {
+                    nextStringSymbolIndex = -1;
+                    let nextStringIndex = HelperFunctions.getIndexOfAny(currentLine, stringSymbols, index + 1);
+
+                    //We search for the next string tag since they are found in pairs
+                    //and break if we reach end or we if find one without a string in string escape
+                    while (nextStringIndex >= 0) {
+                        if (nextStringIndex > 0 && result[i].charAt(nextStringIndex - 1) !== stringInStringEscape) {
+                            nextStringSymbolIndex = nextStringIndex;
+                            break;
+                        }
+
+                        if (nextStringIndex + 1 >= result[i].length) {
+                            break;
+                        }
+                        nextStringIndex = HelperFunctions.getIndexOfAny(currentLine, stringSymbols, nextStringIndex + 1);
+                    }
+
+                    if (nextStringSymbolIndex === -1) {
+                        console.error(`tried to infer the string tag for string symbol from line ${line} ` +
+                            `at index ${index} for langauge ${language} but it has no second string symbol pair!`);
+                        return;
+                    }
+                    else {
+                        result[i] = result[i].substring(0, index) + `<${stringTag}>` + result[i].substring(index, nextStringSymbolIndex + 1) +
+                            result[i].substring(nextStringSymbolIndex + 1);
+                        searchStartPos = nextStringSymbolIndex + 1;
+                    }
+                }
+
+                //when we find ( symbol we look back until we find a space or start of line
+                //so we can extract the area for function name and use it to be sorrounded
+                else if (autoAddFuncTag && property === inferFunctionProperty) {
+                    previousSpaceIndex = -1;
+                    for (let j = index - 1; j >= 0; j--) {
+                        if (result[i].charAt(j) === " ") {
+                            previousSpaceIndex = j;
+                            break;
+                        }
+                    }
+                    if (index == 0 || previousSpaceIndex >= 0) {
+                        result[i] = result[i].substring(0, previousSpaceIndex) + `<${functionTag}>` +
+                            result[i].substring(previousSpaceIndex, index + 1) + `</${functionTag}>` + result[i].substring(index + 1);
+
+                        //5 for <> and </> for tag length added
+                        searchStartPos += (5 + 2 * functionTag.length);
+                    }
+                    else {
+                        console.warn(`found a ( for a function when inferring tags for langauge ${language}` +
+                            `at index ${index} for line ${line} but found no space before for function or start of line!`);
+                    }
+                }
+
+                //When we find a number, we keep looking forward until we no longer have a number
+                //and then we exit and sorround that whole area with the number tag
+                else if (autoAddNumTag && property === inferNumberProperty) {
+                    for (let j = index + 1; j < result[i].length; j++) {
+                        if (!HelperFunctions.isNumber(result[i].charAt(j))) {
+                            break;
+                        }
+                    }
+                    result[i] = result[i].substring(0, index) + `<${numberTag}>` +
+                        result[i].substring(index, j) + `</${numberTag}>` + result[i].substring(j);
+
+                    //5 for <> and </> and for tag length added
+                    searchStartPos += (5 + 2 * numberTag.length);
+                }
+
+                //If we go past line, we don't search anymore
+                if (searchStartPos >= result[i].length) {
+                    break;
+                }
+
+                index = getNextIndex(property, result[i], searchStartPos);
+            }
+        }
+    }
+    return result;
 }
 
 /**
@@ -559,6 +756,9 @@ export function getHtmlFromCodeData(data) {
     if (autoAddLangTagData) {
         code = tryAddCodeTags(codeLanguage, code);
         console.log(`LANG TAG BEFORE: ${codeBefore} AFTER ${code}`);
+    }
+    if (autoAddFuncTag || autoAddNumTag || autoAddStrTag) {
+        tryAddInferredTags(codeLanguage, code);
     }
 
     let html = "";

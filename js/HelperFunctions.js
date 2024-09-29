@@ -94,6 +94,8 @@ export class HelperFunctions {
         , ".", "?", "/"
     ];
 
+    static digitCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
     static startWidth = window.innerWidth;
     static startHeight = window.innerHeight;
 
@@ -340,8 +342,8 @@ export class HelperFunctions {
      * @param {String[]} [specialCharExclude=[]] 
      * @returns {Boolean}
      */
-    static isSpecialCharacter(c, specialCharExclude=[]) {
-        if (specialCharExclude && specialCharExclude.length>0 && 
+    static isSpecialCharacter(c, specialCharExclude = []) {
+        if (specialCharExclude && specialCharExclude.length > 0 &&
             HelperFunctions.arrayContains(specialCharExclude, c)) return false;
 
         return this.specialCharacters.indexOf(c) != -1;
@@ -364,7 +366,7 @@ export class HelperFunctions {
 
         let result = target;
         let valIndex = target.indexOf(replaceVal);
-        while (valIndex >= 0 && valIndex<result.length) {
+        while (valIndex >= 0 && valIndex < result.length) {
             let newStr = result.substring(0, valIndex) + newVal + result.substring(valIndex + replaceVal.length);
             result = newStr;
 
@@ -373,32 +375,54 @@ export class HelperFunctions {
         return result;
     }
 
+    static isNumber(str) {
+        return !isNaN(str);
+    }
+
     /**
      * Gets the indices of all the occurences of instanceStr in string
      * @param {String} string 
      * @param {String} instanceStr 
      * @returns {Number[]}
      */
-    static getIndicesOfString(string, instanceStr){
+    static getIndicesOfString(string, instanceStr) {
         let valIndex = string.indexOf(instanceStr);
-        let indices=[];
+        let indices = [];
         while (valIndex >= 0) {
             indices.push(valIndex);
 
-            if (valIndex>=string.length-1) break;
-            valIndex = string.indexOf(instanceStr, valIndex+1);
+            if (valIndex >= string.length - 1) break;
+            valIndex = string.indexOf(instanceStr, valIndex + 1);
         }
         return indices;
+    }
+
+    /**
+     * Will go through each element in findStrings until it finds the 
+     * str in string otherwise -1
+     * @param {String} string 
+     * @param {String[]} findStrings 
+     * @param {number} [startIndex=0] 
+     * @return {Number}
+     */
+    static getIndexOfAny(string, findStrings, startIndex = 0) {
+        let index = -1;
+
+        for (let i = 0; i < findStrings.length; i++) {
+            index = string.indexOf(findStrings[i], startIndex);
+            if (index >= 0) return index;
+        }
+        return -1;
     }
 
     /**
      * @param {String[]} stringArray 
      * @returns {String}
      */
-    static combineStringArrayToOne(stringArray){
-        let result="";
-        for (let i=0; i<stringArray.length; i++){
-            result+=stringArray[i];
+    static combineStringArrayToOne(stringArray) {
+        let result = "";
+        for (let i = 0; i < stringArray.length; i++) {
+            result += stringArray[i];
         }
         return result;
     }
@@ -430,11 +454,11 @@ export class HelperFunctions {
      * @returns {Object}
      */
     static getObjFromJson(json) {
-        let obj=null;
-        try{
-            obj= JSON.parse(json);
+        let obj = null;
+        try {
+            obj = JSON.parse(json);
         }
-        catch (e){
+        catch (e) {
             console.error(`tried to parse the json ${json} but encountered error: ${e}`);
         }
         return obj;
