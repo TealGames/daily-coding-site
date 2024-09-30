@@ -20,6 +20,8 @@
             "Server"
         ],
         "SyntaxData": {
+            "FunctionSyntax": true,
+            "StringSyntax": true,
             "DefaultKeywords": [
                 "function","var","let","const","null","class","interface","abstract",
                 "extends","super","arguments","eval","final","new","this","typeof",
@@ -76,6 +78,8 @@
             "Web"
         ],
         "SyntaxData":{
+            "FunctionSyntax": true,
+            "StringSyntax": true,
             "DefaultKeywords":[
                 "and", "as", "assert", "class", "def", "del", "False", "global",
                 "in", "is", "lambda", "None", "nonlocal", "not", "or", "True"
@@ -141,6 +145,8 @@
             "Applications"
         ],
         "SyntaxData": {
+            "FunctionSyntax": true,
+            "StringSyntax": true,
             "DefaultKeywords": [
                 "abstract","assert","boolean","byte","char","const","class",
                 "double","enum","extends","false","final","float","implements",
@@ -177,6 +183,8 @@
             "Applications"
         ],
         "SyntaxData": {
+            "FunctionSyntax": true,
+            "StringSyntax": true,
             "DefaultKeywords": [
                 "abstract","as","async","base","bool","byte","char",
                 "checked","class","const","decimal","delegate",
@@ -217,6 +225,8 @@
             "Systems"
         ],
         "SyntaxData":{
+            "FunctionSyntax": true,
+            "StringSyntax": true,
             "DefaultKeywords":[
                 "auto", "char", "const", "double", "enum", "extern", "float",
                 "int", "long", "register", "short", "signed", "sizeof",
@@ -250,6 +260,8 @@
             "Game Development"
         ],
         "SyntaxData":{
+            "FunctionSyntax": true,
+            "StringSyntax": true,
             "DefaultKeywords":[
                 "alignas", "alignof", "and", "and_eq", "asm", "atomic_cancel", "atomic_commit",
                 "atomic_noexcept", "auto", "bitand", "bitor", "bool", "char", "char8_t", "char16_t",

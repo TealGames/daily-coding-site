@@ -12,7 +12,7 @@ let langaugeData = [];
 let dailyTable = [];
 let dailyCode = [];
 
-const todayForcedCodeId = -1;
+const todayForcedCodeId = 104;
 
 export const maxCodeIdLength = 4;
 
