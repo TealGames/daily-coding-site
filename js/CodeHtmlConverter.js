@@ -218,7 +218,7 @@ function getInferredTagsForLanguage(language) {
     }
 
     for (let i = 0; i < taggedLangData.length; i++) {
-        console.log(`checking tag data ${HelperFunctions.objAsString(taggedLangData[i])}`);
+        //console.log(`checking tag data ${HelperFunctions.objAsString(taggedLangData[i])}`);
         if (taggedLangData[i].getLanguage() === language) {
             let obj = {};
             obj[inferStringProperty] = taggedLangData[i].getInferString();
@@ -269,7 +269,7 @@ function tryAddCodeTags(language, codeLines) {
             for (let k = 0; k < currentData.length; k++) {
                 checkString = currentData[k];
                 checkStrIsTag = isValidTag(checkString);
-                console.log(`checking string ${checkString} of tag ${currentTag} for line ${line}`);
+                //console.log(`checking string ${checkString} of tag ${currentTag} for line ${line}`);
 
                 index = result[i].indexOf(checkString);
                 while (index >= 0) {
@@ -321,7 +321,7 @@ function tryAddCodeTags(language, codeLines) {
                     //if we were at the last index, we exit
                     if (nextSearchStart >= result[i].length) break;
 
-                    console.log(`next search start pos is ${nextSearchStart}`);
+                    //console.log(`next search start pos is ${nextSearchStart}`);
                     index = result[i].indexOf(checkString, nextSearchStart);
                     index = -1;
                 }
@@ -391,7 +391,7 @@ function tryAddInferredTags(language, codeLines) {
 
             searchStartPos=0;
             index = getNextIndex(property, result[i], searchStartPos);
-            console.log(`checking property ${property} for lang data ${HelperFunctions.objAsString(langData)} for line ${line} index ${index}`);
+            //console.log(`checking property ${property} for lang data ${HelperFunctions.objAsString(langData)} for line ${line} index ${index}`);
             while (index >= 0) {
                 searchStartPos = index + 1;
 
@@ -401,10 +401,10 @@ function tryAddInferredTags(language, codeLines) {
                 //found in pairs and then we sorround that segment with tags and set the next index to past second string
                 //we have to also consider strings in strings, so we have to find escape
                 else if (autoAddStrTag && property === inferStringProperty) {
-                    console.log(`adding str tag`);
+                    //console.log(`adding str tag`);
                     nextStringSymbolIndex = -1;
                     let nextStringIndex = HelperFunctions.getIndexOfAny(result[i], stringSymbols, index + 1);
-                    console.log(`next string ${nextStringIndex} when searching from ${index} at line ${result[i]} len: ${result[i].length}`);
+                    //console.log(`next string ${nextStringIndex} when searching from ${index} at line ${result[i]} len: ${result[i].length}`);
 
                     //We search for the next string tag since they are found in pairs
                     //and break if we reach end or we if find one without a string in string escape
@@ -437,13 +437,13 @@ function tryAddInferredTags(language, codeLines) {
                 //when we find ( symbol we look back until we find a space or start of line
                 //so we can extract the area for function name and use it to be sorrounded
                 else if (autoAddFuncTag && property === inferFunctionProperty) {
-                    
+
                     //If we have a closing tag before the parenthesis it means the area that would be a func
                     //is overriden with a custom tag, so we don't do anything
                     if (index-tagLength-2>=0 && result[i].charAt(index-1)===">" && (result[i].charAt(index-tagLength-2)==="<" || 
                     (index-tagLength-3>=0 && result[i].substring(index-tagLength-3, index-tagLength-1)==="</"))){}
                     else{
-                        console.log(`adding func tag`);
+                        //console.log(`adding func tag`);
                         previousSpaceIndex = -1;
                         for (let j = index - 1; j >= 0; j--) {
                             //Functions can be called by themselves or they can be used on another variable
@@ -476,7 +476,7 @@ function tryAddInferredTags(language, codeLines) {
                         result[i].substring(index-tabTag.length, index)===tabTag && 
                         (result[i].charAt(index-tabTag.length-1)==="/" || result[i].charAt(index-tabTag.length-1)==="<")) {}
                     else{
-                        console.log(`adding num tag`);
+                        //console.log(`adding num tag`);
                         for (let j = index + 1; j < result[i].length; j++) {
                             if (!HelperFunctions.isNumber(result[i].charAt(j))) {
                                 nextNonNumberIndex=j;
@@ -804,7 +804,7 @@ export function getHtmlFromCodeData(data) {
     }
     if (autoAddFuncTag || autoAddNumTag || autoAddStrTag) {
         code= tryAddInferredTags(codeLanguage, code);
-        console.log(`INFER TAG BEFORE: ${codeBefore} AFTER ${code}`);
+        //console.log(`INFER TAG BEFORE: ${codeBefore} AFTER ${code}`);
     }
 
     let html = "";

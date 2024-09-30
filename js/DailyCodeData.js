@@ -372,7 +372,7 @@ function getCodeDataFromJSON(json) {
  */
 export function getDataFromLanguage(language, warn = true) {
     for (let i = 0; i < langaugeData.length; i++) {
-        console.log(`checking lang ${langaugeData[i].getLang()} with ${language}`);
+        //console.log(`checking lang ${langaugeData[i].getLang()} with ${language}`);
         if (language === langaugeData[i].getLang()) {
             return langaugeData[i];
         }

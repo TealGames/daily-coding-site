@@ -286,7 +286,7 @@ function checkInput(text) {
     if (!text) return;
 
     const foundData = getDataFromLanguageString(text);
-    console.log(`checking repeat guess: ${guessedLanguages}`);
+    //console.log(`checking repeat guess: ${guessedLanguages}`);
     if (isRepeatGuess(foundData)) return;
 
     //NO matter what we show the current attempt for table game
@@ -467,7 +467,7 @@ function clearUpdateTime() {
     });
 
     const creditsJson = await HelperFunctions.getFileText(creditsJsonPath);
-    console.log(`credits json ${creditsJson}`);
+    //console.log(`credits json ${creditsJson}`);
     if (creditsJson) credits = HelperFunctions.getObjFromJson(creditsJson);
 }());
 

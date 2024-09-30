@@ -23,10 +23,10 @@ function setLines() {
 
     let number = 1;
     lineNumberParent.innerHTML = "";
-    console.log(`set lines line num rect: ${getLineRectWidth()} right content: ${getRightContentWidth()}`);
+    //console.log(`set lines line num rect: ${getLineRectWidth()} right content: ${getRightContentWidth()}`);
 
     while (getLineRectWidth() < getRightContentWidth()) {
-        console.log(`adding line number ${number}`);
+        //console.log(`adding line number ${number}`);
         lineNumberParent.innerHTML += `<p class="inline no-margins">${number}</p>`;
         number++;
     }

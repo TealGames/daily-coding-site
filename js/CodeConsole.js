@@ -55,23 +55,23 @@ function updateStyle() {
 
     const gameDisplayRect = displayContainer.getBoundingClientRect();
 
-    console.log(`checking window width ${window.innerWidth} new display top ${gameDisplayRect.top}+height${gameDisplayRect.height}`);
+    //console.log(`checking window width ${window.innerWidth} new display top ${gameDisplayRect.top}+height${gameDisplayRect.height}`);
     const centerRect = centerContentContainer.getBoundingClientRect();
     const bodyRect = bodyContainer.getBoundingClientRect();
     const footerRect = footer.getBoundingClientRect();
     //console.log(`center container height: ${centerRect.height} pos ${centerRect.y+centerRect.height} footer start: ${footerRect.top}`);
-    console.log(`body container height: ${bodyRect.height} pos ${bodyRect.y + bodyRect.height} footer start: ${footerRect.top}`);
-    console.log(`DIFF: body ${bodyRect.height}- footer ${footerRect.top} = ${bodyRect.height - footerRect.top} shown: ${isConsoleShown} threshold: ${bodyConsoleDiffUpdateThreshold}`);
+    //console.log(`body container height: ${bodyRect.height} pos ${bodyRect.y + bodyRect.height} footer start: ${footerRect.top}`);
+    //console.log(`DIFF: body ${bodyRect.height}- footer ${footerRect.top} = ${bodyRect.height - footerRect.top} shown: ${isConsoleShown} threshold: ${bodyConsoleDiffUpdateThreshold}`);
 
     //to move the console up when the width shrinks
     if (isConsoleShown && window.innerWidth <= updateConsoleFromWidthThreshold) {
-        console.log(`OVERLAP FOR CONSOLE FOUND WHILE displayed: TRUE :${gameDisplayRect.top + gameDisplayRect.height}`);
+        //console.log(`OVERLAP FOR CONSOLE FOUND WHILE displayed: TRUE :${gameDisplayRect.top + gameDisplayRect.height}`);
         footer.style.removeProperty(`height`);
         footer.style.top = `${gameDisplayRect.top + gameDisplayRect.height + extraConsoleBuffer}px`;
         footer.style.bottom = "0%";
     }
     else if (!isConsoleShown && bodyRect.height - footerRect.top >= bodyConsoleDiffUpdateThreshold) {
-        console.log(`OVERLAP FOR CONSOLE FOUND WHILE displayed FALSE: ${gameDisplayRect.top + gameDisplayRect.height}`);
+        //console.log(`OVERLAP FOR CONSOLE FOUND WHILE displayed FALSE: ${gameDisplayRect.top + gameDisplayRect.height}`);
         footer.style.removeProperty(`height`);
         footer.style.top = `${bodyRect.height}px`;
         footer.style.bottom = "0%";
@@ -81,7 +81,7 @@ function updateStyle() {
     //     footer.style.bottom = "0%";
     // }
     else {
-        console.log(`choosing strict height top: ${100 - footer.style.height}`);
+        //console.log(`choosing strict height top: ${100 - footer.style.height}`);
         footer.style.removeProperty(`top`);
         footer.style.removeProperty(`bottom`);
     }
@@ -122,7 +122,7 @@ function hideConsole() {
 }
 
 function updateFromPage(e) {
-    console.log("enabled page " + e.detail);
+    //console.log("enabled page " + e.detail);
     updateStyle();
     if (e.detail.pageEnabledId !== PageId.GameDisplay) {
         hideConsole();
@@ -152,7 +152,7 @@ function updateLabelText(e) {
     let oldHtml = label.innerHTML;
 
     //If we have the label, we just append the answer, otherwise we create a new label
-    console.log(`update label val: ${input} @idx${lastIndex} ${e?.detail?.CorrectGuess}`);
+    //console.log(`update label val: ${input} @idx${lastIndex} ${e?.detail?.CorrectGuess}`);
     if (lastIndex >= 0) {
         oldHtml = oldHtml.substring(0, lastIndex);
 
