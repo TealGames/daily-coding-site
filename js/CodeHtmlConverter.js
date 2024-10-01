@@ -746,15 +746,18 @@ export function codeStylesPassesTests(id, strings) {
         }
 
         //CHECK FOR START AND CLOSING TAGS
-        let allTagIndices = [];
+        let startTagIndices = [];
+        let endTagIndices= [];
         for (let j = 0; j < allTags.length; j++) {
 
             //New line tag does not need closing tag
             if (allTags[j] == newLineTag) continue;
 
-            allTagIndices = HelperFunctions.getIndicesOfString(line, `${allTags[j]}>`);
-            if (allTagIndices && allTagIndices.length !== 0 && allTagIndices.length % 2 !== 0) {
-                failTest(i, `Found tag that either has no closing or start tag: ${allTags[j]}`);
+            startTagIndices = HelperFunctions.getIndicesOfString(line, `<${allTags[j]}>`);
+            endTagIndices = HelperFunctions.getIndicesOfString(line, `</${allTags[j]}>`);
+            if (startTagIndices && endTagIndices && startTagIndices.length!==endTagIndices.length) {
+                failTest(i, `Found tag that either has no closing or start tag: ${allTags[j]} `+
+                    `with start (${startTagIndices}) end (${endTagIndices})`);
                 return false;
             }
         }
