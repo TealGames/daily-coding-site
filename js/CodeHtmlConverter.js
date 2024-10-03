@@ -51,14 +51,6 @@ const noTagFoundTag = defaultTag;
 let taggedLangData = [];
 const taggedLangDataJson = "./data/LanguageData.json";
 
-/**
- * @param {String} tag 
- * @returns {Boolean}
- */
-function isValidTag(tag) {
-    return HelperFunctions.arrayContains(allTags, tag);
-}
-
 class LanguageTagData {
     #language;
     tagData;
@@ -161,6 +153,139 @@ class LanguageTagData {
         }
         return [];
     }
+}
+
+/**
+ * Will check if a tag is valid. Can include < > or </> since those are removed
+ * However it must have both a start and end symbol otherwise parsing fails
+ * @param {String} tag 
+ * @returns {Boolean}
+ */
+function isValidTag(tag) {
+    let searchStr= tag.trim();
+    if (!searchStr || searchStr.length===0) return false;
+
+    const hasEndSymbol= searchStr.charAt(searchStr.length-1)===">";
+    if (searchStr.length>=4 && searchStr.substring(0, 2)==="</" && hasEndSymbol){
+        searchStr=searchStr.substring(2, searchStr.length-1);
+    }
+    else if (searchStr.length>=3 && searchStr.charAt(0)==="<" && hasEndSymbol) {
+        searchStr=searchStr.substring(1, searchStr.length-1);
+    }
+    
+    console.log(`checking is valid tag from tag ${tag} search: ${searchStr}`);
+
+    return HelperFunctions.arrayContains(allTags, searchStr);
+}
+
+/**
+ * Will check if a valid start tag exists before the index in line
+ * meaning that the tag most likely starts for the index specified
+ * <t>word -> true
+ * </t>word -> false
+ * word -> false
+ * @param {String} line 
+ * @param {Number} index 
+ * @returns {Boolean}
+ */
+function hasStartTagBefore(line, index, failInfo=""){
+    if (index<0 || index>=line.length){
+        console.warn(`tried to check tag before for line ${line} (Len: ${line.length}) at index ${index}, `+
+            `but the index is out of bounds [${0} ${line.length-1}]! ${(failInfo? `Fail Info: ${failInfo}` : "")}`);
+        return false;
+    }
+
+    //min tag length is <, 1 character, >
+    const minTagLen=3;
+
+    //Check to make sure we have the min amount of space before
+    if (index<minTagLen){
+        console.warn(`tried to check tag before for line ${line} at index ${index}, `+
+            `but it can not be used on indices less than ${minTagLen}! ${(failInfo? `Fail Info: ${failInfo}` : "")}`);
+        return false;
+    }
+
+    //Since we check before index, we need to not count that index as part of length
+    if (line.length<minTagLen+1){
+        console.warn(`tried to check tag before for line ${line} at index ${index}, `+
+            `but the line length is less than min of ${minTagLen+1}! ${(failInfo? `Fail Info: ${failInfo}` : "")}`);
+        return false;
+    }
+
+    if (line.charAt(index-1)!==">") return false;
+
+    //We start at index - max tag len and 2 for <> symbols
+    let startIndex= index-tagLength-2;
+    let testStr="";
+    if (startIndex<0) startIndex=0;
+    
+    for (let i=startIndex; i<index-1; i++){
+        //We test the current index as well as the index before end symbol
+        //so we don't include any symbols and only check for the valid tag
+        testStr= line.substring(i, index-1);
+
+        //If we are looking for a tag and we find it is an end tag, 
+        //we return false since we are looking for START TAGS not end tags
+        if (line.charAt(i)==="<" && i+1<=line.length-1 && 
+            line.charAt(i+1)==="/" && isValidTag(testStr)){
+            return false;
+        }
+
+        if (isValidTag(testStr)){
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Will check if a valid tag exists before the index in line
+ * @param {String} line 
+ * @param {Number} index 
+ * @returns {Boolean}
+ */
+function hasEndTagAfter(line, index, failInfo=""){
+    if (index<0 || index>=line.length){
+        console.warn(`tried to check tag after for line ${line} (Len: ${line.length}) at index ${index}, `+
+            `but the index is out of bounds [${0} ${line.length-1}]! ${(failInfo? `Fail Info: ${failInfo}` : "")}`);
+        return false;
+    }
+
+    //min tag length is <, /, 1 character, >
+    const minTagLen=4;
+    const smallestFitIndex= line.length-1-minTagLen;
+    //check to make sure we have the min amount of space after
+    if (index>smallestFitIndex){
+        console.warn(`tried to check tag after for line ${line} at index ${index}, `+
+            `but it can not be used on indices greater than ${smallestFitIndex} since the smallest tag does not fit then! `+
+            `${(failInfo? `Fail Info: ${failInfo}` : "")}`);
+        return false;
+    }
+
+    //Since we check before index, we need to not count that index as part of length
+    if (line.length<minTagLen+1){
+        console.warn(`tried to check tag after for line ${line} at index ${index}, `+
+            `but the line length is less than min of ${minTagLen+1}! ${(failInfo? `Fail Info: ${failInfo}` : "")}`);
+        return false;
+    }
+    
+    if (line.substring(index+1, index+3)!=="</") return false;
+    let testStr="";
+    
+    //start index should go after the start tag symbols
+    //max index is the amount needed by min tag plus the extra amount for the max characters
+    //since the default min amount covers only 1 character, so we need to cover the rest
+    for (let i=index+3; i<=index+minTagLen+(tagLength-1) && i<line.length; i++){
+        //We check the symbol after index and also include the index specified
+        testStr= line.substring(index+1, i+1);
+        console.log(`checking end tag after valid tag:${testStr} valid:${isValidTag(testStr)}`);
+        if (isValidTag(testStr)){
+            return true;
+        }
+    }
+
+    return false;
 }
 
 (async function initLanguageTagData() {
@@ -284,7 +409,8 @@ function tryAddCodeTags(language, codeLines) {
                     else break;
 
                     //if we have a tag before this and is NOT a closing tag, it means if must be for this segment, so we don't add any tags
-                    if (index - tagLength - 2 >= 0 && result[i].charAt(index - 1) === ">" && result[i].charAt(index - tagLength - 2) !== "/") { }
+                    // if (index - tagLength - 2 >= 0 && result[i].charAt(index - 1) === ">" && result[i].charAt(index - tagLength - 2) !== "/") { }
+                    if (hasStartTagBefore(result[i], index)) {}
 
                     //If the check string is a tag and we are at a tag (meaning we have < or </ on left and > on right)
                     //then we don't do anything
@@ -304,13 +430,23 @@ function tryAddCodeTags(language, codeLines) {
 
                         nextSearchStart = endIndex + 1;
                         if (startFree && endFree && result[i].substring(index, endIndex + 1) === checkString) {
-                            let insertionStr = `<${currentTag}>`;
-                            if (spaceBefore) insertionStr += " ";
-                            insertionStr += checkString;
-                            if (spaceAfter) insertionStr += " ";
-                            insertionStr += `</${currentTag}>`;
+                            let oldStrEndIndex=index;
+                            let oldStrStartIndex=endIndex+1;
 
-                            result[i] = result[i].substring(0, index) + insertionStr + result[i].substring(endIndex + 1);
+                            let insertionStr = `<${currentTag}>`;
+                            if (spaceBefore){
+                                insertionStr += " ";
+                                oldStrEndIndex--;
+                            }
+                            insertionStr += checkString;
+                            if (spaceAfter){
+                                insertionStr += " ";
+                                oldStrStartIndex++;
+                            }
+                            insertionStr += `</${currentTag}>`;
+                            
+                            console.log(`adding result code tag: ${insertionStr} for ${result[i]} between ${oldStrEndIndex} and ${oldStrStartIndex}`);
+                            result[i] = result[i].substring(0, oldStrEndIndex) + insertionStr + result[i].substring(oldStrStartIndex);
 
                             //We add to the not found tag index the amount of special chars added (5)
                             //and the 2 extra tags added
@@ -331,13 +467,18 @@ function tryAddCodeTags(language, codeLines) {
     return result;
 }
 
+/**
+ * @param {String} language 
+ * @param {String[]} codeLines
+ * @returns {String}
+ */
 function tryAddInferredTags(language, codeLines) {
     if (!autoAddFuncTag && !autoAddNumTag && !autoAddStrTag) return;
 
     const langData = getInferredTagsForLanguage(language);
     if (!langData) {
         console.error(`tried to get inferred tag data from lang ${language} but it was not found for language`);
-        return;
+        return codeLines;
     }
 
     let line = "";
@@ -355,12 +496,12 @@ function tryAddInferredTags(language, codeLines) {
     //used for number tag
     let nextNonNumberIndex=-1;
 
-    //Checks if the indices before have > and it is not a closing tag, it must be for this tag
-    const isStartTagBefore = (currentLine) => {
-        if (index - tagLength - 2 >= 0 && currentLine.charAt(index - 1) === ">" &&
-            currentLine.charAt(index - tagLength - 2) !== "/") return true;
-        else return false;
-    }
+    // //Checks if the indices before have > and it is not a closing tag, it must be for this tag
+    // const isStartTagBefore = (currentLine) => {
+    //     // if (index - tagLength - 2 >= 0 && currentLine.charAt(index - 1) === ">" &&
+    //     //     currentLine.charAt(index - tagLength - 2) !== "/") return true;
+    //     // else return false;
+    // }
 
     const getNextIndex = (property, currentLine, startPosIndex) => {
         const searchIndexStart = startPosIndex >= 0 ? startPosIndex : 0;
@@ -395,13 +536,15 @@ function tryAddInferredTags(language, codeLines) {
             while (index >= 0) {
                 searchStartPos = index + 1;
 
-                if (isStartTagBefore(result[i])) { }
+                //if (isStartTagBefore(result[i])) { }
+                if (hasStartTagBefore(result[i], index)) {}
+                else if (hasEndTagAfter(result[i], index)) {}
 
                 //When we find string symbol we try to find another one since strings are all
                 //found in pairs and then we sorround that segment with tags and set the next index to past second string
                 //we have to also consider strings in strings, so we have to find escape
                 else if (autoAddStrTag && property === inferStringProperty) {
-                    //console.log(`adding str tag`);
+                    console.log(`adding str tag at index ${index}`);
                     nextStringSymbolIndex = -1;
                     let nextStringIndex = HelperFunctions.getIndexOfAny(result[i], stringSymbols, index + 1);
                     //console.log(`next string ${nextStringIndex} when searching from ${index} at line ${result[i]} len: ${result[i].length}`);
@@ -417,15 +560,18 @@ function tryAddInferredTags(language, codeLines) {
                         if (nextStringIndex + 1 >= result[i].length) {
                             break;
                         }
-                        nextStringIndex = HelperFunctions.getIndexOfAny(currentLine, stringSymbols, nextStringIndex + 1);
+                        nextStringIndex = HelperFunctions.getIndexOfAny(result[i], stringSymbols, nextStringIndex + 1);
                     }
 
                     if (nextStringSymbolIndex === -1) {
                         console.error(`tried to infer the string tag for string symbol from line ${line} ` +
-                            `at index ${index} for langauge ${language} but it has no second string symbol pair!`);
+                            `at index ${index} (${result[i].charAt(index)}) for langauge ${language} but it has no second string symbol pair! `+
+                            `has end tag after: ${result[i].substring(index+1, index+1+6)}`);
+                        //return codeLines;
                         return;
                     }
                     else {
+                        console.log(`index string pair: ${index} and ${nextStringIndex}`);
                         result[i] = result[i].substring(0, index) + `<${stringTag}>` + result[i].substring(index, nextStringSymbolIndex + 1) +
                             `</${stringTag}>`+ result[i].substring(nextStringSymbolIndex + 1);
 
@@ -797,19 +943,21 @@ export function getHtmlFromCodeData(data) {
     const codeLanguage = data.getLang();
     const codeBefore = code;
 
-    if (autoAddDefToSymbols) {
-        code = tryAddTagToSymbols(code);
-        //console.log(`DEF TAG BEFORE: ${codeBefore} AFTER ${code}`);
+    if (data.getAddTags()){
+        if (autoAddDefToSymbols) {
+            code = tryAddTagToSymbols(code);
+            //console.log(`DEF TAG BEFORE: ${codeBefore} AFTER ${code}`);
+        }
+        if (autoAddLangTagData) {
+            code = tryAddCodeTags(codeLanguage, code);
+            //console.log(`LANG TAG BEFORE: ${codeBefore} AFTER ${code}`);
+        }
+        if (autoAddFuncTag || autoAddNumTag || autoAddStrTag) {
+            code= tryAddInferredTags(codeLanguage, code);
+            console.log(`INFER TAG BEFORE: ${codeBefore} AFTER ${code}`);
+        }
     }
-    if (autoAddLangTagData) {
-        code = tryAddCodeTags(codeLanguage, code);
-        //console.log(`LANG TAG BEFORE: ${codeBefore} AFTER ${code}`);
-    }
-    if (autoAddFuncTag || autoAddNumTag || autoAddStrTag) {
-        code= tryAddInferredTags(codeLanguage, code);
-        //console.log(`INFER TAG BEFORE: ${codeBefore} AFTER ${code}`);
-    }
-
+    
     let html = "";
     let currentTag = null;
 
@@ -866,17 +1014,17 @@ export function getHtmlFromCodeData(data) {
                         if (j >= fullLine.length) {
                             console.error(`tried to parse a tab tag in code style with id ${data.getId()} ` +
                                 `but it occured at the end of a line which is not allowed!`);
-                            return;
+                            return null;
                         }
                         else if (fullLine.charAt(j) === " ") {
                             console.error(`tried to parse a tab tag in code style with id ${data.getId()} ` +
                                 `but it has an empty space after the tag which is not allowed!`);
-                            return;
+                            return null;
                         }
                         else if (fullLine.charAt(j) !== "<" && !defaultKeywordTag) {
                             console.error(`tried to parse a tab tag in code style with id ${data.getId()} ` +
                                 `but it does not have a tag after it which is not allowed!`);
-                            return;
+                            return null;
                         }
                     }
 
@@ -911,7 +1059,7 @@ export function getHtmlFromCodeData(data) {
                     else if (!currentTag) {
                         console.error(`At index ${j} of line ${i} for code data with id ` +
                             `${data.getId()} there is empty current tag! Current line: ${currentLine}`);
-                        return;
+                        return null;
                     }
                     else {
                         let cssClasses = getCSSClassFromTag(currentTag);

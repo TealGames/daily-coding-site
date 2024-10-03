@@ -14,6 +14,10 @@ let dailyCode = [];
 
 const todayForcedCodeId = -1;
 
+//Set the forced queued ids to make the code data appear in the order of the queue
+const queuedForcedId= [1, 2, 3, 51, 52, 53, 54, 101, 102, 103, 151, 152, 153, 201, 202, 203];
+let queuedIds=[];
+
 export const maxCodeIdLength = 4;
 
 export const CodingLanguage = {}
@@ -25,6 +29,9 @@ export class CodeData {
     #codeLines;
     #lang;
     #lineAppearOrder;
+    #addTags;
+
+    static OVERRIDE_TAG_ADDING_PROPERTY= "OverrideTagAdding";
 
     /**
      * @param {String} id
@@ -32,13 +39,15 @@ export class CodeData {
      * @param {string[]} codeLines - the code for the day
      * @param {String} lang - language
      * @param {Number[][]} lineAppearOrder - order lines appear (as indices)
+     * @param {Boolean} addTags 
      */
-    constructor(id, day, lang, codeLines, lineAppearOrder) {
+    constructor(id, day, lang, codeLines, lineAppearOrder, addTags) {
         this.#id = id;
         this.#day = day;
         this.#codeLines = codeLines;
         this.#lang = lang;
         this.#lineAppearOrder = lineAppearOrder;
+        this.#addTags= addTags;
     }
 
     /**
@@ -76,6 +85,13 @@ export class CodeData {
      */
     getLineOrder() {
         return this.#lineAppearOrder;
+    }
+    
+    /**
+     * @returns {Boolean}
+     */
+    getAddTags(){
+        return this.#addTags;
     }
 }
 
@@ -117,6 +133,9 @@ function getTodaysDataUTC(collection) {
 */
 export function getTodaysCodeDataUTC() {
     if (todayForcedCodeId >= 0) return getCodeDataFromId(todayForcedCodeId);
+    else if (queuedForcedId && queuedForcedId.length>0 && queuedIds && queuedIds.length>0){
+        return getCodeDataFromId(queuedIds.shift());
+    }
 
     return getTodaysDataUTC(dailyCode);
 }
@@ -359,8 +378,12 @@ function getTableDataFromJSON(json) {
 function getCodeDataFromJSON(json) {
     validateCodeDataJSON(json);
 
+    let hasAddTag= true;
+    if (HelperFunctions.hasProperty(json, CodeData.OVERRIDE_TAG_ADDING_PROPERTY) && 
+        json[CodeData.OVERRIDE_TAG_ADDING_PROPERTY]) hasAddTag=false;
+
     const data = new CodeData(json.ID, new Date(json.Year, json.Month, json.Day), json.Language,
-        json.Code, json.Order);
+        json.Code, json.Order, hasAddTag);
     // console.log(`data for json ${HelperFunctions.objAsString(json)} is ${json.Language}` +
     //     `${HelperFunctions.objAsString(data)}`);
     return data;
@@ -425,7 +448,11 @@ async function initJsonData(path, dataArray, actionOnObject) {
     }
 }
 
-(async function initAllJsonData() {
+(async function start() {
+    if (queuedForcedId && queuedForcedId.length>0){
+        queuedIds= queuedForcedId;
+    }
+
     await initCodingLanguages();
 
     await initJsonData(languageDataJsonPath, langaugeData, (object) => {
