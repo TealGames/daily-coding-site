@@ -71,7 +71,8 @@ function updateTime(elementId)
 
     //We have to get in relation to completed code assigned day (not in terms of player, but my local time)
     //since we don't know the player completes it and how close to the next time it is
-    let nextDaily= getTodaysCodeData().getDay();
+    // let nextDaily= getTodaysCodeData().getDay();
+    let nextDaily=new Date();
     nextDaily.setDate(nextDaily.getDate()+1);
     nextDaily= HelperFunctions.convertToUTC(HelperFunctions.getDateAsMidnight(nextDaily));
 
@@ -82,11 +83,12 @@ function updateTime(elementId)
         return;
     }
 
+    console.log(`current time: ${currentTime} next: ${nextDaily}`);
     const timeDelta= HelperFunctions.getTimeDifference(currentTime, nextDaily);
     const generalHtml=`<p class="code-2-new-line"></p>`+
                     `<p class="inline code-tab-space code-comment">//Next Daily In:`;
-    const htmlToAdd= generalHtml+ ` ${timeDelta.Hours}:`+
-                    `${timeDelta.Minutes}:${timeDelta.Seconds}</p>`;
+    const htmlToAdd= generalHtml+ ` ${HelperFunctions.padWithLeadingZeros(timeDelta.Hours, 2)}:`+
+                    `${HelperFunctions.padWithLeadingZeros(timeDelta.Minutes)}:${HelperFunctions.padWithLeadingZeros(timeDelta.Seconds, 2)}</p>`;
 
     const html= element.innerHTML;
     const index= html.indexOf(generalHtml);
