@@ -88,7 +88,7 @@ function updateTime(elementId)
     const generalHtml=`<p class="code-2-new-line"></p>`+
                     `<p class="inline code-tab-space code-comment">//Next Daily In:`;
     const htmlToAdd= generalHtml+ ` ${HelperFunctions.padWithLeadingZeros(timeDelta.Hours, 2)}:`+
-                    `${HelperFunctions.padWithLeadingZeros(timeDelta.Minutes)}:${HelperFunctions.padWithLeadingZeros(timeDelta.Seconds, 2)}</p>`;
+                    `${HelperFunctions.padWithLeadingZeros(timeDelta.Minutes, 2)}:${HelperFunctions.padWithLeadingZeros(timeDelta.Seconds, 2)}</p>`;
 
     const html= element.innerHTML;
     const index= html.indexOf(generalHtml);
