@@ -38,7 +38,7 @@ const defaultModeButtonId = "play-default-button";
 const tableModeButtonId = "play-table-button";
 const nameModeButtonId = "play-name-button";
 
-const codeIdTabId = "code-id-tab";
+const codeIdTabContainerId = "code-id-tab-container";
 const codeIdTextId = "code-id-tab-text";
 let codeIdText = null;
 
@@ -131,8 +131,8 @@ function initGameDisplay() {
     HelperFunctions.disableElement(gameReturnMenuContainerId);
     HelperFunctions.enableElement(learnGameRulesContainerId);
 
-    if (playingGame === PlayingGameType.CodeGame) HelperFunctions.enableElement(codeIdTabId);
-    else HelperFunctions.disableElement(codeIdTabId);
+    if (playingGame === PlayingGameType.CodeGame) HelperFunctions.enableElement(codeIdTabContainerId);
+    else HelperFunctions.disableElement(codeIdTabContainerId);
 
     clearUpdateTime();
     enableInput();

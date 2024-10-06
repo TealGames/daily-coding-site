@@ -245,7 +245,6 @@
         "Month": 8,
         "Day": 7,
         "Language": "C#",
-        "OverrideTagAdding": true,
         "Code": [
            "private class <obj>SnapshotTransitionData</obj>",
             "{",

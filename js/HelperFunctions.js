@@ -294,6 +294,7 @@ export class HelperFunctions {
     }
 
     static disableElement(elementId) {
+        console.log(`disabling element ${elementId}`);
         const disableElement = document.getElementById(elementId);
 
         //To prevent conflicts with disable class, we remove any enable classes we might have added
@@ -302,6 +303,7 @@ export class HelperFunctions {
     }
 
     static enableElement(elementId) {
+        console.log(`enabling element ${elementId}`);
         const enableElement = document.getElementById(elementId);
         const nodeType = enableElement.nodeName;
 
