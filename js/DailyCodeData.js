@@ -12,10 +12,10 @@ let langaugeData = [];
 let dailyTable = [];
 let dailyCode = [];
 
-const todayForcedCodeId = -1;
+const todayForcedCodeId = 251;
 
 //Set the forced queued ids to make the code data appear in the order of the queue
-const queuedForcedId= [];
+const queuedForcedId= [1, 2, 3, 51, 52, 53, 54, 101, 102, 103, 151, 152, 153, 201, 202, 203];
 //1, 2, 3, 51, 52, 53, 54, 101, 102, 103, 151, 152, 153, 201, 202, 203
 let queuedIds=[];
 
@@ -570,6 +570,27 @@ export function getCodeDataFromId(id) {
     }
 
     return null;
+}
+
+/**
+ * @param {String} lang
+ * @returns {CodeData[]}
+ */
+export function getCodeDataFromLanguage(lang){
+    let result=[];
+    if (!lang) return result;
+
+    if (!isValidLanguage(lang, false)){
+        console.warn(`tried to get daily code data for langauge ${lang} but it is not a valid language`);
+        return result;
+    }
+
+    for (let i = 0; i < dailyCode.length; i++) {
+        if (dailyCode[i].getLang()===lang){
+            result.push(dailyCode[i]);
+        }
+    }
+    return result;
 }
 
 /**

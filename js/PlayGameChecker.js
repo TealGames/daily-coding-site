@@ -12,6 +12,7 @@ const playButtonId= "play-button";
 const playDefaultButtonId= "play-default-button";
 const playTableButtonId= "play-table-button";
 
+const restrictOneGamePerDay=false;
 let intervalId=0;
 
 function setButtonsIfPage(pageId)
@@ -20,6 +21,7 @@ function setButtonsIfPage(pageId)
     const playedTable= hasPlayedTodaysTable();
 
     clearUpdateTime();
+    if (!restrictOneGamePerDay) return;
 
     if(pageId===PageId.ModeSelect)
     {

@@ -1,5 +1,5 @@
 import { HelperFunctions } from "./HelperFunctions.js";
-import { getDataFromLanguage, getDataFromLanguageString, getTodaysCodeDataUTC, getTodaysTableDataUTC, LanguageData, maxCodeIdLength } from "./DailyCodeData.js";
+import { CodeData, getCodeDataFromLanguage, getDataFromLanguage, getDataFromLanguageString, getTodaysCodeDataUTC, getTodaysTableDataUTC, isValidLanguage, LanguageData, maxCodeIdLength } from "./DailyCodeData.js";
 import { codeTokenTag, getCSSClassIfHasTab, getHtmlFromCodeData, getHtmlFromLanguageData } from "./CodeHtmlConverter.js";
 import { CodeHtmlData } from "./CodeHtmlConverter.js";
 
@@ -21,9 +21,6 @@ let gameReturnMenuContainer = null;
 const learnGameRulesContainerId="learn-games-rules-container";
 let learnGameRulesContainer=null;
 
-const timerElementId = "name-game-timer";
-let timerElement = null;
-
 const dislayContainerId = "game-display-container";
 const displayAreaId = "code-display-area";
 let displayArea = null;
@@ -42,6 +39,10 @@ const codeIdTabContainerId = "code-id-tab-container";
 const codeIdTextId = "code-id-tab-text";
 let codeIdText = null;
 
+const timerElementId = "name-game-timer";
+const timerElementContainerId= "name-game-timer-container";
+let timerElement = null;
+
 let today = null;
 let todaysCodeDisplay = null;
 let appearOrderIndex = 0;
@@ -56,6 +57,8 @@ let previousInput = [];
 const defaultTotalAttempts = 5;
 let currentTotalAttempts = defaultTotalAttempts;
 let currentAttempts = 0;
+
+const obfuscateId=true;
 
 //For name game
 const defaultMinutesTime = 1;
@@ -98,9 +101,9 @@ function initGameDisplay() {
     todaysCodeDisplay = getHtmlFromCodeData(code);
     guessedLanguages.length=0;
 
-    const id = code.getId();
+    const id = getId(code);
     const idWith0s = HelperFunctions.padWithLeadingZeros(id, maxCodeIdLength);
-    if (code) codeIdText.innerHTML = `#${idWith0s}`;
+    if (code && id>=0) codeIdText.innerHTML = `#${idWith0s}`;
     else codeIdText.innerHTML = "null_id";
 
     const contributorData = getContributorForId(id);
@@ -139,6 +142,80 @@ function initGameDisplay() {
     clearDisplay();
 }
 
+/**
+ * @param {CodeData} codeData 
+ * @returns {int}
+ */
+function getId(codeData){
+    if (!codeData) return -1;
+
+    if (!obfuscateId){
+        return codeData.getId();
+    }
+
+    const order= codeData.getLineOrder();
+    if (!order) return -1;
+
+    let idStr="";
+    let currentNumStr="";
+    let rowIdx=order.length-1;
+    let colIdx=0;
+    while (rowIdx>=0 && idStr.length<maxCodeIdLength){
+        console.log(`current num: ${order[rowIdx][colIdx]}`);
+        currentNumStr=(order[rowIdx][colIdx]).toString();
+        if (idStr.length+currentNumStr.length<=maxCodeIdLength){
+            idStr+=currentNumStr;
+        }
+
+        colIdx++;
+        if (colIdx>order[rowIdx].length-1){
+            rowIdx--;
+            colIdx=0;
+        }
+    }
+    return parseInt(idStr);
+}
+
+/**
+ * @param {CodeData} allCodeData 
+ * @param {String} idStr 
+ * @returns {Number}
+ */
+function getIdFromObfuscatedStringId(allCodeData, language, idStr){
+    const numId= idStr.replace(/^0+/, "");
+    return getIdFromObfuscatedId(allCodeData, language, numId);
+}
+
+/**
+ * @param {CodeData} allCodeData 
+ * @param {String} language 
+ * @param {Number} id 
+ * @returns {Number}
+ */
+function getIdFromObfuscatedId(allCodeData, language, id){
+    if (!allCodeData) return -1;
+    if (!obfuscateId) return id;
+    
+    const searchData=allCodeData;
+    const langData= getCodeDataFromLanguage(language);
+    if (langData.length<allCodeData.length){
+        searchData= langData;
+    }
+
+    const currentData=null;
+    let currentId=-1;
+    for (let i=0; i<searchData.length; i++){
+        currentData= searchData[i];
+        currentId=getId(currentData);
+        if (currentId===id){
+            return currentData.getId();
+        }
+    }
+
+    console.warn(`tried to find the real id from obfuscated id ${id} for lang ${language} `+
+       `of data ${allCodeData} but found none that match obfuscated id!`);
+    return -1;
+}
 
 /**
  * @param {String} id 
@@ -338,7 +415,7 @@ function cleanInput(input) {
 }
 
 function startTimer() {
-    HelperFunctions.enableElement(timerElementId);
+    //HelperFunctions.enableElement(timerElementId);
     currentSecondsLeft = defaultMinutesTime * 60;
     timerIntervalId = setInterval(updateTime, 1000);
 
@@ -386,7 +463,7 @@ function updateTime() {
 
 function clearUpdateTime() {
     clearInterval(timerIntervalId);
-    HelperFunctions.disableElement(timerElementId);
+    HelperFunctions.disableElement(timerElementContainerId);
 
     HelperFunctions.tryRemoveClasses(timerElement, [defaultTimerCssClass, timerWarningCssClass]);
     HelperFunctions.addClass(timerElement, defaultTimerCssClass);
@@ -428,7 +505,7 @@ function clearUpdateTime() {
         nextLine();
 
         HelperFunctions.enableElement(languageDropdownButtonId);
-        HelperFunctions.disableElement(timerElementId);
+        HelperFunctions.disableElement(timerElementContainerId);
 
         HelperFunctions.tryRemoveClasses(displayArea, [visibleDisplayContainerClass, hiddenDisplayContainerClass]);
         HelperFunctions.addClass(displayArea, visibleDisplayContainerClass);
@@ -443,8 +520,8 @@ function clearUpdateTime() {
         nextLine();
 
         HelperFunctions.enableElement(languageDropdownButtonId);
-        HelperFunctions.disableElement(timerElementId);
-
+        HelperFunctions.disableElement(timerElementContainerId);
+        
         HelperFunctions.tryRemoveClasses(displayArea, [visibleDisplayContainerClass, hiddenDisplayContainerClass]);
         HelperFunctions.addClass(displayArea, visibleDisplayContainerClass);
 
@@ -457,7 +534,7 @@ function clearUpdateTime() {
         initGameDisplay();
 
         HelperFunctions.disableElement(languageDropdownButtonId);
-        HelperFunctions.enableElement(timerElementId);
+        HelperFunctions.enableElement(timerElementContainerId);
 
         HelperFunctions.tryRemoveClasses(displayArea, [visibleDisplayContainerClass, hiddenDisplayContainerClass]);
         HelperFunctions.addClass(displayArea, visibleDisplayContainerClass);

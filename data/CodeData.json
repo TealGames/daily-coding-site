@@ -86,7 +86,7 @@
             "<obj>String</obj> <var>myName</var>= <str>\"William Shakespeare\"</str>;",
             "<key>int</key> <var>age</var>= <num>408</num>;",
             "<spc>if</spc> (<var>year</var>==<num>2025</num>) <var>age</var>++;",
-            "<obj>String</obj> <var>msg</var> = STR.<str>\"Hello my name is \\{myName}. I am \\{age} years old\"</str>;",
+            "<obj>String</obj> <var>msg</var> = STR.<str>\"Hello my name is </str>{<var>myName</var>}<str>. I am </str>{<var>age</var>}<str> years old\"</str>;",
             "<obj>System</obj>.<key>out</key>.<fnc>println</fnc>(<var>msg</var>);"
         ],
         "Order": [
@@ -125,7 +125,7 @@
         "Code": [
             "<key>class</key> <obj>Program</obj>",
             "{",
-            "<t><key>public static void </key><fnc>Main</fnc>(<obj>string</obj>[]<var>args</var>)",
+            "<t><key>public static void </key><fnc>Main</fnc>(<obj>string</obj>[]<var> args</var>)",
             "<t>{",
             "<t2><obj>Console</obj>.<fnc>WriteLine</fnc>(<str>\"What is your username?\"</str>);",
             "<t2><obj>string</obj> <var>username</var>= <obj>Console</obj>.<fnc>ReadLine</fnc>();",
@@ -254,7 +254,7 @@
             "<t>public float <var> EndTime </var>{ get => <var>StartTime</var> + <var>TransitionTime</var>; }",
             "<t>public float <var> TimeLeft </var>{ get => <var>EndTime</var> - <obj>Time</obj>.<var>unscaledTime</var>; }",
             "<new>",
-            "<t>public SnapshotTransitionData(<obj>AudioMixerSnapshot</obj><var> snapshot </var>, float<var> duration </var>)",
+            "<t>public <obj>SnapshotTransitionData</obj>(<obj>AudioMixerSnapshot</obj><var> snapshot</var>, float<var> duration</var>)",
             "<t>{",
             "<t2>this.<var>SnapshotTransitionInProgress</var> = <var>snapshot</var>;",
             "<t2>this.<var>TransitionTime</var> = <var>duration</var>;",
@@ -703,6 +703,50 @@
             ],
             [
                 0, 1, 3, 4, 18, 19
+            ]
+        ]
+    },
+
+
+
+
+
+
+
+
+    {
+        "ID": 251,
+        "Year": 2024,
+        "Month": 8,
+        "Day": 15,
+        "Language": "Rust",
+        "Code": [
+            "pub fn transformer_iter(input: <obj>Vec</obj><(<obj>String</obj>, <obj>Command</obj>)>) -> <obj>Vec</obj><<obj>String</obj>> {",
+            "<t>input",
+            "<t>.into_iter()",
+            "<t>.map(|(<var>string</var>, <var>command</var>)| match <var>command</var> {",
+            "<t2><obj>Command</obj>::<enm>Uppercase</enm> => <var>string</var>.to_uppercase(),",
+            "<t2><obj>Command</obj>::<enm>Trim</enm> => <var>string</var>.trim().to_string(),",
+            "<t2><obj>Command</obj>::<enm>Append</enm>(<var>n</var>) => <var>string</var> + &\"bar\".repeat(<var>n</var>),",
+            "<t>})",
+            "<t>.collect()",
+            "}"
+        ],
+        "Order": [
+            [
+                8
+            ],
+            [
+               1, 2
+            ],
+            [
+                3,7
+            ],
+            [
+                4, 5, 6
+            ],
+            [
+                0, 9
             ]
         ]
     }

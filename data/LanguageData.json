@@ -298,7 +298,20 @@
             "Applications",
             "Systems",
             "Scripting"
-        ]
+        ],
+        "SyntaxData":{
+            "FunctionSyntax":true,
+            "StringSyntax":true,
+            "DefaultKeywords":[
+                "as", "async", "const", "crate", "dyn", "enum", "extern", "false", "fn",
+                "impl", "let", "mod", "move", "mut", "pub", "ref", "Self", "self", "struct",
+                "super", "trait", "true", "type", "union","use", "where"
+            ],
+            "SpecialKeywords":[
+                "await", "break", "continue", "continue", "else", "for", "if", "in",
+                "loop", "match", "return", "while"
+            ]
+        }
     },
     {
         "Language": "Zig",
