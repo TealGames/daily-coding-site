@@ -27,8 +27,9 @@ const stringInStringEscape = "/";
 
 export const codeTokenTag = "p";
 
+const noClosingTags= [newLineTag, tabTag];
 const allTags = [defaultTag, defaultKeywordTag, specialKeywordTag, variableTag,
-    functionTag, objectTag, enumTag, stringTag, numberTag, commentTag, newLineTag];
+    functionTag, objectTag, enumTag, stringTag, numberTag, commentTag, newLineTag, tabTag];
 
 //tab tags must be first index in line
 const tabTagOnlyAtStart = true;
@@ -175,12 +176,53 @@ function isValidTag(tag) {
     else if (searchStr.length>=3 && searchStr.charAt(0)==="<" && hasEndSymbol) {
         searchStr=searchStr.substring(1, searchStr.length-1);
     }
+
+    //If the last character is a number, we remove it (like the tab tag)
+    //to make sure we find the tag in the all tag list
+    if (HelperFunctions.isNumber(searchStr.charAt(searchStr.length-1))){
+        searchStr= searchStr.substring(0, searchStr.length-1);
+    }
     
     console.log(`checking is valid tag from tag ${tag} search: ${searchStr}`);
 
     return HelperFunctions.arrayContains(allTags, searchStr);
 }
 
+/**
+ * Will check a string to see if it has a valid tag (rather than just checking the tag directly
+ * @param {String} string 
+ * @returns {Boolean}
+ */
+function containsValidTag(string){
+    if (!string) return false;
+
+    const startIdx= string.indexOf("<");
+    if (startIdx<0) return false;
+
+    //We search after the start index to find the next one
+    //since we can otherwise mistake greater/less signs for tags
+    const endIdx= string.indexOf(">", startIdx);
+    if (endIdx<0) return false;
+
+    return isValidTag(string.substring(startIdx, endIdx+1));
+}
+
+/**
+ * Checks if the str is a valid tag and is a single tab (meaning no closing tag)
+ * @param {*} string 
+ * @returns 
+ */
+function isSingleTag(string){
+    if (!string) return false;
+    if (!isValidTag(string)) return false;
+
+    //If the last character is a number, we remove it (like the tab tag)
+    //to make sure we find the tag in the all tag list
+    if (HelperFunctions.isNumber(string.charAt(string.length-1))){
+        string= string.substring(0, string.length-1);
+    }
+    return HelperFunctions.arrayContains(noClosingTags, string);
+}
 /**
  * Will check if a valid start tag exists before the index in line
  * meaning that the tag most likely starts for the index specified
@@ -191,7 +233,7 @@ function isValidTag(tag) {
  * @param {Number} index 
  * @returns {Boolean}
  */
-function hasStartTagBefore(line, index, failInfo=""){
+function hasStartTagBefore(line, index, failInfo="", dontCountSingleTagsAsStart=true){
     if (index<0 || index>=line.length){
         console.warn(`tried to check tag before for line ${line} (Len: ${line.length}) at index ${index}, `+
             `but the index is out of bounds [${0} ${line.length-1}]! ${(failInfo? `Fail Info: ${failInfo}` : "")}`);
@@ -234,6 +276,13 @@ function hasStartTagBefore(line, index, failInfo=""){
         }
 
         if (isValidTag(testStr)){
+
+            //If we dont want to include single tags, we return false
+            if (dontCountSingleTagsAsStart && isSingleTag(testStr)){
+                return false;
+            }
+            
+            console.log(`found valid tag ${testStr} at index ${i} to ${index-1} of ${line}`);
             return true;
         }
     }
@@ -591,8 +640,10 @@ function tryAddInferredTags(language, codeLines) {
                         for (let j = index - 1; j >= 0; j--) {
                             //If while looking for a function we first find a start tag
                             //it means it must be for this string so we don't try to add func tag
-                            if (hasStartTagBefore(result[i], i)){
+                            if (hasStartTagBefore(result[i], j)){
                                 previousSpaceIndex=-1;
+                                console.warn(`found a ( for a function when inferring tags for langauge ${language} ` +
+                                    `at index ${index} for line ${result[i]} but found a start tag before for index ${j}!`);
                                 break;
                             }
                             
@@ -616,8 +667,8 @@ function tryAddInferredTags(language, codeLines) {
                             searchStartPos += (5 + 2 * functionTag.length);
                         }
                         else {
-                            console.warn(`found a ( for a function when inferring tags for langauge ${language}` +
-                                `at index ${index} for line ${line} but found no space before for function or start of line!`);
+                            console.warn(`found a ( for a function when inferring tags for langauge ${language} ` +
+                                `at index ${index} for line ${result[i]} but did not find correct syntax for a function!`);
                         }
                     }
                 }
@@ -906,8 +957,8 @@ export function codeStylesPassesTests(id, strings) {
         let endTagIndices= [];
         for (let j = 0; j < allTags.length; j++) {
 
-            //New line tag does not need closing tag
-            if (allTags[j] == newLineTag) continue;
+            //Tags without closing dont need to be checked
+            if (HelperFunctions.arrayContains(noClosingTags, allTags[j])) continue;
 
             startTagIndices = HelperFunctions.getIndicesOfString(line, `<${allTags[j]}>`);
             endTagIndices = HelperFunctions.getIndicesOfString(line, `</${allTags[j]}>`);
@@ -986,8 +1037,12 @@ export function getHtmlFromCodeData(data) {
         for (let j = 0; j < fullLine.length; j++) {
             const c = fullLine.charAt(j);
             nextTagSymbolIndex= fullLine.indexOf(">", j);
+
+            if (j-tagLength+2<fullLine.length) 
+                console.log(`HTML At line ${fullLine} index ${j} contains tag: ${containsValidTag(fullLine.substring(j, j+tagLength+3))}`);
             if (c === "<" && j + 1 < fullLine.length && fullLine.charAt(j + 1) !== lessThanEscape && 
-                nextTagSymbolIndex>=0 && nextTagSymbolIndex-j<=tagLength+1) {
+                nextTagSymbolIndex>=0 && nextTagSymbolIndex-j<=tagLength+2 && containsValidTag(fullLine.substring(j, j+tagLength+3))) {
+
                 //If we are at closing tag, we can skip to the next text (since we know it has to be
                 //of the form </TAG>) so we have to do / + tag length + > and next space
                 if (fullLine[j + 1] === "/") {
